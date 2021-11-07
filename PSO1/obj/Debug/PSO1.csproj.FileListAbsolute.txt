@@ -1,0 +1,14 @@
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.csproj.AssemblyReference.cache
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Properties.Resources.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.csproj.GenerateResource.cache
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.csproj.CoreCompileInputs.cache
+F:\C#\projects\PSO1\PSO1\bin\Debug\PSO1.exe.config
+F:\C#\projects\PSO1\PSO1\bin\Debug\PSO1.exe
+F:\C#\projects\PSO1\PSO1\bin\Debug\PSO1.pdb
+F:\C#\projects\PSO1\PSO1\bin\Debug\EntityFramework.dll
+F:\C#\projects\PSO1\PSO1\bin\Debug\EntityFramework.SqlServer.dll
+F:\C#\projects\PSO1\PSO1\bin\Debug\EntityFramework.xml
+F:\C#\projects\PSO1\PSO1\bin\Debug\EntityFramework.SqlServer.xml
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.csproj.CopyComplete
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.exe
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.pdb
