@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class Admin : IUser
+    //public class Admin : IUser
+    public class Admin
     {
         public int Id { get; set; }
         public string UserName { get; set; }
@@ -14,20 +15,20 @@ namespace PSO1.Model
         public int UserPersonalDataId { get; set; }
         public int UserAddressId { get; set; }
 
-        private UserPersonalData userInfo;
-        private UserAddress userAddress;
+        //private UserPersonalData userInfo;
+        //private UserAddress userAddress;
 
         public Admin()
         {
 
         }
-        public UserPersonalData UserInfo { get; set; }
-        public UserAddress UserAddress { get; set; }
+        //public UserPersonalData UserInfo { get; set; }
+        //public UserAddress UserAddress { get; set; }
 
         public void CreateAdmin(string chosenName, UserPersonalData personalInfo)
         {
             UserName = chosenName;
-            this.userInfo = personalInfo;
+            //this.userInfo = personalInfo;
         }
         public override string ToString()
         {

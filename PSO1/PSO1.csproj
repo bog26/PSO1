@@ -109,6 +109,7 @@
     <Compile Include="Model\ShoppingCartItem.cs" />
     <Compile Include="Model\Transaction.cs" />
     <Compile Include="Model\TransactionItem.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserAddress.cs" />
     <Compile Include="Model\UserInputCheck.cs" />
     <Compile Include="Model\UserPersonalData.cs" />

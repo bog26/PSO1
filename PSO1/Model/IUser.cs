@@ -11,7 +11,8 @@ namespace PSO1.Model
         int Id { get; set; }
         string UserName { get; set; }
         string Password { get; set; }
-        UserPersonalData UserInfo { get; set; }
+        bool isAdmin { get; set; }
+        //UserPersonalData UserInfo { get; set; }
         string ToString();
 
     }

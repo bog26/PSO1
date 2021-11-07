@@ -12,6 +12,7 @@ namespace PSO1.Model
 {
     public class DBBindings
     {
+        /*
         public static BindingSource BindAllUserDataToGrid()
         {
             psDBContext psContext = new psDBContext();
@@ -32,7 +33,9 @@ namespace PSO1.Model
             binding.DataSource = query.ToList();
             return binding;
         }
+        */
 
+        /*
         public static BindingSource BindCrtUserDataToGrid(string userName)
         {
 
@@ -75,6 +78,32 @@ namespace PSO1.Model
 
         }
 
+        */
+
+        public static BindingSource BindCrtUserDataToGrid(string userName)
+        {
+            psDBContext psContext = new psDBContext();
+            BindingSource binding = new BindingSource();
+
+            var crtUser = psContext.Users.First(x => x.UserName == userName);
+            int crtUserId = crtUser.Id;
+
+            var queryUserInfo = from userInfo in psContext.UserPersonalDatas
+                             where userInfo.UserId == crtUserId
+                                select new
+                             {
+                                 UserName = crtUser.UserName,
+                                 FirstName = userInfo.FirstName,
+                                 LastName = userInfo.LastName,
+                                 BirthDate = userInfo.BirthDate,
+                                 email = userInfo.Email,
+                                 Telephone = userInfo.Telephone
+                             };
+            binding.DataSource = queryUserInfo.ToList();
+            return binding;
+        }
+
+        /*
         //TBD:
         private static IEnumerable<Object> UserDataQuery(string userName, psDBContext psContext)
         {
@@ -117,8 +146,8 @@ namespace PSO1.Model
 
                 return query;
             }
-
         }
+        */
 
 
         public static BindingSource BindCrtUserAddressToGrid(string userName)

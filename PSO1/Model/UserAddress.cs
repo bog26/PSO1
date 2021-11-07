@@ -15,8 +15,9 @@ namespace PSO1.Model
         private string region;
         private string country;
         private int postalCode;
-        public int AdminId;
-        public int ClientId;
+        public int UserId { get; set; }
+        //public int AdminId;
+        //public int ClientId;
         //public int UserPersonalDataId;
         public UserAddress()
         {

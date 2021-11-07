@@ -9,6 +9,7 @@ namespace PSO1.Model
     public class UserPersonalData
     {
         public int Id { get; set; }
+        public int UserId { get; set; }
         private string firstName;
         private string lastName;
         private DateTime birthDate;
@@ -16,7 +17,8 @@ namespace PSO1.Model
         private string telephone;
         //public int AdminId;
         //public int ClientId;
-        private UserAddress address;
+        //private UserAddress address;
+
         public UserPersonalData()
         {
 
