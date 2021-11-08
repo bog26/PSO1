@@ -14,6 +14,10 @@ namespace PSO1.Model
         public int UserPersonalDataId { get; set; }
         public int UserAddressId { get; set; }
         public bool isAdmin { get; set; }
+        public User()
+        {
+            isAdmin = false;
+        }
         public override string ToString()
         {
             return UserName;

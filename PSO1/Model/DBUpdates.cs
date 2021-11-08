@@ -12,22 +12,50 @@ namespace PSO1.Model
 {
     public class DBUpdates
     {
+        public static void DeleteUser(int userId)
+        {
+            var psContext = new psDBContext();
+            var userToDelete = psContext.Users.First(x => x.Id == userId);
+            if(userToDelete!=null)
+            {
+                psContext.Users.Remove(userToDelete);
+                psContext.SaveChanges();
+            }  
+        }
+        public static void DeleteUserData(int userId)
+        {
+            var psContext = new psDBContext();
+            var queryPersonalData = psContext.UserPersonalDatas.First(x => x.UserId == userId);
+            if(queryPersonalData != null)
+            {
+                psContext.UserPersonalDatas.Remove(queryPersonalData);
+                psContext.SaveChanges();
+            }            
+        }
+        public static void DeleteUserAddress(int userId)
+        {
+            var psContext = new psDBContext();
+            var queryPersonalAddress = psContext.UserAddresses.First(x => x.UserId == userId);
+            if (queryPersonalAddress != null)
+            {
+                psContext.UserAddresses.Remove(queryPersonalAddress);
+                psContext.SaveChanges();
+            }
+        }
+
+        public static void DeleteAllUserData(int userId)
+        {
+            DeleteUserData(userId);
+            DeleteUserAddress(userId);
+            DeleteUser(userId);
+        }
+
         public static void WriteUserPersonalDataToDB(string choice, string input)
         {
             var psContext = new psDBContext();
             string loggedUser = Form.ActiveForm.Text;
-            UserPersonalData pdata;
-
-            if (InternalDBQueries.CheckForAdminRights(loggedUser))
-            {
-                var crtUser = psContext.Admins.First(x => x.UserName == loggedUser);
-                pdata = psContext.UserPersonalDatas.Find(crtUser.UserPersonalDataId);
-            }
-            else
-            {
-                var crtUser = psContext.Clients.First(x => x.UserName == loggedUser);
-                pdata = psContext.UserPersonalDatas.Find(crtUser.UserPersonalDataId);
-            }
+            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
+            UserPersonalData pdata = psContext.UserPersonalDatas.Find(crtUser.UserPersonalDataId);
             UserPDataChange(pdata, choice, input);
             psContext.SaveChanges();
         }
@@ -89,17 +117,10 @@ namespace PSO1.Model
         {
             var psContext = new psDBContext();
             string loggedUser = Form.ActiveForm.Text;
-            UserAddress personalAddr;
-            if (InternalDBQueries.CheckForAdminRights(loggedUser))
-            {
-                var crtUser = psContext.Admins.First(x => x.UserName == loggedUser);
-                personalAddr = psContext.UserAddresses.Find(crtUser.UserAddressId);
-            }
-            else
-            {
-                var crtUser = psContext.Clients.First(x => x.UserName == loggedUser);
-                personalAddr = psContext.UserAddresses.Find(crtUser.UserAddressId);
-            }
+
+            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
+            UserAddress personalAddr = psContext.UserAddresses.Find(crtUser.UserAddressId);
+
             UserAddressChange(personalAddr, choice, input);
             psContext.SaveChanges();
         }
@@ -184,16 +205,9 @@ namespace PSO1.Model
             var psContext = new psDBContext();
             string loggedUser = Form.ActiveForm.Text;
 
-            if (InternalDBQueries.CheckForAdminRights(loggedUser))
-            {
-                var crtUser = psContext.Admins.First(x => x.UserName == loggedUser);
-                crtUser.Password = newPass;
-            }
-            else
-            {
-                var crtUser = psContext.Clients.First(x => x.UserName == loggedUser);
-                crtUser.Password = newPass;
-            }
+            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
+            crtUser.Password = newPass;
+
             psContext.SaveChanges();
         }
 
@@ -338,7 +352,7 @@ namespace PSO1.Model
         public static void SaveProductToWishlist(string user, int PID)
         {
             var psContext = new psDBContext();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
+            var crtUser = psContext.Users.First(x => x.UserName == user);
 
             var crtWishList = psContext.WishLists.First(x => x.ClientName == user);
             crtWishList.AddPID(PID);
@@ -731,8 +745,8 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             ShoppingCartItem Item = new ShoppingCartItem();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
-            Item.ClientId = crtUser.Id;
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            Item.UserId = crtUser.Id;
             Item.ProductId = PID;
             Item.Amount = amount;
             psContext.ShoppingCartItems.Add(Item);
@@ -742,8 +756,8 @@ namespace PSO1.Model
         public static void DeleteCartItem(string user, int itemSelection)
         {
             psDBContext psContext = new psDBContext();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
-            var cartItem = psContext.ShoppingCartItems.Where(x => x.ClientId == crtUser.Id).ToList()[itemSelection];
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var cartItem = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList()[itemSelection];
             psContext.ShoppingCartItems.Remove(cartItem);
             psContext.SaveChanges();
         }
@@ -760,7 +774,7 @@ namespace PSO1.Model
             {
                 TransactionItem newItem = CreateNewTransactionItem(item, crtTransaction);
                 psContext.TransactionItems.Add(newItem);
-                ShoppingCartItem crtItem = psContext.ShoppingCartItems.First(x => (x.ClientId == item.ClientId)
+                ShoppingCartItem crtItem = psContext.ShoppingCartItems.First(x => (x.UserId == item.UserId)
                                                                             && (x.ProductId == item.ProductId));
                 psContext.ShoppingCartItems.Remove(crtItem);
                 psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost += newItem.Cost;
@@ -775,7 +789,7 @@ namespace PSO1.Model
             TransactionItem newItem = new TransactionItem();
             decimal price = psContext.Products.First(x => x.Id == cartItem.ProductId).crtSellPrice;
             newItem.TransactionId = transaction.Id;
-            newItem.ClientId = cartItem.ClientId;
+            newItem.UserId = cartItem.UserId;
             newItem.ProductId = cartItem.ProductId;
             newItem.Amount = cartItem.Amount;
             newItem.Cost = cartItem.Amount * price;
@@ -786,8 +800,8 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             Transaction newTransaction = new Transaction();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
-            newTransaction.ClientId = crtUser.Id;
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            newTransaction.UserId = crtUser.Id;
             psContext.Transactions.Add(newTransaction);
             psContext.SaveChanges();
             return newTransaction;
@@ -798,8 +812,8 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             Transaction newTransaction = new Transaction();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
-            newTransaction.ClientId = crtUser.Id;
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            newTransaction.UserId = crtUser.Id;
             psContext.Transactions.Add(newTransaction);
             psContext.SaveChanges();
         }
@@ -808,8 +822,8 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             List<int> cartItemsList = new List<int>();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
-            var cartItem = psContext.ShoppingCartItems.Where(x => x.ClientId == crtUser.Id).ToList();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var cartItem = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList();
 
             return cartItem;
         }

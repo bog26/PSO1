@@ -86,6 +86,11 @@
     <Compile Include="Form5.Designer.cs">
       <DependentUpon>Form5.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111081420188_FirstMigration.cs" />
+    <Compile Include="Migrations\202111081420188_FirstMigration.designer.cs">
+      <DependentUpon>202111081420188_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\DBBindings.cs" />
@@ -116,6 +121,24 @@
     <Compile Include="Model\WishList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form3.resx">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form4.resx">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form5.resx">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111081420188_FirstMigration.resx">
+      <DependentUpon>202111081420188_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -124,6 +147,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -138,6 +162,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pso1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ecommerce-shopping-cart.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\index.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wallpaper2you_262369.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\35800246-registration-concept-on-blue-background-with-world-map-and-social-icons-.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14850286-login-background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\260161.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Online-Registration-3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\for-web_031418055600.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\online-registration-1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6145266e516ec.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image 2.jpg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

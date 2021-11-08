@@ -153,43 +153,24 @@ namespace PSO1.Model
         public static BindingSource BindCrtUserAddressToGrid(string userName)
         {
             psDBContext psContext = new psDBContext();
-
             BindingSource binding = new BindingSource();
-            var queryAdmin = from user in psContext.Admins
-                             where user.UserName == userName
-                             select new
-
-                             {
-                                 Street = user.UserAddress.Street,
-                                 StreetNr = user.UserAddress.StreetNr,
-                                 City = user.UserAddress.City,
-                                 Region = user.UserAddress.Region,
-                                 Country = user.UserAddress.Country,
-                                 PostalCode = user.UserAddress.PostalCode
-                             };
-
-            var queryClient = from user in psContext.Clients
-                              where user.UserName == userName
-                              select new
-                              {
-                                  Street = user.UserAddress.Street,
-                                  StreetNr = user.UserAddress.StreetNr,
-                                  City = user.UserAddress.City,
-                                  Region = user.UserAddress.Region,
-                                  Country = user.UserAddress.Country,
-                                  PostalCode = user.UserAddress.PostalCode
-                              };
 
 
+            var crtUser = psContext.Users.First(x => x.UserName == userName);
+            int crtUserId = crtUser.Id;
 
-            if (InternalDBQueries.CheckForAdminRights(userName))
-            {
-                binding.DataSource = queryAdmin.ToList();
-            }
-            else
-            {
-                binding.DataSource = queryClient.ToList();
-            }
+            var queryUserAddress = from userAddress in psContext.UserAddresses
+                                where userAddress.UserId == crtUserId
+                                select new
+                                {
+                                    Street = userAddress.Street,
+                                    StreetNr = userAddress.StreetNr,
+                                    City = userAddress.City,
+                                    Region = userAddress.Region,
+                                    Country = userAddress.Country,
+                                    PostalCode = userAddress.PostalCode
+                                };
+            binding.DataSource = queryUserAddress.ToList();
             return binding;
         }
         public static BindingSource BindCategories()
@@ -370,13 +351,13 @@ namespace PSO1.Model
             binding.DataSource = cartProductNames;
             return binding;
         }
-        public static List<int> GetCartProductIDs(string clientName)
+        public static List<int> GetCartProductIDs(string userName)
         {
             psDBContext psContext = new psDBContext();
             BindingSource binding = new BindingSource();
-            var crtClient = psContext.Clients.First(x => x.UserName == clientName);
+            var crtClient = psContext.Users.First(x => x.UserName == userName);
             var productsQuery = from shoppingCart in psContext.ShoppingCartItems
-                                where shoppingCart.ClientId == crtClient.Id
+                                where shoppingCart.UserId == crtClient.Id
                                 select shoppingCart.ProductId;
             return productsQuery.ToList();
         }
@@ -729,9 +710,9 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             BindingSource binding = new BindingSource();
-            var crtUser = psContext.Clients.First(x => x.UserName == user);
+            var crtUser = psContext.Users.First(x => x.UserName == user);
             var queryTransactions = from transaction in psContext.Transactions
-                                    where transaction.ClientId == crtUser.Id
+                                    where transaction.UserId == crtUser.Id
                                     select new
                                     {
                                         ID = transaction.Id,

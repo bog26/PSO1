@@ -14,22 +14,13 @@ namespace PSO1.Model
         {
             bool exisitingUser = false;
             var psContext = new psDBContext();
-            var admins = psContext.Admins.ToList();
-            var clients = psContext.Clients.ToList();
-            foreach (Admin admin in admins)
+
+            var queryUsers = psContext.Users.Where(x => x.UserName == userName).ToList();
+            if (queryUsers.Count !=0)
             {
-                if (userName == admin.UserName)
-                {
-                    exisitingUser = true;
-                }
+                exisitingUser = true;
             }
-            foreach (Client client in clients)
-            {
-                if (userName == client.UserName)
-                {
-                    exisitingUser = true;
-                }
-            }
+
             return exisitingUser;
         }
 
@@ -38,21 +29,10 @@ namespace PSO1.Model
             var psContext = new psDBContext();
             bool correctPassword = false;
 
-            if (CheckForAdminRights(loggedUser))
+            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
+            if (crtUser.Password == password)
             {
-                var crtUser = psContext.Admins.First(x => x.UserName == loggedUser);
-                if (crtUser.Password == password)
-                {
-                    correctPassword = true;
-                }
-            }
-            else
-            {
-                var crtUser = psContext.Clients.First(x => x.UserName == loggedUser);
-                if (crtUser.Password == password)
-                {
-                    correctPassword = true;
-                }
+                correctPassword = true;
             }
 
             return correctPassword;
@@ -61,32 +41,35 @@ namespace PSO1.Model
         public static string GetPassword(string loggedUser)
         {
             var psContext = new psDBContext();
-            var crtUser = psContext.Admins.First(x => x.UserName == loggedUser);
+            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
             return crtUser.Password;
         }
 
 
         public static bool CheckForAdminRights(string userName)
         {
-            bool isAdmin = false;
-
             var psContext = new psDBContext();
-            var admins = psContext.Admins.ToList();
-            foreach (Admin admin in admins)
-            {
-                if (userName == admin.UserName)
-                {
-                    isAdmin = true;
-                }
-            }
-
+            var crtUser = psContext.Users.First(x => x.UserName == userName);
+            bool isAdmin = crtUser.isAdmin;
             return isAdmin;
+        }
+
+        public static bool CheckForExistingAdmin()
+        {
+            var psContext = new psDBContext();
+            bool alreadyExistingAdmin = false;
+            var queryAdmins = psContext.Users.Where(x => x.isAdmin == true).ToList();
+            if(queryAdmins.Count!=0)
+            {
+                alreadyExistingAdmin = true;
+            }
+            return alreadyExistingAdmin;
         }
 
         public static int GetWishListSize(string clientName)
         {
             var psContext = new psDBContext();
-            var crtClient = psContext.Clients.First(x => x.UserName == clientName);
+            var crtClient = psContext.Users.First(x => x.UserName == clientName);
             var crtWishList = psContext.WishLists.First(x => x.ClientName == clientName);
             int[] PIDArray = crtWishList.getPIDs();
             //var wishList = crtClient.WishList.WishPIDs;
@@ -97,8 +80,8 @@ namespace PSO1.Model
         {
             bool productinCart = false;
             var psContext = new psDBContext();
-            var crtClient = psContext.Clients.First(x => x.UserName == user);
-            var item = psContext.ShoppingCartItems.Where(x => (x.ProductId == PID) && (x.ClientId == crtClient.Id)).ToList();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var item = psContext.ShoppingCartItems.Where(x => (x.ProductId == PID) && (x.UserId == crtUser.Id)).ToList();
 
             if (item.Count > 0)
             {
@@ -118,17 +101,16 @@ namespace PSO1.Model
         public static int GetNrOfTransItems(string user, int transId)
         {
             var psContext = new psDBContext();
-            var crtClient = psContext.Clients.First(x => x.UserName == user);
-            int transItemsNr = psContext.TransactionItems.Where(x => (x.ClientId == crtClient.Id)
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            int transItemsNr = psContext.TransactionItems.Where(x => (x.UserId == crtUser.Id)
                                                                   && (x.TransactionId == transId)).ToList().Count;
             return transItemsNr;
         }
         public static string GetTransactionItemName(string user, int transId, int itemIndex)
         {
             var psContext = new psDBContext();
-            int crtClientId = psContext.Clients.First(x => x.UserName == user).Id;
-            //string itemName = string.Empty;
-            int itemId = psContext.TransactionItems.Where(x => (x.ClientId == crtClientId)
+            int crtUserId = psContext.Users.First(x => x.UserName == user).Id;
+            int itemId = psContext.TransactionItems.Where(x => (x.UserId == crtUserId)
                                                                   && (x.TransactionId == transId)
                                                                   ).ToList()[itemIndex].ProductId;
             string itemName = psContext.Products.First(x => x.Id == itemId).ProductName;
@@ -137,8 +119,8 @@ namespace PSO1.Model
         public static int GetAmountOfSameTransItems(string user, int transId, int itemIndex)
         {
             var psContext = new psDBContext();
-            int crtClientId = psContext.Clients.First(x => x.UserName == user).Id;
-            int itemId = psContext.TransactionItems.Where(x => (x.ClientId == crtClientId)
+            int crtUserId = psContext.Users.First(x => x.UserName == user).Id;
+            int itemId = psContext.TransactionItems.Where(x => (x.UserId == crtUserId)
                                                                   && (x.TransactionId == transId)
                                                                   ).ToList()[itemIndex].ProductId;
             int transItemsNr = psContext.TransactionItems.First(x => x.ProductId == itemId).Amount;
@@ -148,8 +130,8 @@ namespace PSO1.Model
         {
             decimal itemPrice = 0;
             var psContext = new psDBContext();
-            int crtClientId = psContext.Clients.First(x => x.UserName == user).Id;
-            int itemId = psContext.TransactionItems.Where(x => (x.ClientId == crtClientId)
+            int crtUserId = psContext.Users.First(x => x.UserName == user).Id;
+            int itemId = psContext.TransactionItems.Where(x => (x.UserId == crtUserId)
                                                                   && (x.TransactionId == transId)
                                                                   ).ToList()[itemIndex].ProductId;
             itemPrice = psContext.TransactionItems.First(x => x.ProductId == itemId).Cost;

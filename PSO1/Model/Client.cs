@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class Client : IUser
+    public class Client 
     {
         //[Key]
         public int Id { get; set; }

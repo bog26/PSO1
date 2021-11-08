@@ -12,3 +12,9 @@ F:\C#\projects\PSO1\PSO1\bin\Debug\EntityFramework.SqlServer.xml
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.csproj.CopyComplete
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.exe
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.pdb
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form1.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form2.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form3.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form4.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form5.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.FirstMigration.resources

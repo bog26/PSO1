@@ -10,7 +10,7 @@ namespace PSO1.Model
     {
         public int Id { get; set; }
         public int TransactionId { get; set; }
-        public int ClientId { get; set; }
+        public int UserId { get; set; }
         public int ProductId { get; set; }
         public int Amount { get; set; }
         public decimal Cost { get; set; }

@@ -9,7 +9,7 @@ namespace PSO1.Model
     public class Transaction
     {
         public int Id { get; set; }
-        public int ClientId { get; set; }
+        public int UserId { get; set; }
 
         //public DateTime TransactionEnd { get; set; }
         public string TransactionStatus { get; set; }

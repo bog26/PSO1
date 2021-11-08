@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PSO1.Model;
+using static PSO1.Model.InternalDBQueries;
+using static PSO1.Model.DBUpdates;
 
 namespace PSO1
 {
@@ -89,6 +91,7 @@ namespace PSO1
             return correctUserData;
         }
 
+        /*
         public bool CheckForExistingAdmin()
         {
             bool existingAdmin;
@@ -105,6 +108,10 @@ namespace PSO1
             MessageBox.Show("existing admins: "+ admins.Count);
             return existingAdmin;
         }
+        */
+
+        //delete:
+        /*
         public void CreateAdmin()
         {
             var newAdmin = new Admin();
@@ -124,7 +131,10 @@ namespace PSO1
             MessageBox.Show("Testing new admin data: " + newAdmin.UserInfo.FirstName + " "
                 + newAdmin.UserInfo.LastName + " password: "+ newAdmin.Password + "Street: "+ newAdmin.UserAddress.Street);
         }
+        */
 
+        //delete:
+        /*
         public void CreateClient()
         {
             var newClient = new Client();
@@ -149,21 +159,69 @@ namespace PSO1
             MessageBox.Show("Testing new client data: " + newClient.UserInfo.FirstName + " "
                 + newClient.UserInfo.LastName + " password: " + newClient.Password);
         }
+        */
 
         public void CreateUser()
         {
             bool alreadyExistingAdmin = CheckForExistingAdmin();
-            if (alreadyExistingAdmin && !ExecutedFromAdminAccount)
+
+            var newUser = new User();
+            newUser.UserName = textBox1.Text;
+            newUser.Password = textBox12.Text;
+            if(!alreadyExistingAdmin || ExecutedFromAdminAccount)
             {
-                CreateClient();
-                MessageBox.Show("Client account succesfully created");
+                newUser.isAdmin = true;
+            }
+
+            psContext = new psDBContext();
+            psContext.Users.Add(newUser);
+            psContext.SaveChanges();
+
+            int crtUserId = psContext.Users.First(x => x.UserName == textBox1.Text).Id;
+            bool correctUserData = CreateUserData(crtUserId);
+            bool correctAddress = CreateUserAddress(crtUserId);
+
+            if(!(correctUserData && correctAddress))
+            {
+                DeleteAllUserData(crtUserId);
+                MessageBox.Show("User account not created due to incorrect input");
             }
             else
             {
-                CreateAdmin();
-                MessageBox.Show("Admin account succesfully created");
+                MessageBox.Show("User account succesfully created");
             }
+            
+
+            //test:
+            // MessageBox.Show("Testing new client data: " + newClient.UserInfo.FirstName + " "
+            //   + newClient.UserInfo.LastName + " password: " + newClient.Password);
         }
+        /*
+        public void CreateNewUser()
+        {
+            var newUser = new User();
+            UserPersonalData userPersonalData = GatherUserData();
+            UserAddress userAddress = GatherUserAddress();
+
+            newClient.UserName = textBox1.Text;
+            newClient.Password = textBox12.Text;
+            newClient.UserInfo = userPersonalData;
+
+            newClient.UserAddress = userAddress;
+            newClient.WishList = new WishList(newClient.UserName);
+            //newClient.WishList.WishProducts = new List<Product>();
+            //WishProducts = new List<Product>();
+            //WishList = new WishList(UserName);
+
+            psContext = new psDBContext();
+            psContext.Clients.Add(newClient);
+            psContext.SaveChanges();
+
+            //test:
+            MessageBox.Show("Testing new client data: " + newClient.UserInfo.FirstName + " "
+                + newClient.UserInfo.LastName + " password: " + newClient.Password);
+        }
+        */
 
         public UserPersonalData GatherUserData()
         {
@@ -183,8 +241,65 @@ namespace PSO1
                 Telephone = textBox11.Text,
             };
             return userPersonalData;
+        }
+
+        private bool CreateUserData(int userIdNr)
+        {
+            psContext = new psDBContext();
+            UserPersonalData newUserData = new UserPersonalData();
+            string userBirthDateStr = monthCalendar1.SelectionRange.Start.ToShortDateString();
+            DateTime userBirthDate = Convert.ToDateTime(userBirthDateStr);
+            bool userDataCreationOk = false;
+            try
+            {
+                newUserData.UserId = userIdNr;
+                newUserData.FirstName = textBox2.Text;
+                newUserData.LastName = textBox3.Text;
+                newUserData.BirthDate = userBirthDate;
+                newUserData.Email = textBox4.Text;
+                newUserData.Telephone = textBox11.Text;
+
+                psContext.UserPersonalDatas.Add(newUserData);
+                psContext.SaveChanges();
+                userDataCreationOk = true;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                MessageBox.Show("User data not saved to DB");
+            }
+            return userDataCreationOk;
+        }
+
+        private bool CreateUserAddress(int userIdNr)
+        {
+            psContext = new psDBContext();
+            UserAddress newUserAddress = new UserAddress();
+            bool userAddressCreationOk = false;
+            try
+            {
+                newUserAddress.Street = textBox5.Text;
+                newUserAddress.StreetNr = int.Parse(textBox6.Text);
+                newUserAddress.City = textBox7.Text;
+                newUserAddress.Region = textBox8.Text;
+                newUserAddress.Country = textBox9.Text;
+                newUserAddress.PostalCode = int.Parse(textBox10.Text);
+
+                psContext.UserAddresses.Add(newUserAddress);
+                psContext.SaveChanges();
+                userAddressCreationOk = true;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                MessageBox.Show("Address not saved to DB");
+            }
+            return userAddressCreationOk;
+
 
         }
+
+
         public UserAddress GatherUserAddress()
         {
             var userAddress = new UserAddress
