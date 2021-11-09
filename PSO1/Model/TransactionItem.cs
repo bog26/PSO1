@@ -10,8 +10,11 @@ namespace PSO1.Model
     {
         public int Id { get; set; }
         public int TransactionId { get; set; }
+        Transaction Transaction { get; set; }
         public int UserId { get; set; }
+        User User { get; set; }
         public int ProductId { get; set; }
+        Product Product { get; set; }
         public int Amount { get; set; }
         public decimal Cost { get; set; }
         public DateTime TransactionTime { get; set; }

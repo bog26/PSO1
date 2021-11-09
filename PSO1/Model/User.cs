@@ -12,7 +12,9 @@ namespace PSO1.Model
         public string UserName { get; set; }
         public string Password { get; set; }
         public int UserPersonalDataId { get; set; }
+        UserPersonalData UserPersonalData { get; set; }
         public int UserAddressId { get; set; }
+        UserAddress UserAddress { get; set; }
         public bool isAdmin { get; set; }
         public User()
         {

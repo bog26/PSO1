@@ -163,24 +163,28 @@ namespace PSO1
 
         public void CreateUser()
         {
-            bool alreadyExistingAdmin = CheckForExistingAdmin();
+            psContext = new psDBContext();
+            CreateUserData();
+            CreateUserAddress();
 
             var newUser = new User();
             newUser.UserName = textBox1.Text;
             newUser.Password = textBox12.Text;
-            if(!alreadyExistingAdmin || ExecutedFromAdminAccount)
+            newUser.UserAddressId = GetUserPersonalDataId(newUser.UserName);
+            newUser.UserPersonalDataId = GetUserAddressId(newUser.UserName);
+            bool alreadyExistingAdmin = CheckForExistingAdmin();
+            if (!alreadyExistingAdmin || ExecutedFromAdminAccount)
             {
                 newUser.isAdmin = true;
             }
-
-            psContext = new psDBContext();
             psContext.Users.Add(newUser);
             psContext.SaveChanges();
 
             int crtUserId = psContext.Users.First(x => x.UserName == textBox1.Text).Id;
-            bool correctUserData = CreateUserData(crtUserId);
-            bool correctAddress = CreateUserAddress(crtUserId);
+            //bool correctUserData = CreateUserData(crtUserId);
+            //bool correctAddress = CreateUserAddress(crtUserId);
 
+            /*
             if(!(correctUserData && correctAddress))
             {
                 DeleteAllUserData(crtUserId);
@@ -190,7 +194,7 @@ namespace PSO1
             {
                 MessageBox.Show("User account succesfully created");
             }
-            
+            */
 
             //test:
             // MessageBox.Show("Testing new client data: " + newClient.UserInfo.FirstName + " "
@@ -243,6 +247,7 @@ namespace PSO1
             return userPersonalData;
         }
 
+        /*
         private bool CreateUserData(int userIdNr)
         {
             psContext = new psDBContext();
@@ -270,6 +275,32 @@ namespace PSO1
             }
             return userDataCreationOk;
         }
+        */
+
+        private void CreateUserData()
+        {
+            psContext = new psDBContext();
+            UserPersonalData newUserData = new UserPersonalData();
+            string userBirthDateStr = monthCalendar1.SelectionRange.Start.ToShortDateString();
+            DateTime userBirthDate = Convert.ToDateTime(userBirthDateStr);
+            try
+            {
+
+                newUserData.UserName = textBox1.Text;
+                newUserData.FirstName = textBox2.Text;
+                newUserData.LastName = textBox3.Text;
+                newUserData.BirthDate = userBirthDate;
+                newUserData.Email = textBox4.Text;
+                newUserData.Telephone = textBox11.Text;
+                psContext.UserPersonalDatas.Add(newUserData);
+                psContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+           
+        }
 
         private bool CreateUserAddress(int userIdNr)
         {
@@ -295,6 +326,31 @@ namespace PSO1
                 MessageBox.Show("Address not saved to DB");
             }
             return userAddressCreationOk;
+        }
+        private void CreateUserAddress()
+        {
+            psContext = new psDBContext();
+            UserAddress newUserAddress = new UserAddress();
+
+            try
+            {
+                newUserAddress.UserName = textBox1.Text;
+                newUserAddress.Street = textBox5.Text;
+                newUserAddress.StreetNr = int.Parse(textBox6.Text);
+                newUserAddress.City = textBox7.Text;
+                newUserAddress.Region = textBox8.Text;
+                newUserAddress.Country = textBox9.Text;
+                newUserAddress.PostalCode = int.Parse(textBox10.Text);
+
+                psContext.UserAddresses.Add(newUserAddress);
+                psContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                MessageBox.Show("Address not saved to DB");
+            }
+
 
 
         }

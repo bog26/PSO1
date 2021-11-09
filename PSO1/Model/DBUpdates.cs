@@ -12,30 +12,30 @@ namespace PSO1.Model
 {
     public class DBUpdates
     {
-        public static void DeleteUser(int userId)
+        public static void DeleteUser(string user)
         {
             var psContext = new psDBContext();
-            var userToDelete = psContext.Users.First(x => x.Id == userId);
+            var userToDelete = psContext.Users.First(x => x.UserName == user);
             if(userToDelete!=null)
             {
                 psContext.Users.Remove(userToDelete);
                 psContext.SaveChanges();
             }  
         }
-        public static void DeleteUserData(int userId)
+        public static void DeleteUserData(string user)
         {
             var psContext = new psDBContext();
-            var queryPersonalData = psContext.UserPersonalDatas.First(x => x.UserId == userId);
+            var queryPersonalData = psContext.UserPersonalDatas.First(x => x.UserName == user);
             if(queryPersonalData != null)
             {
                 psContext.UserPersonalDatas.Remove(queryPersonalData);
                 psContext.SaveChanges();
             }            
         }
-        public static void DeleteUserAddress(int userId)
+        public static void DeleteUserAddress(string user)
         {
             var psContext = new psDBContext();
-            var queryPersonalAddress = psContext.UserAddresses.First(x => x.UserId == userId);
+            var queryPersonalAddress = psContext.UserAddresses.First(x => x.UserName == user);
             if (queryPersonalAddress != null)
             {
                 psContext.UserAddresses.Remove(queryPersonalAddress);
@@ -43,11 +43,11 @@ namespace PSO1.Model
             }
         }
 
-        public static void DeleteAllUserData(int userId)
+        public static void DeleteAllUserData(string userName)
         {
-            DeleteUserData(userId);
-            DeleteUserAddress(userId);
-            DeleteUser(userId);
+            DeleteUserData(userName);
+            DeleteUserAddress(userName);
+            DeleteUser(userName);
         }
 
         public static void WriteUserPersonalDataToDB(string choice, string input)
@@ -348,7 +348,7 @@ namespace PSO1.Model
             return writeToDBSuccessful;
         }
 
-
+        /*
         public static void SaveProductToWishlist(string user, int PID)
         {
             var psContext = new psDBContext();
@@ -359,10 +359,27 @@ namespace PSO1.Model
 
             psContext.SaveChanges();
         }
+        */
+
+        public static void SaveProductToWishlist(string user, int PID)
+        {
+            var psContext = new psDBContext();
+            int crtUserId = psContext.Users.First(x => x.UserName == user).Id;
+            var queryWishListItems = psContext.WishListItems.Where(x => (x.UserId == crtUserId)
+                                                                         && x.ProductId == PID).ToList();
+            if(queryWishListItems.Count == 0)
+            {
+                WishListItem newItem = new WishListItem();
+                newItem.ProductId = PID;
+                newItem.UserId = crtUserId;
+                psContext.WishListItems.Add(newItem);
+            }
+            psContext.SaveChanges();
+        }
 
 
 
-        public static string GetProductSpec(int productID)
+            public static string GetProductSpec(int productID)
         {
             psDBContext psContext = new psDBContext();
             var queryproducts = from product in psContext.Products

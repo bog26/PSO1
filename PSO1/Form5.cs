@@ -494,15 +494,24 @@ namespace PSO1
         }
         private void button33_Click(object sender, EventArgs e) //"Add to cart"
         {
-            int rowIndex = Int32.Parse(dataGridView7.CurrentCell.RowIndex.ToString());
-            int productID = Int32.Parse(dataGridView7.Rows[rowIndex].Cells[0].Value.ToString());
-            int amount = Int32.Parse(numericUpDown1.Value.ToString());
-            if(amount>0 && !InternalDBQueries.IsProductInCart(crtUser, productID))
+            bool selectionOk =false;
+            if(dataGridView7.CurrentCell !=null)
             {
-                DBUpdates.CreateNewShoppingCartItem(crtUser, productID, amount);
-                string plural = (amount > 1) ? "s" : string.Empty;
-                MessageBox.Show($"{amount} item{plural} with PID {productID} added to cart");
+                selectionOk = true;
             }
+            if(selectionOk)
+            {
+                int rowIndex = Int32.Parse(dataGridView7.CurrentCell.RowIndex.ToString());
+                int productID = Int32.Parse(dataGridView7.Rows[rowIndex].Cells[0].Value.ToString());
+                int amount = Int32.Parse(numericUpDown1.Value.ToString());
+                if (amount > 0 && !InternalDBQueries.IsProductInCart(crtUser, productID))
+                {
+                    DBUpdates.CreateNewShoppingCartItem(crtUser, productID, amount);
+                    string plural = (amount > 1) ? "s" : string.Empty;
+                    MessageBox.Show($"{amount} item{plural} with PID {productID} added to cart");
+                }
+            }
+            
             
         }
         private void button34_Click(object sender, EventArgs e) //"Add to wishlist"

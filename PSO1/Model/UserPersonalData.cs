@@ -9,7 +9,9 @@ namespace PSO1.Model
     public class UserPersonalData
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        
+        //public int UserId { get; set; }
+        //User User { get; set; }
         private string firstName;
         private string lastName;
         private DateTime birthDate;
@@ -18,11 +20,11 @@ namespace PSO1.Model
         //public int AdminId;
         //public int ClientId;
         //private UserAddress address;
-
         public UserPersonalData()
         {
 
         }
+        public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }

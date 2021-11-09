@@ -86,9 +86,25 @@
     <Compile Include="Form5.Designer.cs">
       <DependentUpon>Form5.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202111081420188_FirstMigration.cs" />
-    <Compile Include="Migrations\202111081420188_FirstMigration.designer.cs">
-      <DependentUpon>202111081420188_FirstMigration.cs</DependentUpon>
+    <Compile Include="Migrations\202111081524067_FirstMigration.cs" />
+    <Compile Include="Migrations\202111081524067_FirstMigration.designer.cs">
+      <DependentUpon>202111081524067_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111082230430_ChangeUserAddresssAndUserPersonalData.cs" />
+    <Compile Include="Migrations\202111082230430_ChangeUserAddresssAndUserPersonalData.designer.cs">
+      <DependentUpon>202111082230430_ChangeUserAddresssAndUserPersonalData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111082240286_RemoveShoppingCartsTable.cs" />
+    <Compile Include="Migrations\202111082240286_RemoveShoppingCartsTable.designer.cs">
+      <DependentUpon>202111082240286_RemoveShoppingCartsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111082254383_AddedWishListItems.cs" />
+    <Compile Include="Migrations\202111082254383_AddedWishListItems.designer.cs">
+      <DependentUpon>202111082254383_AddedWishListItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111082338278_RemovedWishLists.cs" />
+    <Compile Include="Migrations\202111082338278_RemovedWishLists.designer.cs">
+      <DependentUpon>202111082338278_RemovedWishLists.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
@@ -119,6 +135,7 @@
     <Compile Include="Model\UserInputCheck.cs" />
     <Compile Include="Model\UserPersonalData.cs" />
     <Compile Include="Model\WishList.cs" />
+    <Compile Include="Model\WishListItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -136,8 +153,20 @@
     <EmbeddedResource Include="Form5.resx">
       <DependentUpon>Form5.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111081420188_FirstMigration.resx">
-      <DependentUpon>202111081420188_FirstMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202111081524067_FirstMigration.resx">
+      <DependentUpon>202111081524067_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111082230430_ChangeUserAddresssAndUserPersonalData.resx">
+      <DependentUpon>202111082230430_ChangeUserAddresssAndUserPersonalData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111082240286_RemoveShoppingCartsTable.resx">
+      <DependentUpon>202111082240286_RemoveShoppingCartsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111082254383_AddedWishListItems.resx">
+      <DependentUpon>202111082254383_AddedWishListItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111082338278_RemovedWishLists.resx">
+      <DependentUpon>202111082338278_RemovedWishLists.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

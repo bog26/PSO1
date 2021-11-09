@@ -11,6 +11,7 @@ namespace PSO1.Model
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
+        Product Product { get; set; }
         public byte[] SpecData { get; set; }
         public string SpecDataExtension { get; set; }
 

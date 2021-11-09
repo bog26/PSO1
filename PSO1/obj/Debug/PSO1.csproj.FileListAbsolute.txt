@@ -18,3 +18,7 @@ F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form3.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form4.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form5.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.FirstMigration.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.ChangeUserAddresssAndUserPersonalData.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.RemoveShoppingCartsTable.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddedWishListItems.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.RemovedWishLists.resources

@@ -23,7 +23,18 @@ namespace PSO1.Model
 
             return exisitingUser;
         }
-
+        public static int GetUserPersonalDataId(string userName)
+        {
+            var psContext = new psDBContext();
+            int UserPersonalDataId = psContext.UserPersonalDatas.First(x => x.UserName == userName).Id; 
+            return UserPersonalDataId;
+        }
+        public static int GetUserAddressId(string userName)
+        {
+            var psContext = new psDBContext();
+            int UserAddressId = psContext.UserAddresses.First(x => x.UserName == userName).Id;
+            return UserAddressId;
+        }
         public static bool CheckForCorrectPassword(string loggedUser, string password)
         {
             var psContext = new psDBContext();
@@ -65,7 +76,7 @@ namespace PSO1.Model
             }
             return alreadyExistingAdmin;
         }
-
+        /*
         public static int GetWishListSize(string clientName)
         {
             var psContext = new psDBContext();
@@ -75,8 +86,16 @@ namespace PSO1.Model
             //var wishList = crtClient.WishList.WishPIDs;
             return PIDArray.Length;
         }
+        */
+        public static int GetWishListSize(string userName)
+        {
+            var psContext = new psDBContext();
+            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
+            int wishListSize = psContext.WishListItems.Where(x => x.UserId == crtUserId).ToList().Count;
+            return wishListSize;
+        }
 
-        public static bool IsProductInCart(string user, int PID)
+            public static bool IsProductInCart(string user, int PID)
         {
             bool productinCart = false;
             var psContext = new psDBContext();

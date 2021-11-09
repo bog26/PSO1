@@ -19,13 +19,14 @@ namespace PSO1.Model
         public DbSet<UserPersonalData> UserPersonalDatas { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
 
-        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        //public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ProductSubCategory> ProductSubCategories { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<WishList> WishLists { get; set; }
+        //public DbSet<WishList> WishLists { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<WishListItem> WishListItems { get; set; }
         public DbSet<TransactionItem> TransactionItems { get; set; }
         public DbSet<ProductPicture> ProductPictures { get; set; }
         public DbSet<ProductSpecification> ProductSpecifications { get; set; }

@@ -11,6 +11,7 @@ namespace PSO1.Model
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
+        Product Product { get; set; }
         public byte[] ImageData { get; set; }
 
         public void CreateImage(string fileName)

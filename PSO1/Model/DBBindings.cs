@@ -86,10 +86,10 @@ namespace PSO1.Model
             BindingSource binding = new BindingSource();
 
             var crtUser = psContext.Users.First(x => x.UserName == userName);
-            int crtUserId = crtUser.Id;
+            //int crtUserId = crtUser.Id;
 
             var queryUserInfo = from userInfo in psContext.UserPersonalDatas
-                             where userInfo.UserId == crtUserId
+                             where userInfo.UserName == userName
                                 select new
                              {
                                  UserName = crtUser.UserName,
@@ -103,51 +103,6 @@ namespace PSO1.Model
             return binding;
         }
 
-        /*
-        //TBD:
-        private static IEnumerable<Object> UserDataQuery(string userName, psDBContext psContext)
-        {
-            IUser loggedUser;
-            if (InternalDBQueries.CheckForAdminRights(userName))
-            {
-                loggedUser = psContext.Admins.First(x => x.UserName == userName);
-            }
-            else
-            {
-                loggedUser = psContext.Clients.First(x => x.UserName == userName);
-            }
-
-
-            var newData = new  //null obj
-            {
-                UserName = loggedUser.UserName,
-                FirstName = loggedUser.UserInfo.FirstName,
-                LastName = loggedUser.UserInfo.LastName,
-                BirthDate = loggedUser.UserInfo.BirthDate,
-                email = loggedUser.UserInfo.Email,
-                Telephone = loggedUser.UserInfo.Telephone
-            };
-
-
-            if (loggedUser.GetType() == typeof(Admin))
-            {
-                var query = from user in psContext.Admins
-                            where user.UserName == userName
-                            select newData
-                            ;
-
-                return query;
-            }
-            else
-            {
-                var query = from user in psContext.Clients
-                            where user.UserName == userName
-                            select newData;
-
-                return query;
-            }
-        }
-        */
 
 
         public static BindingSource BindCrtUserAddressToGrid(string userName)
@@ -160,8 +115,9 @@ namespace PSO1.Model
             int crtUserId = crtUser.Id;
 
             var queryUserAddress = from userAddress in psContext.UserAddresses
-                                where userAddress.UserId == crtUserId
-                                select new
+                                //where userAddress.UserId == crtUserId
+                                where userAddress.UserName == userName
+                                   select new
                                 {
                                     Street = userAddress.Street,
                                     StreetNr = userAddress.StreetNr,
@@ -297,6 +253,7 @@ namespace PSO1.Model
             return binding;
         }
 
+        /*
         public static BindingSource BindWishListPIDs(string clientName)
         {
             psDBContext psContext = new psDBContext();
@@ -312,8 +269,10 @@ namespace PSO1.Model
             }
             binding.DataSource = wishListPIDs;
             return binding;
-
         }
+        */
+
+        /*
         public static BindingSource BindWishListProducts(string clientName)
         {
             psDBContext psContext = new psDBContext();
@@ -336,8 +295,19 @@ namespace PSO1.Model
             binding.DataSource = wishListProducts;
             return binding;
         }
+        */
 
-        public static BindingSource BindCartProducts(string clientName)
+        public static BindingSource BindWishListProducts(string userName)
+        {
+            psDBContext psContext = new psDBContext();
+            BindingSource binding = new BindingSource();
+            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
+            var queryWishListItems = psContext.WishListItems.Where(x => x.UserId == crtUserId).ToList();
+            binding.DataSource = queryWishListItems;
+            return binding;
+        }
+
+            public static BindingSource BindCartProducts(string clientName)
         {
             psDBContext psContext = new psDBContext();
             BindingSource binding = new BindingSource();
