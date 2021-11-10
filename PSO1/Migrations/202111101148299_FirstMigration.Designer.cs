@@ -7,13 +7,13 @@ namespace PSO1.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class AddedWishListItems : IMigrationMetadata
+    public sealed partial class FirstMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedWishListItems));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "202111082254383_AddedWishListItems"; }
+            get { return "202111101148299_FirstMigration"; }
         }
         
         string IMigrationMetadata.Source

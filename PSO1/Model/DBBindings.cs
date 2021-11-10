@@ -12,73 +12,6 @@ namespace PSO1.Model
 {
     public class DBBindings
     {
-        /*
-        public static BindingSource BindAllUserDataToGrid()
-        {
-            psDBContext psContext = new psDBContext();
-
-            BindingSource binding = new BindingSource();
-            var query = from i in psContext.Admins
-                        orderby i.Id
-                        select new
-                        {
-                            i.Id,
-                            UserName = i.UserName,
-                            Name = i.UserInfo.FirstName,
-                            LastName = i.UserInfo.LastName,
-                            BirthDate = i.UserInfo.BirthDate,
-                            email = i.UserInfo.Email,
-                            Telephone = i.UserInfo.Telephone
-                        };
-            binding.DataSource = query.ToList();
-            return binding;
-        }
-        */
-
-        /*
-        public static BindingSource BindCrtUserDataToGrid(string userName)
-        {
-
-            psDBContext psContext = new psDBContext();
-            BindingSource binding = new BindingSource();
-
-            var queryAdmin = from user in psContext.Admins
-                             where user.UserName == userName
-                             select new
-                             {
-                                 UserName = user.UserName,
-                                 FirstName = user.UserInfo.FirstName,
-                                 LastName = user.UserInfo.LastName,
-                                 BirthDate = user.UserInfo.BirthDate,
-                                 email = user.UserInfo.Email,
-                                 Telephone = user.UserInfo.Telephone
-                             };
-            var queryClient = from user in psContext.Clients
-                              where user.UserName == userName
-                              select new
-                              {
-                                  UserName = user.UserName,
-                                  FirstName = user.UserInfo.FirstName,
-                                  LastName = user.UserInfo.LastName,
-                                  BirthDate = user.UserInfo.BirthDate,
-                                  email = user.UserInfo.Email,
-                                  Telephone = user.UserInfo.Telephone
-                              };
-
-
-            if (InternalDBQueries.CheckForAdminRights(userName))
-            {
-                binding.DataSource = queryAdmin.ToList();
-            }
-            else
-            {
-                binding.DataSource = queryClient.ToList();
-            }
-            return binding;
-
-        }
-
-        */
 
         public static BindingSource BindCrtUserDataToGrid(string userName)
         {
@@ -253,61 +186,23 @@ namespace PSO1.Model
             return binding;
         }
 
-        /*
-        public static BindingSource BindWishListPIDs(string clientName)
-        {
-            psDBContext psContext = new psDBContext();
-            BindingSource binding = new BindingSource();
-
-            List<int> wishListPIDs = new List<int>();
-            var crtWishList = psContext.WishLists.First(x => x.ClientName == clientName);
-            int[] crtWishListArr;
-            crtWishListArr = crtWishList.getPIDs();
-            for (int i = 0; i < crtWishListArr.Count(); i++)
-            {
-                wishListPIDs.Add(crtWishListArr[i]);
-            }
-            binding.DataSource = wishListPIDs;
-            return binding;
-        }
-        */
-
-        /*
-        public static BindingSource BindWishListProducts(string clientName)
-        {
-            psDBContext psContext = new psDBContext();
-            BindingSource binding = new BindingSource();
-
-            List<int> wishListPIDs = new List<int>();
-            List<string> wishListProducts = new List<string>();
-            var crtWishList = psContext.WishLists.First(x => x.ClientName == clientName);
-            int[] crtWishListArr;
-            crtWishListArr = crtWishList.getPIDs();
-
-            for (int i = 0; i < crtWishListArr.Count(); i++)
-            {
-                int crtProductID = crtWishListArr[i];
-                var queryProduct = psContext.Products.First(x => x.Id == crtProductID);
-                string productModel = queryProduct.ProductName;
-                wishListProducts.Add(productModel);
-            }
-
-            binding.DataSource = wishListProducts;
-            return binding;
-        }
-        */
-
         public static BindingSource BindWishListProducts(string userName)
         {
             psDBContext psContext = new psDBContext();
             BindingSource binding = new BindingSource();
             int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
             var queryWishListItems = psContext.WishListItems.Where(x => x.UserId == crtUserId).ToList();
-            binding.DataSource = queryWishListItems;
+            List<string> wishListProductNames = new List<string>();
+            foreach(WishListItem item in queryWishListItems)
+            {
+                string productName = psContext.Products.First(x => x.Id == item.ProductId).ProductName;
+                wishListProductNames.Add(productName);
+            }
+            binding.DataSource = wishListProductNames;
             return binding;
         }
 
-            public static BindingSource BindCartProducts(string clientName)
+        public static BindingSource BindCartProducts(string clientName)
         {
             psDBContext psContext = new psDBContext();
             BindingSource binding = new BindingSource();

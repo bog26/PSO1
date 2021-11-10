@@ -15,5 +15,6 @@ namespace PSO1.Model
         public int ProductId { get; set; }
 
         public Product Product { get; set; }
+        public User User { get; set; }
     }
 }

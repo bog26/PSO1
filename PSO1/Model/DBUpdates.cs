@@ -348,18 +348,6 @@ namespace PSO1.Model
             return writeToDBSuccessful;
         }
 
-        /*
-        public static void SaveProductToWishlist(string user, int PID)
-        {
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
-
-            var crtWishList = psContext.WishLists.First(x => x.ClientName == user);
-            crtWishList.AddPID(PID);
-
-            psContext.SaveChanges();
-        }
-        */
 
         public static void SaveProductToWishlist(string user, int PID)
         {
@@ -395,8 +383,19 @@ namespace PSO1.Model
             ProductPicture picture = new ProductPicture();
             picture.ProductId = PID;
             picture.CreateImage(fileName);
+            DeleteProductImageIfExisting();
             psContext.ProductPictures.Add(picture);
             psContext.SaveChanges();
+        }
+        public static void DeleteProductImageIfExisting()
+        {
+            psDBContext psContext = new psDBContext();
+            int imgCount = psContext.ProductPictures.Count(); 
+            if(imgCount!=0)
+            {
+                psContext.ProductPictures.Remove(psContext.ProductPictures.ToList()[0]);
+                psContext.SaveChanges();
+            }
         }
         public static byte[] GetPictureData(int PID)
         {
@@ -778,6 +777,15 @@ namespace PSO1.Model
             psContext.ShoppingCartItems.Remove(cartItem);
             psContext.SaveChanges();
         }
+
+        public static void DeleteWishListItem(string user, int itemSelection)
+        {
+            psDBContext psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var cartItem = psContext.WishListItems.Where(x => x.UserId == crtUser.Id).ToList()[itemSelection];
+            psContext.WishListItems.Remove(cartItem);
+            psContext.SaveChanges();
+        }
         public static void DeleteCartItem(string user, ShoppingCartItem item)
         {
 
@@ -795,6 +803,10 @@ namespace PSO1.Model
                                                                             && (x.ProductId == item.ProductId));
                 psContext.ShoppingCartItems.Remove(crtItem);
                 psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost += newItem.Cost;
+                
+                Product crtProduct = psContext.Products.First(x => x.Id == item.ProductId);
+                crtProduct.decreaseStock(newItem.Amount);
+                
                 psContext.SaveChanges();
             }
 

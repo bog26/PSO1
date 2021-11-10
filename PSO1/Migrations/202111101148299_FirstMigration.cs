@@ -110,19 +110,6 @@
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
-                .Index(t => t.ProductId);
-            
-            CreateTable(
-                "dbo.ShoppingCartItems",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        ProductId = c.Int(nullable: false),
-                        Amount = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.ProductId);
@@ -149,7 +136,7 @@
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
+                        UserName = c.String(),
                         Street = c.String(),
                         StreetNr = c.Int(nullable: false),
                         City = c.String(),
@@ -164,7 +151,7 @@
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
+                        UserName = c.String(),
                         FirstName = c.String(),
                         LastName = c.String(),
                         BirthDate = c.DateTime(nullable: false),
@@ -174,13 +161,19 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.ShoppingCarts",
+                "dbo.ShoppingCartItems",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         UserId = c.Int(nullable: false),
+                        ProductId = c.Int(nullable: false),
+                        Amount = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.ProductId);
             
             CreateTable(
                 "dbo.TransactionItems",
@@ -215,53 +208,62 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.WishLists",
+                "dbo.WishListItems",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ClientName = c.String(),
-                        StringPIDs = c.String(),
+                        UserId = c.Int(nullable: false),
+                        ProductId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.ProductId);
             
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.WishListItems", "UserId", "dbo.Users");
+            DropForeignKey("dbo.WishListItems", "ProductId", "dbo.Products");
             DropForeignKey("dbo.TransactionItems", "UserId", "dbo.Users");
             DropForeignKey("dbo.TransactionItems", "TransactionId", "dbo.Transactions");
             DropForeignKey("dbo.TransactionItems", "ProductId", "dbo.Products");
             DropForeignKey("dbo.ShoppingCartItems", "UserId", "dbo.Users");
+            DropForeignKey("dbo.ShoppingCartItems", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.Reviews", "UserId", "dbo.Users");
             DropForeignKey("dbo.Users", "UserPersonalDataId", "dbo.UserPersonalDatas");
             DropForeignKey("dbo.Users", "UserAddressId", "dbo.UserAddresses");
-            DropForeignKey("dbo.ShoppingCartItems", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Reviews", "ProductId", "dbo.Products");
             DropForeignKey("dbo.ProductSpecifications", "ProductId", "dbo.Products");
             DropForeignKey("dbo.ProductPictures", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Products", "ProductSubCategoryId", "dbo.ProductSubCategories");
             DropForeignKey("dbo.ProductSubCategories", "ProductCategoryId", "dbo.ProductCategories");
             DropForeignKey("dbo.Products", "ManufacturerId", "dbo.Manufacturers");
+            DropIndex("dbo.WishListItems", new[] { "ProductId" });
+            DropIndex("dbo.WishListItems", new[] { "UserId" });
             DropIndex("dbo.TransactionItems", new[] { "ProductId" });
             DropIndex("dbo.TransactionItems", new[] { "UserId" });
             DropIndex("dbo.TransactionItems", new[] { "TransactionId" });
-            DropIndex("dbo.Users", new[] { "UserAddressId" });
-            DropIndex("dbo.Users", new[] { "UserPersonalDataId" });
             DropIndex("dbo.ShoppingCartItems", new[] { "ProductId" });
             DropIndex("dbo.ShoppingCartItems", new[] { "UserId" });
+            DropIndex("dbo.Users", new[] { "UserAddressId" });
+            DropIndex("dbo.Users", new[] { "UserPersonalDataId" });
             DropIndex("dbo.Reviews", new[] { "ProductId" });
+            DropIndex("dbo.Reviews", new[] { "UserId" });
             DropIndex("dbo.ProductSpecifications", new[] { "ProductId" });
             DropIndex("dbo.ProductSubCategories", new[] { "ProductCategoryId" });
             DropIndex("dbo.Products", new[] { "ManufacturerId" });
             DropIndex("dbo.Products", new[] { "ProductSubCategoryId" });
             DropIndex("dbo.ProductPictures", new[] { "ProductId" });
-            DropTable("dbo.WishLists");
+            DropTable("dbo.WishListItems");
             DropTable("dbo.Transactions");
             DropTable("dbo.TransactionItems");
-            DropTable("dbo.ShoppingCarts");
+            DropTable("dbo.ShoppingCartItems");
             DropTable("dbo.UserPersonalDatas");
             DropTable("dbo.UserAddresses");
             DropTable("dbo.Users");
-            DropTable("dbo.ShoppingCartItems");
             DropTable("dbo.Reviews");
             DropTable("dbo.ProductSpecifications");
             DropTable("dbo.ProductSubCategories");

@@ -76,17 +76,7 @@ namespace PSO1.Model
             }
             return alreadyExistingAdmin;
         }
-        /*
-        public static int GetWishListSize(string clientName)
-        {
-            var psContext = new psDBContext();
-            var crtClient = psContext.Users.First(x => x.UserName == clientName);
-            var crtWishList = psContext.WishLists.First(x => x.ClientName == clientName);
-            int[] PIDArray = crtWishList.getPIDs();
-            //var wishList = crtClient.WishList.WishPIDs;
-            return PIDArray.Length;
-        }
-        */
+
         public static int GetWishListSize(string userName)
         {
             var psContext = new psDBContext();
@@ -156,7 +146,36 @@ namespace PSO1.Model
             itemPrice = psContext.TransactionItems.First(x => x.ProductId == itemId).Cost;
             return itemPrice;
         }
+        public static string ConstructProductHierarchy(int PID)
+        {
+            string hierarchyText = string.Empty;
+            var psContext = new psDBContext();
+            Product crtProduct = psContext.Products.First(x => x.Id == PID);
+            ProductSubCategory crtSubCategory = psContext.ProductSubCategories.First(x => x.Id == crtProduct.ProductSubCategoryId);
+            string categoryName = psContext.ProductCategories.First(x => x.Id == crtSubCategory.ProductCategoryId).Name;
+            hierarchyText = categoryName + ">" + crtSubCategory.Name + ">" + crtProduct.Model.ToString();
+            return hierarchyText;
+        }
 
+        public static string GetNrOfProductsInCart(string userName)
+        {
+            var psContext = new psDBContext();
+            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
+            List<ShoppingCartItem> cartItems = psContext.ShoppingCartItems.Where(x => x.Id == crtUserId).ToList();
+            int nrOfProductsInCart = 0;
+            foreach(ShoppingCartItem item in cartItems )
+            {
+                nrOfProductsInCart += item.Amount;
+            }
+
+            string productsString = string.Empty;
+
+            if(nrOfProductsInCart!=0)
+            {
+                productsString = nrOfProductsInCart.ToString();
+            }
+            return productsString;
+        }
 
     }
 }

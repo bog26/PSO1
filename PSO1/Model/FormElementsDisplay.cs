@@ -116,6 +116,24 @@ namespace PSO1.Model
             label.Text = labelText;
             panel.Controls.Add(label);
         }
+        public static void DisplayNewLabelOnPanel(Label label, Panel panel, int[] position, int[] size, string labelText, Font font, Color foreColor)
+        {
+            int posX = position[0];
+            int posY = position[1];
+            int length = size[0];
+            int hight = size[1];
+            label.AutoSize = true;
+            //label.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            label.Font = font;
+            label.ForeColor = foreColor;
+            //label.BackColor = color;
+            label.Location = new Point(posX, posY);
+            label.Name = labelText;
+            label.Size = new Size(length, hight);
+            label.TabIndex = 0;
+            label.Text = labelText;
+            panel.Controls.Add(label);
+        }
 
 
         public static void DisplayNewDataGridView(DataGridView dataGridView, int[] position, int[] size)

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace PSO1
 {
@@ -427,11 +428,13 @@ namespace PSO1
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.richTextBox6 = new System.Windows.Forms.RichTextBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.button40 = new System.Windows.Forms.Button();
 
             this.panelWishList = new System.Windows.Forms.Panel();
             this.label27 = new System.Windows.Forms.Label();
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.button36 = new System.Windows.Forms.Button();
+            this.button39 = new System.Windows.Forms.Button();
 
             this.panelShoppingCart = new System.Windows.Forms.Panel();
             this.label28 = new System.Windows.Forms.Label();
@@ -444,7 +447,12 @@ namespace PSO1
             this.dataGridView8 = new System.Windows.Forms.DataGridView();
             this.richTextBox7 = new System.Windows.Forms.RichTextBox();
 
-
+            this.panelProductSpec = new System.Windows.Forms.Panel();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.button41 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.richTextBox8 = new System.Windows.Forms.RichTextBox();
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -466,7 +474,8 @@ namespace PSO1
 
             ControlDimensions StandardPanel;
             StandardPanel.X = 900;
-            StandardPanel.Y = 360;
+            //StandardPanel.Y = 360;
+            StandardPanel.Y = 440;
             StandardPanel.PosX = 235;
             StandardPanel.PosY = 68;
 
@@ -474,10 +483,20 @@ namespace PSO1
             EmailBox.X = LargeEmailPanel.X / 2 - 3 * xMargin;
             EmailBox.Y = LargeEmailPanel.Y / 2 - 4 * yMargin - 20;
 
+            ControlDimensions MiniPanel;
+            MiniPanel.X = 200;
+            MiniPanel.Y = 300;
+
             var standardFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular,
                                                         System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
-            
+
+            var mediumFont = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular,
+                                                        System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            var blueText = SystemColors.HotTrack;
+
+            //new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+
             this.Controls.Add(this.buttonShoppingCart1);
             DisplayNewButton(buttonShoppingCart1, new int[2] { 910,10}, new int[2] { 160, 35 }, "Shopping Cart", "Shopping Cart");
             this.buttonShoppingCart1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -810,6 +829,11 @@ namespace PSO1
             DisplayNumericUpDownOnPanel(numericUpDown1, panelProducts, button33, new int[2] { 2 * xItemsSpace, 0 },
                 new int[2] { STDTEXTBOX, SMALLTEXT }, "", standardFont);
 
+            DisplayNewButtonOnPanel(button40, panelProducts, button34, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Open Specifications", standardFont);
+            this.button40.Click += new System.EventHandler(this.button40_Click);
+            this.button40.Hide();
+
             DisplayNewPanel(panelWishList, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
                             new int[2] { StandardPanel.X, StandardPanel.Y }, "panelProducts", true);
             this.Controls.Add(this.panelWishList);
@@ -817,6 +841,8 @@ namespace PSO1
 
             DisplayNewLabelOnPanel(label27, panelWishList, new int[2] { xMargin, yMargin }, new int[2]
                 { CalculateLabelLenght(label27.Text), SMALLTEXT }, "Wish list");
+
+
 
             //DisplayListBox(listBox3, panelWishList, label27, new int[2] { 0, 2 * yItemsSpace },
             //            new int[2] { 140, 60 }, "listBox3", BindWishListPIDs(crtUser));
@@ -828,6 +854,12 @@ namespace PSO1
                 { LONGITEM, SMALLTEXT }, "Show wish List", standardFont);
             this.button36.Click += new System.EventHandler(this.button36_Click);
             button36.Hide();
+
+            DisplayNewButtonOnPanel(button39, panelWishList, listBox3, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Remove selection", standardFont);
+            this.button39.Click += new System.EventHandler(this.button39_Click);
+
+
 
             DisplayNewPanel(panelShoppingCart, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
                             new int[2] { StandardPanel.X, StandardPanel.Y }, "panelShoppingCart", true);
@@ -867,6 +899,56 @@ namespace PSO1
             DisplayNewRichTextBoxOnPanel(richTextBox7, panelTransactions, dataGridView8, new int[2] { 4*xItemsSpace, 0 }, new int[2]
                 { dataGridView8.Size.Width, dataGridView8.Size.Height}, "richTextBox7", standardFont);
             this.richTextBox7.ReadOnly = true;
+
+            //panelProductSpec
+            DisplayNewPanel(panelProductSpec, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
+                           new int[2] { StandardPanel.X, StandardPanel.Y }, "panelProductSpec", true);
+            this.Controls.Add(this.panelProductSpec);
+            panelProductSpec.Hide();
+
+            DisplayNewLabelOnPanel(label30, panelProductSpec, new int[2] { xMargin, yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Product Specifications");
+
+            int label31PosX = StandardPanel.X - 30 * xItemsSpace;
+            int label31PosY = label30.Location.Y;
+            DisplayNewLabelOnPanel(label31, panelProductSpec, new int[2] { label31PosX, label31PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Price");
+
+            DisplayNewButtonOnPanel(button41, panelProductSpec, label30, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Back to search", standardFont);
+            this.button41.Click += new System.EventHandler(this.button41_Click);
+
+            DisplayPicture(pictureBox1, panelProductSpec, button41, new int[2] { 0, 2*yItemsSpace }, new int[2]
+                { MiniPanel.X, MiniPanel.Y });
+
+            DisplayNewRichTextBoxOnPanel(richTextBox8, panelProductSpec, pictureBox1, new int[2] { 4 * xItemsSpace, 0 }, new int[2]
+                { MiniPanel.X, MiniPanel.Y}, "richTextBox8", mediumFont);
+            richTextBox8.ForeColor = blueText;
+            this.richTextBox8.ReadOnly = true;
+
+
+            /*
+            int label24PosX = dataGridView7.Location.X ;
+            int label24PosY = dataGridView7.Location.Y + dataGridView7.Size.Height + 2 * yItemsSpace;
+            string label24Text = "Product specification:";
+            DisplayNewLabelOnPanel(label24, panelProducts, new int[2] { label24PosX, label24PosY }, new int[2]
+                { CalculateLabelLenght(label24Text), SMALLTEXT }, label24Text);
+
+            DisplayNewRichTextBoxOnPanel(richTextBox6, panelProducts, label24, new int[2] { 0, yItemsSpace }, new int[2]
+                { label24.Size.Width, 100}, "richTextBox6", standardFont);
+            this.richTextBox6.ReadOnly = true;
+
+            DisplayNewButtonOnPanel(button33, panelProducts, richTextBox6, new int[2] { 4 * xItemsSpace, 0 }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Add to cart", standardFont);
+            this.button33.Click += new System.EventHandler(this.button33_Click);
+
+            DisplayNewButtonOnPanel(button34, panelProducts, button33, new int[2] { 0, 2*yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Add to wishlist", standardFont);
+            this.button34.Click += new System.EventHandler(this.button34_Click);
+
+            DisplayNumericUpDownOnPanel(numericUpDown1, panelProducts, button33, new int[2] { 2 * xItemsSpace, 0 },
+                new int[2] { STDTEXTBOX, SMALLTEXT }, "", standardFont);
+             */
 
 
         }
@@ -985,11 +1067,13 @@ namespace PSO1
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.RichTextBox richTextBox6;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Button button40;
 
         private System.Windows.Forms.Panel panelWishList;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.ListBox listBox3;
         private System.Windows.Forms.Button button36;
+        private System.Windows.Forms.Button button39;
 
         private System.Windows.Forms.Panel panelShoppingCart;
         private System.Windows.Forms.Label label28;
@@ -1002,5 +1086,12 @@ namespace PSO1
         private System.Windows.Forms.DataGridView dataGridView8;
         private System.Windows.Forms.RichTextBox richTextBox7;
         private OpenFileDialog openFileDialog1;
+
+        private System.Windows.Forms.Panel panelProductSpec;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Button button41;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.RichTextBox richTextBox8;
     }
 }

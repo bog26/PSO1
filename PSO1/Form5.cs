@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
 using PSO1.Model;
+using static PSO1.Model.InternalDBQueries;
 
 namespace PSO1
 {
@@ -169,11 +170,13 @@ namespace PSO1
             panelWishList.Hide();
             panelShoppingCart.Hide();
             panelTransactions.Hide();
+            panelProductSpec.Hide();
             panel.Show();
         }
 
         private void button15_Click(object sender, EventArgs e) //Wish list
         {
+            listBox3.DataSource = BindWishListProducts(crtUser);
             HideShowAllPanels(panelWishList);
         }
 
@@ -457,6 +460,7 @@ namespace PSO1
         private void button32_Click(object sender, EventArgs e) //"Search"
         {
             ProductsQuery();
+            button40.Hide();
             panelProducts.Show();
         }
 
@@ -487,8 +491,24 @@ namespace PSO1
             if (e.RowIndex != columnHeadIndex)
             {
                 richTextBox6.Text = DBUpdates.GetProductSpec(productID);
+                richTextBox8.Text = DBUpdates.GetProductSpec(productID);
                 numericUpDown1.Maximum = InternalDBQueries.GetMaxAmount(productID);
                 richTextBox6.Refresh();
+                button40.Show();
+                label30.Text = ConstructProductHierarchy(productID);
+                //ConstructProductHierarchy(productID)
+                try
+                {
+                    byte[] pictureData = DBUpdates.GetPictureData(productID);
+                    Bitmap picture = GetBitmap(pictureData);
+                    pictureBox1.Image = picture;
+                    pictureBox1.Show();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+
                 panelProducts.Show();
             }
         }
@@ -509,6 +529,7 @@ namespace PSO1
                     DBUpdates.CreateNewShoppingCartItem(crtUser, productID, amount);
                     string plural = (amount > 1) ? "s" : string.Empty;
                     MessageBox.Show($"{amount} item{plural} with PID {productID} added to cart");
+                    UpdateShoppingCartNr(crtUser);
                 }
             }
             
@@ -534,7 +555,13 @@ namespace PSO1
 
         }
 
-        private void button36_Click(object sender, EventArgs e) //"Add to cart"
+        private void button40_Click(object sender, EventArgs e) //"Open Specifications"
+        {
+           
+            HideShowAllPanels(panelProductSpec);
+        }
+
+            private void button36_Click(object sender, EventArgs e) //"Add to cart"
         {
             //MessageBox.Show(InternalDBQueries.GetWishListStr(crtUser));
         }
@@ -582,7 +609,20 @@ namespace PSO1
             HideShowAllPanels(panelShoppingCart);
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void button39_Click(object sender, EventArgs e) //Remove selection(wishlist)
+        {
+            int selection = listBox3.SelectedIndex;
+            DBUpdates.DeleteWishListItem(crtUser, selection);
+            listBox3.DataSource = BindWishListProducts(crtUser);
+            HideShowAllPanels(panelWishList);
+        }
+
+        private void button41_Click(object sender, EventArgs e) //Back to search
+        {
+            HideShowAllPanels(panelProducts);
+        }
+
+            private void button7_Click(object sender, EventArgs e)
         {
             HideShowAllPanels(panelTransactions);
             dataGridView8.DataSource = BindTransactionsToGrid(crtUser);
@@ -610,6 +650,8 @@ namespace PSO1
             panelTransactions.Show();
         }
 
+        
+
         private string ConstructTransactionInfo(int transId) //use StringBuider()!!
         {
             string transInfo = string.Empty;
@@ -625,6 +667,17 @@ namespace PSO1
             }
 
             return transInfo;
+        }
+
+        private void UpdateShoppingCartNr(string user)
+        {
+            string nr = GetNrOfProductsInCart(crtUser);
+            if(nr!= string.Empty)
+            {
+                button5.Text = button5.Text + "(" + nr + ")";
+                button5.Show();
+            }
+            
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
