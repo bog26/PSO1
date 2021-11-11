@@ -216,7 +216,7 @@ namespace PSO1.Model
             binding.DataSource = cartProductNames;
             return binding;
         }
-        public static List<int> GetCartProductIDs(string userName)
+        public static List<int> GetCartProductIDs(string userName )
         {
             psDBContext psContext = new psDBContext();
             BindingSource binding = new BindingSource();

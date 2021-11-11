@@ -146,6 +146,14 @@ namespace PSO1.Model
             itemPrice = psContext.TransactionItems.First(x => x.ProductId == itemId).Cost;
             return itemPrice;
         }
+
+        public static decimal GetProductPrice(int PID)
+        {
+            var psContext = new psDBContext();
+            decimal productPrice = psContext.Products.First(x => x.Id == PID).crtSellPrice;
+            return productPrice;
+        }
+
         public static string ConstructProductHierarchy(int PID)
         {
             string hierarchyText = string.Empty;
@@ -157,24 +165,20 @@ namespace PSO1.Model
             return hierarchyText;
         }
 
-        public static string GetNrOfProductsInCart(string userName)
+       
+        public static int GetNrOfProductsInCart(string userName)
         {
             var psContext = new psDBContext();
+            int productsInCart = 0;
             int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
-            List<ShoppingCartItem> cartItems = psContext.ShoppingCartItems.Where(x => x.Id == crtUserId).ToList();
-            int nrOfProductsInCart = 0;
-            foreach(ShoppingCartItem item in cartItems )
+            //var queryCartProducts = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList();
+            var queryCartProducts = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList();
+            foreach(ShoppingCartItem item in queryCartProducts)
             {
-                nrOfProductsInCart += item.Amount;
+                productsInCart += item.Amount;                               
             }
-
-            string productsString = string.Empty;
-
-            if(nrOfProductsInCart!=0)
-            {
-                productsString = nrOfProductsInCart.ToString();
-            }
-            return productsString;
+            //productsInCart = queryCartProducts.Count();
+            return productsInCart;
         }
 
     }

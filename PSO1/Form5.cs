@@ -11,6 +11,7 @@ using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
 using PSO1.Model;
 using static PSO1.Model.InternalDBQueries;
+using System.IO;
 
 namespace PSO1
 {
@@ -496,7 +497,8 @@ namespace PSO1
                 richTextBox6.Refresh();
                 button40.Show();
                 label30.Text = ConstructProductHierarchy(productID);
-                //ConstructProductHierarchy(productID)
+                label32.Text = GetProductPrice(productID).ToString();
+                label32.Show();
                 try
                 {
                     byte[] pictureData = DBUpdates.GetPictureData(productID);
@@ -598,6 +600,7 @@ namespace PSO1
             DBUpdates.DeleteCartItem(crtUser, selection);
             listBox4.DataSource = BindCartProducts(crtUser);
             HideShowAllPanels(panelShoppingCart);
+            UpdateShoppingCartNr(crtUser);
         }
 
         private void button38_Click(object sender, EventArgs e) //Checkout
@@ -607,6 +610,7 @@ namespace PSO1
             DBUpdates.CheckoutCartItems(crtUser);
             listBox4.DataSource = BindCartProducts(crtUser);
             HideShowAllPanels(panelShoppingCart);
+            UpdateShoppingCartNr(crtUser);
         }
 
         private void button39_Click(object sender, EventArgs e) //Remove selection(wishlist)
@@ -671,13 +675,46 @@ namespace PSO1
 
         private void UpdateShoppingCartNr(string user)
         {
-            string nr = GetNrOfProductsInCart(crtUser);
-            if(nr!= string.Empty)
+            //string nr = GetNrOfProductsInCart(crtUser); // always string.Empty !!!
+            string nr = GetNrOfProductsInCart(crtUser).ToString();
+;           //if (nr!= string.Empty)
+            if (nr != "0")
             {
-                button5.Text = button5.Text + "(" + nr + ")";
+                string updatedText = "Shopping cart" + "(" + nr + ")";
+                button5.Text = updatedText;
+                buttonShoppingCart1.Text = updatedText;
                 button5.Show();
+                buttonShoppingCart1.Show();
+            }
+            else
+            {
+                string defaultText = "Shopping cart";
+                button5.Text = defaultText;
+                buttonShoppingCart1.Text = defaultText;
+                button5.Show();
+                buttonShoppingCart1.Show();
             }
             
+        }
+
+        private void button42_Click(object sender, EventArgs e) //Download spec sheet
+        {
+            int crtRowIndex = dataGridView8.CurrentCell.RowIndex;
+            int crtProductId = int.Parse(dataGridView8.Rows[crtRowIndex].Cells[0].Value.ToString());
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string specFileName = saveFileDialog1.FileName;
+                byte[] specData = DBUpdates.GetSpecData(crtProductId);
+
+                var bw = new BinaryWriter(File.Open(specFileName, FileMode.OpenOrCreate));
+                using (bw)
+                {
+                    bw.Write(specData);
+                }
+
+            }
+
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

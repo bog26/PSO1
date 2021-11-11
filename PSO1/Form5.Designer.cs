@@ -453,6 +453,10 @@ namespace PSO1
             this.button41 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.richTextBox8 = new System.Windows.Forms.RichTextBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.button42 = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            //private SaveFileDialog saveFileDialog1;
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -806,6 +810,7 @@ namespace PSO1
             dataGridView7.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView7.CellContentClick += new DataGridViewCellEventHandler(dataGridView7_CellContentClick);
 
+            /*
             int label24PosX = dataGridView7.Location.X ;
             int label24PosY = dataGridView7.Location.Y + dataGridView7.Size.Height + 2 * yItemsSpace;
             string label24Text = "Product specification:";
@@ -815,8 +820,9 @@ namespace PSO1
             DisplayNewRichTextBoxOnPanel(richTextBox6, panelProducts, label24, new int[2] { 0, yItemsSpace }, new int[2]
                 { label24.Size.Width, 100}, "richTextBox6", standardFont);
             this.richTextBox6.ReadOnly = true;
+            */
 
-            DisplayNewButtonOnPanel(button33, panelProducts, richTextBox6, new int[2] { 4 * xItemsSpace, 0 }, new int[2]
+            DisplayNewButtonOnPanel(button33, panelProducts, dataGridView7, new int[2] { 0, 4*yItemsSpace }, new int[2]
                 { LONGITEM, SMALLTEXT }, "Add to cart", standardFont);
             this.button33.Click += new System.EventHandler(this.button33_Click);
 
@@ -926,6 +932,16 @@ namespace PSO1
             richTextBox8.ForeColor = blueText;
             this.richTextBox8.ReadOnly = true;
 
+            int label32PosX = label31.Location.X + label31.Size.Width +  2*xItemsSpace;
+            int label32PosY = label31.Location.Y;
+            DisplayNewLabelOnPanel(label32, panelProductSpec, new int[2] { label32PosX, label32PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, string.Empty, mediumFont, blueText);
+
+            
+            DisplayNewButtonOnPanel(button42, panelProductSpec, pictureBox1, new int[2] { 0, 4 * yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Download spec sheet", standardFont);
+            this.button42.Click += new System.EventHandler(this.button42_Click);
+            
 
             /*
             int label24PosX = dataGridView7.Location.X ;
@@ -1093,5 +1109,8 @@ namespace PSO1
         private System.Windows.Forms.Button button41;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.RichTextBox richTextBox8;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Button button42;
+        private SaveFileDialog saveFileDialog1;
     }
 }
