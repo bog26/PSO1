@@ -665,7 +665,8 @@ namespace PSO1
             {
                 int amount = InternalDBQueries.GetAmountOfSameTransItems(crtUser, transId, i);
                 decimal cost = InternalDBQueries.GetTransactionItemPrice(crtUser, transId, i)/ amount;
-                transInfo = transInfo + $"Item {i} "+ $" - {amount} Pcs. " + $"Cost/Item: {cost} €" +"\n";
+                string plural = (amount > 1) ? "s" : string.Empty;
+                transInfo = transInfo + $"Item nr.{i+1} "+ $" - {amount} Pc{plural}. " + $"Cost/Item: {cost} €" +"\n";
                 transInfo = transInfo + InternalDBQueries.GetTransactionItemName(crtUser, transId, i) + "\n";
                 transInfo = transInfo + "\n";
             }
