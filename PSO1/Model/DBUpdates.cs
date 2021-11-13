@@ -793,8 +793,10 @@ namespace PSO1.Model
         public static void CheckoutCartItems(string user)
         {
             psDBContext psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
             Transaction crtTransaction = GetCrtTransaction(user);
             List<ShoppingCartItem> CartItems = GetCartItems(user);
+
             foreach (ShoppingCartItem item in CartItems)
             {
                 TransactionItem newItem = CreateNewTransactionItem(item, crtTransaction);
@@ -802,14 +804,49 @@ namespace PSO1.Model
                 ShoppingCartItem crtItem = psContext.ShoppingCartItems.First(x => (x.UserId == item.UserId)
                                                                             && (x.ProductId == item.ProductId));
                 psContext.ShoppingCartItems.Remove(crtItem);
-                psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost += newItem.Cost;
-                
+                psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost -= newItem.Cost;
                 Product crtProduct = psContext.Products.First(x => x.Id == item.ProductId);
+
                 crtProduct.decreaseStock(newItem.Amount);
-                
+                crtUser.ModifyCredit(-newItem.Cost);
                 psContext.SaveChanges();
             }
+        }
+        public static void ModifyShoppingCartItemAmount(string user, int selection, int newAmount)
+        {
+            psDBContext psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            try 
+            {
+                var crtShoppingCartItem = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList()[selection];
+                crtShoppingCartItem.Amount = newAmount;
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            
+            psContext.SaveChanges();
+        }
+        public static bool CheckIfEnoughFounds(string user)
+        {
+            bool enoughFounds = false;
+            psDBContext psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            List<ShoppingCartItem> CartItems = GetCartItems(user);
+            decimal totalCostCart = 0;
 
+            foreach (ShoppingCartItem item in CartItems)
+            {
+                decimal productCost = psContext.Products.First(x => x.Id == item.ProductId).crtSellPrice;
+                totalCostCart += productCost * item.Amount;
+            }
+            if (crtUser.Credit >= totalCostCart)
+            {
+                enoughFounds = true;
+            }
+
+            return enoughFounds;
         }
 
         public static TransactionItem CreateNewTransactionItem(ShoppingCartItem cartItem, Transaction transaction)
@@ -837,6 +874,20 @@ namespace PSO1.Model
 
         }
 
+        public static void AddCredit(string user, decimal credit)
+        {
+            psDBContext psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            
+            crtUser.ModifyCredit(credit);
+            Transaction newTransaction = new Transaction();
+            newTransaction.UserId = crtUser.Id;
+            newTransaction.TotalCost = credit;
+
+            psContext.Transactions.Add(newTransaction);
+            psContext.SaveChanges();
+        }
+
         public static void TransactionInit(string user)
         {
             psDBContext psContext = new psDBContext();
@@ -852,9 +903,9 @@ namespace PSO1.Model
             psDBContext psContext = new psDBContext();
             List<int> cartItemsList = new List<int>();
             var crtUser = psContext.Users.First(x => x.UserName == user);
-            var cartItem = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList();
+            var cartItems = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList();
 
-            return cartItem;
+            return cartItems;
         }
 
     }

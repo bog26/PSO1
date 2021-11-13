@@ -38,6 +38,16 @@ namespace PSO1.Model
             Regex rgx = new Regex(@"^[A-Z]{1}[a-z]{1,20}(\s[A-Z]{1}[a-z]{1,20}){0,3}$");
             inputIsCorrect = rgx.IsMatch(name);
             return inputIsCorrect;
+
+        }
+
+        public static bool CheckCreditInput(string text)
+        {
+            bool inputIsCorrect;
+            //Regex rgx = new Regex(@"^[1-9]{1}[0-9]{1,8}.[0-9]{1,2}$");
+            Regex rgx = new Regex(@"^(([1-9]{1}[0-9]{1,8})|([1-9]{1}[0-9]{1,8}.[0-9]{1,2}))$");
+            inputIsCorrect = rgx.IsMatch(text);
+            return inputIsCorrect;
         }
     }
 }

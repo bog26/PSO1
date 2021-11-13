@@ -12,6 +12,8 @@ using static PSO1.Model.DBBindings;
 using PSO1.Model;
 using static PSO1.Model.InternalDBQueries;
 using System.IO;
+using static PSO1.Model.UserInputCheck;
+using static PSO1.Model.DBUpdates;
 
 namespace PSO1
 {
@@ -172,6 +174,8 @@ namespace PSO1
             panelShoppingCart.Hide();
             panelTransactions.Hide();
             panelProductSpec.Hide();
+            panelFinancialStatus.Hide();
+            panelAddCredit.Hide();
             panel.Show();
         }
 
@@ -603,14 +607,32 @@ namespace PSO1
             UpdateShoppingCartNr(crtUser);
         }
 
+        private void listBox4_Click(object sender, EventArgs e)
+        {
+            string test = listBox4.SelectedItem.ToString();
+            int selection = listBox4.SelectedIndex;
+
+            numericUpDown2.Value = GetShoppingCartItemAmount(crtUser, selection);
+            //listBox4.Text = GetShoppingCartItemAmount(crtUser, selection).ToString();
+            //MessageBox.Show(test);
+        }
+
         private void button38_Click(object sender, EventArgs e) //Checkout
         {
             //DBUpdates.TransactionInit(crtUser);
             //CheckoutCartItems
-            DBUpdates.CheckoutCartItems(crtUser);
-            listBox4.DataSource = BindCartProducts(crtUser);
-            HideShowAllPanels(panelShoppingCart);
-            UpdateShoppingCartNr(crtUser);
+            if(CheckIfEnoughFounds(crtUser))
+            {
+                DBUpdates.CheckoutCartItems(crtUser);
+                listBox4.DataSource = BindCartProducts(crtUser);
+                HideShowAllPanels(panelShoppingCart);
+                UpdateShoppingCartNr(crtUser);
+            }
+            else
+            {
+                MessageBox.Show("Insufficient fonds. Please add more credit");
+            }
+            
         }
 
         private void button39_Click(object sender, EventArgs e) //Remove selection(wishlist)
@@ -621,15 +643,24 @@ namespace PSO1
             HideShowAllPanels(panelWishList);
         }
 
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            int value = (int)numericUpDown2.Value;
+            int selection = listBox4.SelectedIndex;
+            ModifyShoppingCartItemAmount(crtUser, selection, value);
+            //MessageBox.Show("Value changed to " + numericUpDown1.Value.ToString());
+        }
+
         private void button41_Click(object sender, EventArgs e) //Back to search
         {
             HideShowAllPanels(panelProducts);
         }
 
-            private void button7_Click(object sender, EventArgs e)
+        private void button7_Click(object sender, EventArgs e) //Purchases
         {
             HideShowAllPanels(panelTransactions);
-            dataGridView8.DataSource = BindTransactionsToGrid(crtUser);
+            dataGridView8.DataSource = BindPurchasesToGrid(crtUser);
+            //dataGridView8.DataSource = BindTransactionsToGrid(crtUser);
         }
 
         private void dataGridView8_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -642,7 +673,9 @@ namespace PSO1
 
             if (e.RowIndex != columnHeadIndex)
             {
-                richTextBox7.Text = ConstructTransactionInfo(transId);
+                //richTextBox7.Text = ConstructTransactionInfo(transId);
+                richTextBox7.Text = ConstructTransactionInfoTest(transId);
+                //ConstructTransactionInfoTest
                 //richTextBox6.Text = DBUpdates.GetProductSpec(productID);
                 //richTextBox7.Refresh();
                 //panelProducts.Show();
@@ -659,17 +692,44 @@ namespace PSO1
         private string ConstructTransactionInfo(int transId) //use StringBuider()!!
         {
             string transInfo = string.Empty;
-            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId);
+            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId); //ok
             transInfo = nrOfItems.ToString() + " " + "different products in total" + "\n";
             for(int i=0; i<nrOfItems; i++)
             {
-                int amount = InternalDBQueries.GetAmountOfSameTransItems(crtUser, transId, i);
-                decimal cost = InternalDBQueries.GetTransactionItemPrice(crtUser, transId, i)/ amount;
+                int amount = InternalDBQueries.GetAmountOfSameTransItems(crtUser, transId, i);  //TBD
+                decimal cost = InternalDBQueries.GetTransactionItemPrice(crtUser, transId, i)/ amount;  //ok
                 string plural = (amount > 1) ? "s" : string.Empty;
                 transInfo = transInfo + $"Item nr.{i+1} "+ $" - {amount} Pc{plural}. " + $"Cost/Item: {cost} €" +"\n";
-                transInfo = transInfo + InternalDBQueries.GetTransactionItemName(crtUser, transId, i) + "\n";
+                transInfo = transInfo + InternalDBQueries.GetTransactionItemName(crtUser, transId, i) + "\n";  //ok
                 transInfo = transInfo + "\n";
             }
+
+            return transInfo;
+        }
+
+        private string ConstructTransactionInfoTest(int transId) //use StringBuider()!!
+        {
+            string transInfo = string.Empty;
+            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId); //ok
+            transInfo = nrOfItems.ToString() + " " + "different products in total" + "\n";
+           
+            List<int> transItemsIds = GetTransactionItemsIds(transId);
+            foreach(int transItemsId in transItemsIds)
+            {
+                transInfo = transInfo + ConstructTransactionItemInfo(transItemsId);
+            }
+            //ConstructTransactionItemInfo
+            /*
+            for (int i = 0; i < nrOfItems; i++)
+            {
+                int amount = InternalDBQueries.GetAmountOfSameTransItems(crtUser, transId, i);  //TBD
+                decimal cost = InternalDBQueries.GetTransactionItemPrice(crtUser, transId, i) / amount;  //ok
+                string plural = (amount > 1) ? "s" : string.Empty;
+                transInfo = transInfo + $"Item nr.{i + 1} " + $" - {amount} Pc{plural}. " + $"Cost/Item: {cost} €" + "\n";
+                transInfo = transInfo + InternalDBQueries.GetTransactionItemName(crtUser, transId, i) + "\n";  //ok
+                transInfo = transInfo + "\n";
+            }
+            */
 
             return transInfo;
         }
@@ -722,5 +782,41 @@ namespace PSO1
         {
 
         }
+
+        private void button9_Click(object sender, EventArgs e) //Status
+        {
+            label37.Text = GetCrtCreditStatus(crtUser);
+            dataGridView9.DataSource = BindTransactionsToGrid(crtUser);
+            HideShowAllPanels(panelFinancialStatus);
+        }
+
+        private void button10_Click(object sender, EventArgs e) //AddCredit
+        {
+            HideShowAllPanels(panelAddCredit);
+        }
+
+        private void button44_Click(object sender, EventArgs e) //Add Credit
+        {
+            //MessageBox.Show("adding credit");
+            bool correctInput = CheckCreditInput(textBox12.Text);
+            if(correctInput)
+            {
+                string creditText = $"adding credit amount: {textBox12.Text}";
+                MessageBox.Show(creditText);
+                decimal addedCredit;
+                bool decInputOk = decimal.TryParse(textBox12.Text, out addedCredit);
+                if(decInputOk)
+                {
+                    AddCredit(crtUser, addedCredit);
+                }
+            }
+            else
+            {
+                MessageBox.Show("please add a correct amount!");
+            }
+
+        }
+
+        
     }
 }

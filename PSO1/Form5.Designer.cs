@@ -197,7 +197,7 @@ namespace PSO1
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(126, 23);
             this.button7.TabIndex = 3;
-            this.button7.Text = "Transactions";
+            this.button7.Text = "Purchases";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
@@ -254,6 +254,7 @@ namespace PSO1
             this.button10.TabIndex = 2;
             this.button10.Text = "Add credit";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // label4
             // 
@@ -275,6 +276,7 @@ namespace PSO1
             this.button9.TabIndex = 0;
             this.button9.Text = "Status";
             this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // notifyIcon1
             // 
@@ -284,14 +286,6 @@ namespace PSO1
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // clientBindingSource1
-            // 
-            //this.clientBindingSource1.DataSource = typeof(PSO1.Model.Client);
-            // 
-            // clientBindingSource
-            // 
-            //this.clientBindingSource.DataSource = typeof(PSO1.Model.Client);
             // 
             // Form5
             // 
@@ -441,6 +435,7 @@ namespace PSO1
             this.listBox4 = new System.Windows.Forms.ListBox();
             this.button37 = new System.Windows.Forms.Button();
             this.button38 = new System.Windows.Forms.Button();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
 
             this.panelTransactions = new System.Windows.Forms.Panel();
             this.label29 = new System.Windows.Forms.Label();
@@ -456,7 +451,21 @@ namespace PSO1
             this.label32 = new System.Windows.Forms.Label();
             this.button42 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            //private SaveFileDialog saveFileDialog1;
+          
+
+            this.panelFinancialStatus = new System.Windows.Forms.Panel();
+            this.label33 = new System.Windows.Forms.Label();
+            this.button43 = new System.Windows.Forms.Button();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.dataGridView9 = new System.Windows.Forms.DataGridView();
+
+
+            this.panelAddCredit = new System.Windows.Forms.Panel();
+            this.label34 = new System.Windows.Forms.Label();
+            this.button44 = new System.Windows.Forms.Button();
+            this.textBox12 = new System.Windows.Forms.TextBox();
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -877,6 +886,7 @@ namespace PSO1
 
             DisplayListBox(listBox4, panelShoppingCart, label28, new int[2] { 0, 2 * yItemsSpace },
                        new int[2] { 200, 100 }, "listBox4", BindCartProducts(crtUser));
+            this.listBox4.Click += new System.EventHandler(this.listBox4_Click);
 
             DisplayNewButtonOnPanel(button37, panelShoppingCart, listBox4, new int[2] { 0, 2 * yItemsSpace }, new int[2]
                 { LONGITEM, SMALLTEXT }, "Remove selection", standardFont);
@@ -886,13 +896,18 @@ namespace PSO1
                 { LONGITEM, SMALLTEXT }, "Checkout", standardFont);
             this.button38.Click += new System.EventHandler(this.button38_Click);
 
+            DisplayNumericUpDownOnPanel(numericUpDown2, panelShoppingCart, button37, new int[2] { 2 * xItemsSpace, 0 },
+                new int[2] { STDTEXTBOX, SMALLTEXT }, "", standardFont);
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+
+
             DisplayNewPanel(panelTransactions, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
                             new int[2] { StandardPanel.X, StandardPanel.Y }, "panelTransactions", true);
             this.Controls.Add(this.panelTransactions);
             panelTransactions.Hide();
 
             DisplayNewLabelOnPanel(label29, panelTransactions, new int[2] { xMargin, yMargin }, new int[2]
-                { STDTEXTBOX, SMALLTEXT }, "Transactions");
+                { STDTEXTBOX, SMALLTEXT }, "Purchases");
 
             int dataGridView8PosX = label29.Location.X;
             int dataGridView8PosY = label9.Location.Y + label9.Size.Height + 4 * yItemsSpace;
@@ -941,30 +956,52 @@ namespace PSO1
             DisplayNewButtonOnPanel(button42, panelProductSpec, pictureBox1, new int[2] { 0, 4 * yItemsSpace }, new int[2]
                 { LONGITEM, SMALLTEXT }, "Download spec sheet", standardFont);
             this.button42.Click += new System.EventHandler(this.button42_Click);
-            
 
-            /*
-            int label24PosX = dataGridView7.Location.X ;
-            int label24PosY = dataGridView7.Location.Y + dataGridView7.Size.Height + 2 * yItemsSpace;
-            string label24Text = "Product specification:";
-            DisplayNewLabelOnPanel(label24, panelProducts, new int[2] { label24PosX, label24PosY }, new int[2]
-                { CalculateLabelLenght(label24Text), SMALLTEXT }, label24Text);
+            DisplayNewPanel(panelFinancialStatus, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
+                           new int[2] { StandardPanel.X, StandardPanel.Y }, "panelFinancialStatus ", true);
+            this.Controls.Add(this.panelFinancialStatus);
+            panelFinancialStatus.Hide();
 
-            DisplayNewRichTextBoxOnPanel(richTextBox6, panelProducts, label24, new int[2] { 0, yItemsSpace }, new int[2]
-                { label24.Size.Width, 100}, "richTextBox6", standardFont);
-            this.richTextBox6.ReadOnly = true;
+            DisplayNewLabelOnPanel(label33, panelFinancialStatus, new int[2] { xMargin, yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Financial Status");
 
-            DisplayNewButtonOnPanel(button33, panelProducts, richTextBox6, new int[2] { 4 * xItemsSpace, 0 }, new int[2]
-                { LONGITEM, SMALLTEXT }, "Add to cart", standardFont);
-            this.button33.Click += new System.EventHandler(this.button33_Click);
+            int label35PosX = label33.Location.X;
+            int label35PosY = label33.Location.Y + label33.Size.Height + 4*yItemsSpace;
+            DisplayNewLabelOnPanel(label35, panelFinancialStatus, new int[2] { label35PosX, label35PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "All Transactions");
 
-            DisplayNewButtonOnPanel(button34, panelProducts, button33, new int[2] { 0, 2*yItemsSpace }, new int[2]
-                { LONGITEM, SMALLTEXT }, "Add to wishlist", standardFont);
-            this.button34.Click += new System.EventHandler(this.button34_Click);
+            int dataGridView9PosX = label35.Location.X;
+            int dataGridView9PosY = label35.Location.Y + label35.Size.Height + 4*yItemsSpace;
+            DisplayNewDataGridViewOnPanel(dataGridView9, panelFinancialStatus, new int[2]
+                { dataGridView9PosX, dataGridView9PosY}, new int[2] { 350, 150 });
+            dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            DisplayNumericUpDownOnPanel(numericUpDown1, panelProducts, button33, new int[2] { 2 * xItemsSpace, 0 },
-                new int[2] { STDTEXTBOX, SMALLTEXT }, "", standardFont);
-             */
+            int label36PosX = dataGridView9.Location.X;
+            int label36PosY = dataGridView9.Location.Y + dataGridView9.Size.Height + 4 * yItemsSpace;
+            DisplayNewLabelOnPanel(label36, panelFinancialStatus, new int[2] { label36PosX, label36PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Current credit:", mediumFont, blueText);
+
+            int label37PosX = label36PosX + label36.Size.Width + 20*xItemsSpace;
+            int label37PosY = label36PosY;
+            DisplayNewLabelOnPanel(label37, panelFinancialStatus, new int[2] { label37PosX, label37PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Amount", mediumFont, blueText);
+
+
+            DisplayNewPanel(panelAddCredit, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
+                           new int[2] { StandardPanel.X, StandardPanel.Y }, "panelFinancialStatus ", true);
+            this.Controls.Add(this.panelAddCredit);
+            panelAddCredit.Hide();
+
+            DisplayNewLabelOnPanel(label34, panelAddCredit, new int[2] { xMargin, yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Add credit");
+
+            DisplayNewButtonOnPanel(button44, panelAddCredit, label34, new int[2] { 0, 4 * yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Add Credit", standardFont);
+            this.button44.Click += new System.EventHandler(this.button44_Click);
+
+            DisplayNewTextBoxOnPanel(textBox12, panelAddCredit, button44, new int[2] { 4*xItemsSpace, 0 }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "");
+
 
 
         }
@@ -1096,6 +1133,7 @@ namespace PSO1
         private System.Windows.Forms.ListBox listBox4;
         private System.Windows.Forms.Button button37;
         private System.Windows.Forms.Button button38;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
 
         private System.Windows.Forms.Panel panelTransactions;
         private System.Windows.Forms.Label label29;
@@ -1112,5 +1150,19 @@ namespace PSO1
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Button button42;
         private SaveFileDialog saveFileDialog1;
+
+        private System.Windows.Forms.Panel panelFinancialStatus;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Button button43;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.DataGridView dataGridView9;
+
+
+        private System.Windows.Forms.Panel panelAddCredit;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Button button44;
+        private System.Windows.Forms.TextBox textBox12;
     }
 }

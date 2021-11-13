@@ -226,6 +226,7 @@ namespace PSO1.Model
                                 select shoppingCart.ProductId;
             return productsQuery.ToList();
         }
+        
 
 
         public static BindingSource BindProductsToGrid(string keyword, string minPriceStr, string maxPriceStr)
@@ -578,6 +579,24 @@ namespace PSO1.Model
             var crtUser = psContext.Users.First(x => x.UserName == user);
             var queryTransactions = from transaction in psContext.Transactions
                                     where transaction.UserId == crtUser.Id
+                                    select new
+                                    {
+                                        ID = transaction.Id,
+                                        Time = transaction.TransactionTime,
+                                        Amount = transaction.TotalCost
+                                    };
+            binding.DataSource = queryTransactions.ToList();
+            return binding;
+        }
+
+        public static BindingSource BindPurchasesToGrid(string user)
+        {
+            psDBContext psContext = new psDBContext();
+            BindingSource binding = new BindingSource();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var queryTransactions = from transaction in psContext.Transactions
+                                    where transaction.UserId == crtUser.Id
+                                       && transaction.TotalCost < 0
                                     select new
                                     {
                                         ID = transaction.Id,

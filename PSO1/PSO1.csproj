@@ -90,6 +90,10 @@
     <Compile Include="Migrations\202111101148299_FirstMigration.designer.cs">
       <DependentUpon>202111101148299_FirstMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111121512140_AddCreditColumnToUser.cs" />
+    <Compile Include="Migrations\202111121512140_AddCreditColumnToUser.designer.cs">
+      <DependentUpon>202111121512140_AddCreditColumnToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
@@ -139,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111101148299_FirstMigration.resx">
       <DependentUpon>202111101148299_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111121512140_AddCreditColumnToUser.resx">
+      <DependentUpon>202111121512140_AddCreditColumnToUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

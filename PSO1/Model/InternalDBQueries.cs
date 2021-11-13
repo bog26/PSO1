@@ -107,7 +107,37 @@ namespace PSO1.Model
             amount = productQuery.Stock;
             return amount;
         }
+
+        public static int GetShoppingCartItemAmount(string user, int index)
+        {
+            
+            var psContext = new psDBContext();
+            var crtUserId = psContext.Users.First(x => x.UserName == user).Id;
+            int amount = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList()[index].Amount;
+            return amount;
+        }
         public static int GetNrOfTransItems(string user, int transId)
+        {
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            int transItemsNr = psContext.TransactionItems.Where(x => (x.UserId == crtUser.Id)
+                                                                  && (x.TransactionId == transId)).ToList().Count;
+            return transItemsNr;
+        }
+
+        public static List<int> GetTransactionItemsIds(int transId)
+        {
+            List<int> transactionItemsIds = new List<int>();
+            var psContext = new psDBContext();
+            var queryTransactionItems = psContext.TransactionItems.Where(x => x.TransactionId == transId).ToList();
+            foreach(TransactionItem item in queryTransactionItems)
+            {
+                transactionItemsIds.Add(item.Id);
+            }
+            return transactionItemsIds;
+        }
+
+        public static int GetNrOfPurchasedTransItems(string user, int transId)
         {
             var psContext = new psDBContext();
             var crtUser = psContext.Users.First(x => x.UserName == user);
@@ -125,7 +155,7 @@ namespace PSO1.Model
             string itemName = psContext.Products.First(x => x.Id == itemId).ProductName;
             return itemName;
         }
-        public static int GetAmountOfSameTransItems(string user, int transId, int itemIndex)
+        public static int GetAmountOfSameTransItems(string user, int transId, int itemIndex) //To fix
         {
             var psContext = new psDBContext();
             int crtUserId = psContext.Users.First(x => x.UserName == user).Id;
@@ -135,6 +165,29 @@ namespace PSO1.Model
             int transItemsNr = psContext.TransactionItems.First(x => x.ProductId == itemId).Amount;
             return transItemsNr;
         }
+
+        public static string ConstructTransactionItemInfo(int transItemId)
+        {
+            var psContext = new psDBContext();
+            string itemInfo = string.Empty;
+            StringBuilder infoBuilder = new StringBuilder();
+
+            var crtTransItem = psContext.TransactionItems.First(x => x.Id == transItemId);
+            string TransItemId = crtTransItem.Id.ToString();
+            var crtProduct = psContext.Products.First(x => x.Id == crtTransItem.ProductId);
+            int amount = crtTransItem.Amount;
+            string plural = (amount > 1) ? "s" : string.Empty;
+            string cost = (crtTransItem.Cost / amount).ToString();
+
+            infoBuilder.Append($"Item with ID {crtProduct.Id}: ");
+            infoBuilder.Append($"{amount} Pc{plural}.");
+            infoBuilder.Append($"Price per unit: {crtProduct.crtSellPrice} \n");
+            infoBuilder.Append(crtProduct.ProductName + "\n");
+;            //itemInfo = $"Item with ID {crtProduct.Id}: " + $"{amount} Pc{plural}." +  $"Price per unit: {crtProduct.crtSellPrice} "
+            itemInfo = infoBuilder.ToString();
+            return itemInfo; 
+        }
+
         public static decimal GetTransactionItemPrice(string user, int transId, int itemIndex)
         {
             decimal itemPrice = 0;
@@ -180,6 +233,29 @@ namespace PSO1.Model
             //productsInCart = queryCartProducts.Count();
             return productsInCart;
         }
+
+        public static bool CheckIfEnoughCreditforPurcahasing(string user, decimal purchaseValue)
+        {
+            bool enoughCredit = false;
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            if(crtUser.Credit >= purchaseValue)
+            {
+                enoughCredit = true;
+            }
+            return enoughCredit;
+        }
+
+        public static string GetCrtCreditStatus(string user)
+        {
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            string crtCredit = crtUser.Credit.ToString();
+            return crtCredit;
+        }
+
+
+
 
     }
 }
