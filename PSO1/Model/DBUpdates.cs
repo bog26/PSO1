@@ -773,8 +773,15 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             var crtUser = psContext.Users.First(x => x.UserName == user);
-            var cartItem = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList()[itemSelection];
-            psContext.ShoppingCartItems.Remove(cartItem);
+            try
+            {
+                var cartItem = psContext.ShoppingCartItems.Where(x => x.UserId == crtUser.Id).ToList()[itemSelection];
+                psContext.ShoppingCartItems.Remove(cartItem);
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                MessageBox.Show(e.Message.ToString());
+            }
             psContext.SaveChanges();
         }
 
@@ -794,22 +801,28 @@ namespace PSO1.Model
         {
             psDBContext psContext = new psDBContext();
             var crtUser = psContext.Users.First(x => x.UserName == user);
-            Transaction crtTransaction = GetCrtTransaction(user);
             List<ShoppingCartItem> CartItems = GetCartItems(user);
-
-            foreach (ShoppingCartItem item in CartItems)
+            if(CartItems.Count !=0)
             {
-                TransactionItem newItem = CreateNewTransactionItem(item, crtTransaction);
-                psContext.TransactionItems.Add(newItem);
-                ShoppingCartItem crtItem = psContext.ShoppingCartItems.First(x => (x.UserId == item.UserId)
-                                                                            && (x.ProductId == item.ProductId));
-                psContext.ShoppingCartItems.Remove(crtItem);
-                psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost -= newItem.Cost;
-                Product crtProduct = psContext.Products.First(x => x.Id == item.ProductId);
+                Transaction crtTransaction = GetCrtTransaction(user);
+                foreach (ShoppingCartItem item in CartItems)
+                {
+                    TransactionItem newItem = CreateNewTransactionItem(item, crtTransaction);
+                    psContext.TransactionItems.Add(newItem);
+                    ShoppingCartItem crtItem = psContext.ShoppingCartItems.First(x => (x.UserId == item.UserId)
+                                                                                && (x.ProductId == item.ProductId));
+                    psContext.ShoppingCartItems.Remove(crtItem);
+                    psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost -= newItem.Cost;
+                    Product crtProduct = psContext.Products.First(x => x.Id == item.ProductId);
 
-                crtProduct.decreaseStock(newItem.Amount);
-                crtUser.ModifyCredit(-newItem.Cost);
-                psContext.SaveChanges();
+                    crtProduct.decreaseStock(newItem.Amount);
+                    crtUser.ModifyCredit(-newItem.Cost);
+                    psContext.SaveChanges();
+                }
+            }
+            else 
+            {
+                MessageBox.Show("Cart is empty!");
             }
         }
         public static void ModifyShoppingCartItemAmount(string user, int selection, int newAmount)

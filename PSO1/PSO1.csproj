@@ -94,6 +94,10 @@
     <Compile Include="Migrations\202111121512140_AddCreditColumnToUser.designer.cs">
       <DependentUpon>202111121512140_AddCreditColumnToUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111132011139_AddUserItemReviews.cs" />
+    <Compile Include="Migrations\202111132011139_AddUserItemReviews.designer.cs">
+      <DependentUpon>202111132011139_AddUserItemReviews.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
@@ -121,6 +125,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserAddress.cs" />
     <Compile Include="Model\UserInputCheck.cs" />
+    <Compile Include="Model\UserItemReview.cs" />
     <Compile Include="Model\UserPersonalData.cs" />
     <Compile Include="Model\WishList.cs" />
     <Compile Include="Model\WishListItem.cs" />
@@ -146,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111121512140_AddCreditColumnToUser.resx">
       <DependentUpon>202111121512140_AddCreditColumnToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111132011139_AddUserItemReviews.resx">
+      <DependentUpon>202111132011139_AddUserItemReviews.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

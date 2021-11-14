@@ -176,6 +176,7 @@ namespace PSO1
             panelProductSpec.Hide();
             panelFinancialStatus.Hide();
             panelAddCredit.Hide();
+            panelUserProductReviews.Hide();
             panel.Show();
         }
 
@@ -491,10 +492,11 @@ namespace PSO1
             
             int columnHeadIndex = -1;
             int rowSelection = e.RowIndex;
-            int productID = Int32.Parse( dataGridView7.Rows[rowSelection].Cells[0].Value.ToString());
+
 
             if (e.RowIndex != columnHeadIndex)
             {
+                int productID = Int32.Parse(dataGridView7.Rows[rowSelection].Cells[0].Value.ToString());
                 richTextBox6.Text = DBUpdates.GetProductSpec(productID);
                 richTextBox8.Text = DBUpdates.GetProductSpec(productID);
                 numericUpDown1.Maximum = InternalDBQueries.GetMaxAmount(productID);
@@ -673,22 +675,16 @@ namespace PSO1
 
             if (e.RowIndex != columnHeadIndex)
             {
-                //richTextBox7.Text = ConstructTransactionInfo(transId);
-                richTextBox7.Text = ConstructTransactionInfoTest(transId);
-                //ConstructTransactionInfoTest
-                //richTextBox6.Text = DBUpdates.GetProductSpec(productID);
-                //richTextBox7.Refresh();
-                //panelProducts.Show();
+                richTextBox7.Text = ConstructTransactionInfo(transId);
 
             }
-
 
             richTextBox7.Refresh();
             panelTransactions.Show();
         }
 
         
-
+        /*
         private string ConstructTransactionInfo(int transId) //use StringBuider()!!
         {
             string transInfo = string.Empty;
@@ -706,11 +702,12 @@ namespace PSO1
 
             return transInfo;
         }
+        */
 
-        private string ConstructTransactionInfoTest(int transId) //use StringBuider()!!
+        private string ConstructTransactionInfo(int transId) 
         {
             string transInfo = string.Empty;
-            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId); //ok
+            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId); 
             transInfo = nrOfItems.ToString() + " " + "different products in total" + "\n";
            
             List<int> transItemsIds = GetTransactionItemsIds(transId);
@@ -718,27 +715,13 @@ namespace PSO1
             {
                 transInfo = transInfo + ConstructTransactionItemInfo(transItemsId);
             }
-            //ConstructTransactionItemInfo
-            /*
-            for (int i = 0; i < nrOfItems; i++)
-            {
-                int amount = InternalDBQueries.GetAmountOfSameTransItems(crtUser, transId, i);  //TBD
-                decimal cost = InternalDBQueries.GetTransactionItemPrice(crtUser, transId, i) / amount;  //ok
-                string plural = (amount > 1) ? "s" : string.Empty;
-                transInfo = transInfo + $"Item nr.{i + 1} " + $" - {amount} Pc{plural}. " + $"Cost/Item: {cost} €" + "\n";
-                transInfo = transInfo + InternalDBQueries.GetTransactionItemName(crtUser, transId, i) + "\n";  //ok
-                transInfo = transInfo + "\n";
-            }
-            */
 
             return transInfo;
         }
 
         private void UpdateShoppingCartNr(string user)
         {
-            //string nr = GetNrOfProductsInCart(crtUser); // always string.Empty !!!
             string nr = GetNrOfProductsInCart(crtUser).ToString();
-;           //if (nr!= string.Empty)
             if (nr != "0")
             {
                 string updatedText = "Shopping cart" + "(" + nr + ")";
@@ -817,6 +800,9 @@ namespace PSO1
 
         }
 
-        
+        private void button8_Click(object sender, EventArgs e)
+        {
+            HideShowAllPanels(panelUserProductReviews);
+        }
     }
 }

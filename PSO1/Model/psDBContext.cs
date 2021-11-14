@@ -30,6 +30,7 @@ namespace PSO1.Model
         public DbSet<TransactionItem> TransactionItems { get; set; }
         public DbSet<ProductPicture> ProductPictures { get; set; }
         public DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public DbSet<UserItemReview> UserItemReviews { get; set; }
 
     }
 }

@@ -183,7 +183,7 @@ namespace PSO1.Model
             infoBuilder.Append($"{amount} Pc{plural}.");
             infoBuilder.Append($"Price per unit: {crtProduct.crtSellPrice} \n");
             infoBuilder.Append(crtProduct.ProductName + "\n");
-;            //itemInfo = $"Item with ID {crtProduct.Id}: " + $"{amount} Pc{plural}." +  $"Price per unit: {crtProduct.crtSellPrice} "
+     
             itemInfo = infoBuilder.ToString();
             return itemInfo; 
         }

@@ -187,8 +187,9 @@ namespace PSO1
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(126, 23);
             this.button8.TabIndex = 4;
-            this.button8.Text = "Reviews";
+            this.button8.Text = "My reviews";
             this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button7
             // 
@@ -466,6 +467,11 @@ namespace PSO1
             this.label34 = new System.Windows.Forms.Label();
             this.button44 = new System.Windows.Forms.Button();
             this.textBox12 = new System.Windows.Forms.TextBox();
+
+            this.panelUserProductReviews = new System.Windows.Forms.Panel();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.listBox5 = new System.Windows.Forms.ListBox();
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -1002,6 +1008,24 @@ namespace PSO1
             DisplayNewTextBoxOnPanel(textBox12, panelAddCredit, button44, new int[2] { 4*xItemsSpace, 0 }, new int[2]
                 { SHORTITEM, SMALLTEXT }, "");
 
+            DisplayNewPanel(panelUserProductReviews, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
+                           new int[2] { StandardPanel.X, StandardPanel.Y }, "panelUserProductReviews ", true);
+            this.Controls.Add(this.panelUserProductReviews);
+            panelUserProductReviews.Hide();
+
+            DisplayNewLabelOnPanel(label38, panelUserProductReviews, new int[2] { xMargin, yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "My reviews");
+
+            int label39PosX = label38.Location.X + 4*xItemsSpace;
+            int label39PosY = label38.Location.Y + label38.Size.Height + 4*yItemsSpace;
+            DisplayNewLabelOnPanel(label39, panelUserProductReviews, new int[2] { label39PosX, label39PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Purchased items", mediumFont, blueText);
+
+            /*
+             DisplayListBox(listBox3, panelWishList, label27, new int[2] { 0, 2 * yItemsSpace },
+                       new int[2] { 200, 100 }, "listBox3", BindWishListProducts(crtUser));
+             * */
+
 
 
         }
@@ -1164,5 +1188,11 @@ namespace PSO1
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.Button button44;
         private System.Windows.Forms.TextBox textBox12;
+
+        private System.Windows.Forms.Panel panelUserProductReviews;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.ListBox listBox5;
+
     }
 }
