@@ -98,6 +98,18 @@
     <Compile Include="Migrations\202111132011139_AddUserItemReviews.designer.cs">
       <DependentUpon>202111132011139_AddUserItemReviews.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111142330280_AddTitleToUserItemReviews.cs" />
+    <Compile Include="Migrations\202111142330280_AddTitleToUserItemReviews.designer.cs">
+      <DependentUpon>202111142330280_AddTitleToUserItemReviews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111142332166_AddTitleAndReviewToUserItemReviews.cs" />
+    <Compile Include="Migrations\202111142332166_AddTitleAndReviewToUserItemReviews.designer.cs">
+      <DependentUpon>202111142332166_AddTitleAndReviewToUserItemReviews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111151446186_AddReviewTimeToUserItemReviews.cs" />
+    <Compile Include="Migrations\202111151446186_AddReviewTimeToUserItemReviews.designer.cs">
+      <DependentUpon>202111151446186_AddReviewTimeToUserItemReviews.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
@@ -105,6 +117,7 @@
     <Compile Include="Model\DBUpdates.cs" />
     <Compile Include="Model\Encryption.cs" />
     <Compile Include="Model\FormElementsDisplay.cs" />
+    <Compile Include="Model\InfoMessagesConstruction.cs" />
     <Compile Include="Model\InternalDBQueries.cs" />
     <Compile Include="Model\IOMethods.cs" />
     <Compile Include="Model\IUser.cs" />
@@ -154,6 +167,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111132011139_AddUserItemReviews.resx">
       <DependentUpon>202111132011139_AddUserItemReviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111142330280_AddTitleToUserItemReviews.resx">
+      <DependentUpon>202111142330280_AddTitleToUserItemReviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111142332166_AddTitleAndReviewToUserItemReviews.resx">
+      <DependentUpon>202111142332166_AddTitleAndReviewToUserItemReviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111151446186_AddReviewTimeToUserItemReviews.resx">
+      <DependentUpon>202111151446186_AddReviewTimeToUserItemReviews.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

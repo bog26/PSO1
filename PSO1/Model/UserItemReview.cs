@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    class UserItemReview
+    public class UserItemReview
     {
         public int Id { get; set; }
         public int UserId { get; set; }
         User User { get; set; }
         public int ProductId { get; set; }
         Product Product { get; set; }
-        string Review { get; set; }
+        public string Title { get; set; }
+        public string Review { get; set; }
         public int UserItemScore { get; set; }
+        public DateTime ReviewTime { get; set; }
 
+        public UserItemReview()
+        {
+            ReviewTime = DateTime.Now;
+        }
     }
 }

@@ -921,5 +921,19 @@ namespace PSO1.Model
             return cartItems;
         }
 
+        public static void CreateNewReview(string user, int PID, string title, string review, int rating)
+        {
+            psDBContext psContext = new psDBContext();
+            UserItemReview newReview = new UserItemReview();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            newReview.UserId = crtUser.Id;
+            newReview.ProductId = PID;
+            newReview.UserItemScore = rating;
+            newReview.Title = title;
+            newReview.Review = review;
+            psContext.UserItemReviews.Add(newReview);
+            psContext.SaveChanges();
+        }
+
     }
 }

@@ -224,13 +224,11 @@ namespace PSO1.Model
             var psContext = new psDBContext();
             int productsInCart = 0;
             int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
-            //var queryCartProducts = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList();
             var queryCartProducts = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList();
             foreach(ShoppingCartItem item in queryCartProducts)
             {
                 productsInCart += item.Amount;                               
             }
-            //productsInCart = queryCartProducts.Count();
             return productsInCart;
         }
 
@@ -254,8 +252,91 @@ namespace PSO1.Model
             return crtCredit;
         }
 
+        public static bool CheckIfReviewedProduct(string user, int index)
+        {
+            bool wasReviewed = false;
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
 
+            List<Product> purchasedProducts = DBBindings.BuildUserPurchasedProductsList(user);
+            int crtPID = purchasedProducts[index].Id;
 
+            List <UserItemReview> userReviews = psContext.UserItemReviews.Where(x => x.UserId == crtUser.Id).ToList();
+            foreach(UserItemReview review in userReviews)
+            {
+                if(review.ProductId == crtPID)
+                {
+                    wasReviewed = true;
+                    return wasReviewed;
+                }
+            }
+            return wasReviewed; 
+        }
+        public static int GetCrtPIDFromPurchasedProdList(string user, int index)
+        {
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            List<Product> purchasedProducts = DBBindings.BuildUserPurchasedProductsList(user);
+            int crtPID = purchasedProducts[index].Id;
+            return crtPID;
+        }
+
+        public static string GetProductName(int PID)
+        {
+            var psContext = new psDBContext();
+            string prodName = psContext.Products.First(x =>x.Id == PID).ProductName; 
+            return prodName;
+        }
+
+        public static int GetCrtReviewId(string user, int index)
+        {
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            int PID = GetCrtPIDFromPurchasedProdList(user, index);
+            int reviewId = psContext.UserItemReviews.First(x => (x.UserId == crtUser.Id)
+                                                                && (x.ProductId == PID)).Id; 
+            return reviewId;
+        }
+        public static string GetReviewer(int reviewId)
+        {
+            var psContext = new psDBContext();
+            int userId = psContext.UserItemReviews.First(x => x.Id == reviewId).UserId;
+            string reviewer = psContext.Users.First(x => x.Id == userId).UserName;
+            return reviewer; 
+        }
+        public static string GetReviewProductName(int reviewId)
+        {
+            var psContext = new psDBContext();
+            int PID = psContext.UserItemReviews.First(x => x.Id == reviewId).ProductId;
+            string productName = GetProductName(PID);
+            return productName;
+        }
+
+        public static string GetReviewTitle(int reviewId)
+        {
+            var psContext = new psDBContext();
+            string title = psContext.UserItemReviews.First(x => x.Id == reviewId).Title;
+            return title;
+        }
+        public static string GetReview(int reviewId)
+        {
+            var psContext = new psDBContext();
+            string review = psContext.UserItemReviews.First(x => x.Id == reviewId).Review;
+            return review;
+        }
+        public static string GetReviewProductRating(int reviewId)
+        {
+            var psContext = new psDBContext();
+            string rating = psContext.UserItemReviews.First(x => x.Id == reviewId).UserItemScore.ToString();
+            return rating;
+        }
+
+        public static string GetReviewDate(int reviewId)
+        {
+            var psContext = new psDBContext();
+            string reviewDate = psContext.UserItemReviews.First(x => x.Id == reviewId).ReviewTime.ToString();
+            return reviewDate;
+        }
 
     }
 }

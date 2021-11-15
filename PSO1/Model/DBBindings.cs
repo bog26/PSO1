@@ -416,64 +416,6 @@ namespace PSO1.Model
         }
 
 
-        public static BindingSource BindProductsToGridPrototype() //ok
-        {
-            psDBContext psContext = new psDBContext();
-
-            BindingSource binding = new BindingSource();
-            string productModel = "Iphone";
-            string category = "Mobile";
-            string subcategory = "IOS Smartphones";
-            string manufacturer = "Apple";
-            var queryProducts = from product in psContext.Products
-                                where
-                                      product.SubCategory.Name == subcategory &&
-                                      product.Manufacturer.Name == manufacturer
-                                select new
-                                {
-                                    Model = product.Model,
-                                    Category = product.SubCategory.Category,
-                                    Subcategory = product.SubCategory,
-                                    Manufacturer = product.Manufacturer,
-                                    Stock = product.Stock,
-                                    ManufPrice = product.crtManufacturerPrice,
-                                    SellPrice = product.crtSellPrice,
-                                };
-
-            binding.DataSource = queryProducts.ToList();
-            return binding;
-        }
-
-        public static BindingSource BindProductsToGridPrototype1(string keyword)
-        {
-            psDBContext psContext = new psDBContext();
-            BindingSource binding = new BindingSource();
-
-            var queryProducts = psContext.Products.Where(x => x.ProductName != " ");
-            if (keyword != string.Empty)
-            {
-                queryProducts = queryProducts.Where(x => x.ProductName.Contains(keyword));
-            }
-
-            var queryProductsReturn = from product in queryProducts
-                                      select new
-                                      {
-                                          Name = product.ProductName,
-                                          Model = product.Model,
-                                          Category = product.SubCategory.Category,
-                                          Subcategory = product.SubCategory,
-                                          Manufacturer = product.Manufacturer,
-                                          Stock = product.Stock,
-                                          ManufPrice = product.crtManufacturerPrice,
-                                          SellPrice = product.crtSellPrice,
-                                      };
-
-            binding.DataSource = queryProductsReturn.ToList();
-            return binding;
-        }
-
-
-
         public static BindingSource BindInboxMessagesToGridView(string user)
         {
             psDBContext psContext = new psDBContext();
@@ -607,6 +549,40 @@ namespace PSO1.Model
             return binding;
         }
 
+        public static BindingSource BindPurchasedProductsToListbox(string userName)
+        {
+            psDBContext psContext = new psDBContext();
+            BindingSource binding = new BindingSource();
+            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
+            List<Product> purchasedProducts = BuildUserPurchasedProductsList(userName);
+            List<string> purchasedProductNames = new List<string>();
+
+            foreach(Product item in purchasedProducts)
+            {
+                purchasedProductNames.Add(item.ProductName);
+            }
+            
+            binding.DataSource = purchasedProductNames;
+            return binding;
+        }
+
+        public static List<Product> BuildUserPurchasedProductsList(string userName)
+        {
+            psDBContext psContext = new psDBContext();
+            List<Product> purchasedProducts = new List<Product>();
+            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
+            List<TransactionItem> queryTransactionItems = psContext.TransactionItems.Where(x => x.UserId == crtUserId).ToList();
+            queryTransactionItems.OrderBy(x => x.ProductId);
+            foreach (TransactionItem item in queryTransactionItems)
+            {
+                Product purchasedProduct = psContext.Products.First(x => x.Id == item.ProductId);
+                if (!purchasedProducts.Contains(purchasedProduct))
+                {
+                    purchasedProducts.Add(purchasedProduct);
+                }
+            }
+            return purchasedProducts;
+        }
 
     }
 

@@ -14,6 +14,7 @@ using static PSO1.Model.InternalDBQueries;
 using System.IO;
 using static PSO1.Model.UserInputCheck;
 using static PSO1.Model.DBUpdates;
+using static PSO1.Model.InfoMessagesConstruction;
 
 namespace PSO1
 {
@@ -611,12 +612,8 @@ namespace PSO1
 
         private void listBox4_Click(object sender, EventArgs e)
         {
-            string test = listBox4.SelectedItem.ToString();
             int selection = listBox4.SelectedIndex;
-
             numericUpDown2.Value = GetShoppingCartItemAmount(crtUser, selection);
-            //listBox4.Text = GetShoppingCartItemAmount(crtUser, selection).ToString();
-            //MessageBox.Show(test);
         }
 
         private void button38_Click(object sender, EventArgs e) //Checkout
@@ -675,7 +672,7 @@ namespace PSO1
 
             if (e.RowIndex != columnHeadIndex)
             {
-                richTextBox7.Text = ConstructTransactionInfo(transId);
+                richTextBox7.Text = ConstructTransactionInfo(transId, crtUser);
 
             }
 
@@ -683,41 +680,6 @@ namespace PSO1
             panelTransactions.Show();
         }
 
-        
-        /*
-        private string ConstructTransactionInfo(int transId) //use StringBuider()!!
-        {
-            string transInfo = string.Empty;
-            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId); //ok
-            transInfo = nrOfItems.ToString() + " " + "different products in total" + "\n";
-            for(int i=0; i<nrOfItems; i++)
-            {
-                int amount = InternalDBQueries.GetAmountOfSameTransItems(crtUser, transId, i);  //TBD
-                decimal cost = InternalDBQueries.GetTransactionItemPrice(crtUser, transId, i)/ amount;  //ok
-                string plural = (amount > 1) ? "s" : string.Empty;
-                transInfo = transInfo + $"Item nr.{i+1} "+ $" - {amount} Pc{plural}. " + $"Cost/Item: {cost} €" +"\n";
-                transInfo = transInfo + InternalDBQueries.GetTransactionItemName(crtUser, transId, i) + "\n";  //ok
-                transInfo = transInfo + "\n";
-            }
-
-            return transInfo;
-        }
-        */
-
-        private string ConstructTransactionInfo(int transId) 
-        {
-            string transInfo = string.Empty;
-            int nrOfItems = InternalDBQueries.GetNrOfTransItems(crtUser, transId); 
-            transInfo = nrOfItems.ToString() + " " + "different products in total" + "\n";
-           
-            List<int> transItemsIds = GetTransactionItemsIds(transId);
-            foreach(int transItemsId in transItemsIds)
-            {
-                transInfo = transInfo + ConstructTransactionItemInfo(transItemsId);
-            }
-
-            return transInfo;
-        }
 
         private void UpdateShoppingCartNr(string user)
         {
@@ -803,6 +765,52 @@ namespace PSO1
         private void button8_Click(object sender, EventArgs e)
         {
             HideShowAllPanels(panelUserProductReviews);
+        }
+
+        private void button45_Click(object sender, EventArgs e) //Write review
+        {
+            HideReviewSubPanels(newReviewSubPanel);
+        }
+
+        private void listBox5_Click(object sender, EventArgs e)
+        {
+            int selection = listBox5.SelectedIndex;
+            bool existingReview = CheckIfReviewedProduct(crtUser, selection);
+            if(existingReview)
+            {
+
+                int reviewId = GetCrtReviewId(crtUser, selection);
+                richTextBox10.Text = ConstructProductReviewInfo(reviewId);
+                HideReviewSubPanels(existingReviewsSubPanel);
+            }
+            else
+            {
+                //GetProductName
+                label42.Text = listBox5.SelectedItem.ToString();
+                HideReviewSubPanels(noReviewsSubPanel);
+            }
+   
+        }
+
+        private void button47_Click(object sender, EventArgs e) //Submit
+        {
+            int selection = listBox5.SelectedIndex;
+            int PID = GetCrtPIDFromPurchasedProdList(crtUser, selection);
+            int rating = (int)numericUpDown3.Value;
+            string title = textBox13.Text;
+            string review = richTextBox9.Text;
+            CreateNewReview(crtUser, PID, title,review, rating);
+            newReviewSubPanel.Hide();
+        }
+
+
+
+        private void HideReviewSubPanels(Panel panel)
+        {
+            existingReviewsSubPanel.Hide();
+            noReviewsSubPanel.Hide();
+            newReviewSubPanel.Hide();
+            panel.Show(); 
         }
     }
 }

@@ -472,6 +472,32 @@ namespace PSO1
             this.label38 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.listBox5 = new System.Windows.Forms.ListBox();
+            this.noReviewsSubPanel = new System.Windows.Forms.Panel();
+            this.label40 = new System.Windows.Forms.Label();
+            this.button45 = new System.Windows.Forms.Button();
+            this.existingReviewsSubPanel = new System.Windows.Forms.Panel();
+            this.richTextBox10 = new System.Windows.Forms.RichTextBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.button46 = new System.Windows.Forms.Button();
+            this.newReviewSubPanel = new System.Windows.Forms.Panel();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.textBox13 = new System.Windows.Forms.TextBox();
+            this.richTextBox9 = new System.Windows.Forms.RichTextBox();
+            this.button47 = new System.Windows.Forms.Button();
+
+
+
+            /*
+            private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.TextBox textBox13;
+        private System.Windows.Forms.RichTextBox richTextBox9;
+        private System.Windows.Forms.Button button47;
+             * */
+
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -498,6 +524,18 @@ namespace PSO1
             StandardPanel.PosX = 235;
             StandardPanel.PosY = 68;
 
+            ControlDimensions SubPanelLandscapeSmall;
+            SubPanelLandscapeSmall.X = 200;
+            SubPanelLandscapeSmall.Y = 100;
+
+            ControlDimensions SubPanelPortraitSmall;
+            SubPanelPortraitSmall.X = 100;
+            SubPanelPortraitSmall.Y = 200;
+
+            ControlDimensions SubPanelLandscapeMed;
+            SubPanelLandscapeMed.X = 400;
+            SubPanelLandscapeMed.Y = 200;
+
             ControlDimensions EmailBox;
             EmailBox.X = LargeEmailPanel.X / 2 - 3 * xMargin;
             EmailBox.Y = LargeEmailPanel.Y / 2 - 4 * yMargin - 20;
@@ -513,6 +551,7 @@ namespace PSO1
             var mediumFont = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular,
                                                         System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             var blueText = SystemColors.HotTrack;
+            var blackText = SystemColors.ControlText;
 
             //new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
 
@@ -1021,12 +1060,83 @@ namespace PSO1
             DisplayNewLabelOnPanel(label39, panelUserProductReviews, new int[2] { label39PosX, label39PosY }, new int[2]
                 { STDTEXTBOX, SMALLTEXT }, "Purchased items", mediumFont, blueText);
 
-            /*
-             DisplayListBox(listBox3, panelWishList, label27, new int[2] { 0, 2 * yItemsSpace },
-                       new int[2] { 200, 100 }, "listBox3", BindWishListProducts(crtUser));
-             * */
+            
+            DisplayListBox(listBox5, panelUserProductReviews, label39, new int[2] { 0, 2 * yItemsSpace },
+                       new int[2] { 200, 100 }, "listBox5", BindPurchasedProductsToListbox(crtUser));
+            this.listBox5.Click += new System.EventHandler(this.listBox5_Click);
 
+            int noReviewsSubPanelPosX = listBox5.Location.X + listBox5.Size.Width + 4 * xItemsSpace;
+            int noReviewsSubPanelPosY = listBox5.Location.Y;
+            DisplayNewPanel(noReviewsSubPanel, panelUserProductReviews, new int[2] { noReviewsSubPanelPosX, noReviewsSubPanelPosY },
+                           new int[2] { SubPanelLandscapeSmall.X, SubPanelLandscapeSmall.Y }, "noReviewsSubPanel", true);
+            noReviewsSubPanel.Hide();
 
+            DisplayNewLabelOnPanel(label40, noReviewsSubPanel, new int[2] { xMargin, yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Product not reviewed", mediumFont, blueText);
+
+            int button45PosX = label40.Location.X + 4 * xItemsSpace;
+            int button45PosY = label40.Location.Y + label40.Size.Height + 4 * yItemsSpace;
+            DisplayNewButtonOnPanel(button45, noReviewsSubPanel, new int[2] { button45PosX, button45PosY }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Write a review", standardFont);
+            this.button45.Click += new System.EventHandler(this.button45_Click);
+
+            int existingReviewsSubPanelPosX = listBox5.Location.X;
+            int existingReviewsSubPanelPosY = listBox5.Location.Y + listBox5.Size.Height + 4 * yItemsSpace;
+            DisplayNewPanel(existingReviewsSubPanel, panelUserProductReviews, new int[2] { existingReviewsSubPanelPosX, existingReviewsSubPanelPosY },
+                           new int[2] { SubPanelLandscapeMed.X, SubPanelLandscapeMed.Y }, "existingReviewsSubPanel", true);
+            existingReviewsSubPanel.Hide();
+
+            DisplayNewRichTextBoxOnPanel(richTextBox10, existingReviewsSubPanel, new int[2] { xMargin, yMargin }, new int[2]
+                { SubPanelLandscapeMed.X -2*xMargin, SubPanelLandscapeMed.Y- 2*yMargin }, "richTextBox10", standardFont);
+
+            int newReviewSubPanelPosX = listBox5.Location.X;
+            int newReviewSubPanelPosY = listBox5.Location.Y + listBox5.Size.Height + 4 * yItemsSpace;
+            DisplayNewPanel(newReviewSubPanel, panelUserProductReviews, new int[2] { newReviewSubPanelPosX, newReviewSubPanelPosY },
+                           new int[2] { SubPanelLandscapeMed.X, SubPanelLandscapeMed.Y }, "newReviewSubPanel", true);
+            newReviewSubPanel.Hide();
+
+            DisplayNewLabelOnPanel(label42, newReviewSubPanel, new int[2] { xMargin, yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Item", mediumFont, blueText);
+
+            int label43PosX = label42.Location.X + 5 * xItemsSpace;
+            int label43PosY = label42.Location.Y + label42.Size.Height + 2 * yItemsSpace;
+            DisplayNewLabelOnPanel(label43, newReviewSubPanel, new int[2] { label43PosX, label43PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Rating", mediumFont, blackText);
+
+            int label44PosX = label43.Location.X;
+            int label44PosY = label43.Location.Y + label43.Size.Height + 2 * yItemsSpace;
+            DisplayNewLabelOnPanel(label44, newReviewSubPanel, new int[2] { label44PosX, label44PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Title", mediumFont, blackText);
+
+            int label45PosX = label44.Location.X;
+            int label45PosY = label44.Location.Y + label43.Size.Height + 2 * yItemsSpace;
+            DisplayNewLabelOnPanel(label45, newReviewSubPanel, new int[2] { label45PosX, label45PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "Review", mediumFont, blackText);
+
+            int numericUpDown3PosX = label43.Location.X + label43.Size.Width + 4 * xItemsSpace;
+            int numericUpDown3PosY = label43.Location.Y;
+            DisplayNumericUpDownOnPanel(numericUpDown3, newReviewSubPanel, new int[2] { numericUpDown3PosX, numericUpDown3PosY },
+                new int[2] { STDTEXTBOX, SMALLTEXT }, "", standardFont);
+            numericUpDown3.Minimum = 1;
+            numericUpDown3.Maximum = 5;
+
+            int textBox13PosX = numericUpDown3PosX;
+            int textBox13PosY = label44.Location.Y;
+            DisplayNewTextBoxOnPanel(textBox13, newReviewSubPanel, new int[2] { textBox13PosX, textBox13PosY }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Review title");
+
+            int richTextBox9PosX = numericUpDown3PosX;
+            int richTextBox9PosY = label45.Location.Y;
+            DisplayNewRichTextBoxOnPanel(richTextBox9, newReviewSubPanel, new int[2] { richTextBox9PosX, richTextBox9PosY }, new int[2]
+                { 200, 70 }, "richTextBox9", standardFont);
+            richTextBox9.Text = "Product review";
+
+            //int button47PosX = label42.Location.X + 50 * xItemsSpace;
+            int button47PosX = newReviewSubPanel.Width - LONGITEM - 2 * xItemsSpace;
+            int button47PosY = label42.Location.Y ;
+            DisplayNewButtonOnPanel(button47, newReviewSubPanel, new int[2] { button47PosX, button47PosY }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Submit", standardFont);
+            this.button47.Click += new System.EventHandler(this.button47_Click);
 
         }
 
@@ -1193,6 +1303,22 @@ namespace PSO1
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.ListBox listBox5;
+        private System.Windows.Forms.Panel noReviewsSubPanel;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Button button45;
+        private System.Windows.Forms.Panel existingReviewsSubPanel;
+        private System.Windows.Forms.RichTextBox richTextBox10;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Button button46;
+        private System.Windows.Forms.Panel newReviewSubPanel;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.TextBox textBox13;
+        private System.Windows.Forms.RichTextBox richTextBox9;
+        private System.Windows.Forms.Button button47;
 
     }
 }

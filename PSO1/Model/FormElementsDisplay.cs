@@ -274,6 +274,21 @@ namespace PSO1.Model
             panel.Controls.Add(button);
         }
 
+        public static void DisplayNewButtonOnPanel(Button button, Panel panel, int[] position, int[] size, string buttonText, Font font)
+        {
+            int posX = position[0];
+            int posY = position[1];
+            int length = size[0];
+            int hight = size[1];
+            button.Location = new Point(posX, posY);
+            button.Name = buttonText;
+            button.Size = new Size(length, hight);
+            button.Font = font;
+            button.Text = buttonText;
+            button.UseVisualStyleBackColor = true;
+            panel.Controls.Add(button);
+        }
+
         //public static void DisplayNewLabelOnPanel(Label label, Panel panel, Control parentItem, int[] spacers,  int[] size, string labelText, Font font)
         public static void DisplayNewButtonOnPanel(Button button, Panel panel, Control parentItem, int[] spacers, int[] size, string buttonText, Font font)
         {
@@ -456,17 +471,17 @@ namespace PSO1.Model
             panel.Controls.Add(checkbox);
         }
 
-        public static void DisplayNewRichTextBoxOnPanel(RichTextBox rTextBox, Panel panel, int[] position, int[] size, string labelText)
+        public static void DisplayNewRichTextBoxOnPanel(RichTextBox rTextBox, Panel panel, int[] position, int[] size, string rTextBoxText, Font font)
         {
             int posX = position[0];
             int posY = position[1];
             int length = size[0];
             int hight = size[1];
             rTextBox.Location = new Point(posX, posY);
-            rTextBox.Name = labelText;
+            rTextBox.Font = font;
+            rTextBox.Name = rTextBoxText;
+            rTextBox.Text = "";
             rTextBox.Size = new Size(length, hight);
-            //rTextBox.TabIndex = 0;
-            //rTextBox.Text = labelText;
             panel.Controls.Add(rTextBox);
         }
 
@@ -562,6 +577,20 @@ namespace PSO1.Model
             numUpDown.Name = numUpDownText;
             numUpDown.Text = "";
             numUpDown.Size = new Size(size[0], size[1]);
+            panel.Controls.Add(numUpDown);
+        }
+
+        public static void DisplayNumericUpDownOnPanel(NumericUpDown numUpDown, Panel panel, int[] position, int[] size, string numUpDownText, Font font)
+        {
+            int posX = position[0];
+            int posY = position[1];
+            int length = size[0];
+            int hight = size[1];
+            numUpDown.Location = new Point(posX, posY);
+            numUpDown.Size = new Size(length, hight);
+            numUpDown.Font = font;
+            numUpDown.Name = numUpDownText;
+            numUpDown.Text = "";
             panel.Controls.Add(numUpDown);
         }
 
