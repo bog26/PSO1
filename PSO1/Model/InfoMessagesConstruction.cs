@@ -39,6 +39,21 @@ namespace PSO1.Model
                                    $"{title}\n{review}";
             return productReview.ToString();
         }
+
+        public static string ConstructProductReviews(int PID)
+        {
+            StringBuilder allReviews = new StringBuilder();
+            List<int> productReviewIds = GetProductReviewIds(PID);
+            foreach(int id in productReviewIds)
+            {
+                UserItemReview userItemReview = GetUserItemReview(id);
+                allReviews.Append(GetReviewer(id) + " reviewed " + GetReviewProductName(id) +
+                                  " on " + GetReviewDate(id) + "\n");
+                allReviews.Append(GetReviewProductRating(id) + " stars: " + GetReviewTitle(id) + "\n");
+                allReviews.Append(GetReview(id) + "\n\n"); 
+            }
+            return allReviews.ToString();
+        }
     }
    
 }

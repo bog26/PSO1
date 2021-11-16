@@ -259,7 +259,7 @@ namespace PSO1.Model
             var crtUser = psContext.Users.First(x => x.UserName == user);
 
             List<Product> purchasedProducts = DBBindings.BuildUserPurchasedProductsList(user);
-            int crtPID = purchasedProducts[index].Id;
+            int crtPID = purchasedProducts[index].Id;  
 
             List <UserItemReview> userReviews = psContext.UserItemReviews.Where(x => x.UserId == crtUser.Id).ToList();
             foreach(UserItemReview review in userReviews)
@@ -338,5 +338,22 @@ namespace PSO1.Model
             return reviewDate;
         }
 
+        public static UserItemReview GetUserItemReview(int UserItemReviewId)
+        {
+            var psContext = new psDBContext();
+            UserItemReview userItemReview = psContext.UserItemReviews.First(x => x.Id == UserItemReviewId);
+            return userItemReview;
+        }
+        public static List<int> GetProductReviewIds(int PID)
+        {
+            var psContext = new psDBContext();
+            List<int> productReviewIds = new List<int>();
+            List<UserItemReview> queryUserItemReviews = psContext.UserItemReviews.Where(x => x.ProductId ==PID).ToList(); 
+            foreach(UserItemReview item in queryUserItemReviews)
+            {
+                productReviewIds.Add(item.Id);
+            }
+            return productReviewIds;
+        }
     }
 }

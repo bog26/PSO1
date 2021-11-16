@@ -452,7 +452,8 @@ namespace PSO1
             this.label32 = new System.Windows.Forms.Label();
             this.button42 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-          
+            this.richTextBox11 = new System.Windows.Forms.RichTextBox();
+
 
             this.panelFinancialStatus = new System.Windows.Forms.Panel();
             this.label33 = new System.Windows.Forms.Label();
@@ -1002,6 +1003,12 @@ namespace PSO1
                 { LONGITEM, SMALLTEXT }, "Download spec sheet", standardFont);
             this.button42.Click += new System.EventHandler(this.button42_Click);
 
+            int richTextBox11PosX = richTextBox8.Location.X  + richTextBox8.Size.Width + 10 * yItemsSpace;
+            int richTextBox11PosY = richTextBox8.Location.Y;
+            DisplayNewRichTextBoxOnPanel(richTextBox11, panelProductSpec, new int[2] { richTextBox11PosX, richTextBox11PosY }, new int[2]
+                { MiniPanel.X *2, MiniPanel.Y }, "richTextBox11", standardFont);
+            richTextBox11.Text = "Product review";
+
             DisplayNewPanel(panelFinancialStatus, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
                            new int[2] { StandardPanel.X, StandardPanel.Y }, "panelFinancialStatus ", true);
             this.Controls.Add(this.panelFinancialStatus);
@@ -1284,6 +1291,7 @@ namespace PSO1
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Button button42;
         private SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.RichTextBox richTextBox11;
 
         private System.Windows.Forms.Panel panelFinancialStatus;
         private System.Windows.Forms.Label label33;

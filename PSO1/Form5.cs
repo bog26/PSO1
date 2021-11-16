@@ -506,6 +506,7 @@ namespace PSO1
                 label30.Text = ConstructProductHierarchy(productID);
                 label32.Text = GetProductPrice(productID).ToString();
                 label32.Show();
+                richTextBox11.Text = ConstructProductReviews(productID);
                 try
                 {
                     byte[] pictureData = DBUpdates.GetPictureData(productID);
@@ -764,11 +765,13 @@ namespace PSO1
 
         private void button8_Click(object sender, EventArgs e)
         {
+            listBox5.DataSource = BindPurchasedProductsToListbox(crtUser);
             HideShowAllPanels(panelUserProductReviews);
         }
 
         private void button45_Click(object sender, EventArgs e) //Write review
         {
+            
             HideReviewSubPanels(newReviewSubPanel);
         }
 
@@ -802,8 +805,6 @@ namespace PSO1
             CreateNewReview(crtUser, PID, title,review, rating);
             newReviewSubPanel.Hide();
         }
-
-
 
         private void HideReviewSubPanels(Panel panel)
         {
