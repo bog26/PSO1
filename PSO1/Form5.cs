@@ -627,6 +627,21 @@ namespace PSO1
                 listBox4.DataSource = BindCartProducts(crtUser);
                 HideShowAllPanels(panelShoppingCart);
                 UpdateShoppingCartNr(crtUser);
+                //TBD: new sys message here
+
+                //string[] purchaseInfo = GetLastTransInfo(crtUser);
+                string[] transInfo = GetLastTransInfo(crtUser);
+                //string[] transInfoTest = new string[] { "testBuyer","testId", "testCost","testInfo"};
+
+                //string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfoTest);
+                string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfo);
+                //CreatePurchaseInfo
+                var newMessage = SysMessaging.CreateSysMessage(purchaseInfo);
+                WriteMessageToDB(newMessage);
+                //string[] transactionData = GetLastTransInfo(crtUser);
+
+                //purchaseInfo
+
             }
             else
             {

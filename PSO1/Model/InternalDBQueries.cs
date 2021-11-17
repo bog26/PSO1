@@ -200,6 +200,19 @@ namespace PSO1.Model
             return itemPrice;
         }
 
+        public static string[] GetLastTransInfo(string user)
+        {
+            string[] lastTransInfo = new string[4];
+            var psContext = new psDBContext();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            lastTransInfo[0] = crtUser.UserName;
+            Transaction lastTransaction = psContext.Transactions.Where(x => x.UserId == crtUser.Id).ToList().Last();
+            lastTransInfo[1] = lastTransaction.Id.ToString();
+            lastTransInfo[2] = lastTransaction.TotalCost.ToString();
+            lastTransInfo[3] = InfoMessagesConstruction.ConstructTransactionInfo(lastTransaction.Id, user);
+            return lastTransInfo;
+        }
+
         public static decimal GetProductPrice(int PID)
         {
             var psContext = new psDBContext();

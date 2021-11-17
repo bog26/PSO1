@@ -133,6 +133,7 @@
     <Compile Include="Model\Review.cs" />
     <Compile Include="Model\ShoppingCart.cs" />
     <Compile Include="Model\ShoppingCartItem.cs" />
+    <Compile Include="Model\SysMessaging.cs" />
     <Compile Include="Model\Transaction.cs" />
     <Compile Include="Model\TransactionItem.cs" />
     <Compile Include="Model\User.cs" />
