@@ -113,6 +113,7 @@ namespace PSO1
                 richTextBox1.Text = decryptedMessage;
             }
             DBUpdates.ReadMsg(crtUser, selection);
+            UpdateUnreadMsgNr(crtUser);
             panelInbox1.Show();
         }
 
@@ -143,7 +144,7 @@ namespace PSO1
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            //button16
             HideShowAllPanels(panelMessage1);
         }
         private void HideUserInformationFormElements()
@@ -619,35 +620,21 @@ namespace PSO1
 
         private void button38_Click(object sender, EventArgs e) //Checkout
         {
-            //DBUpdates.TransactionInit(crtUser);
-            //CheckoutCartItems
             if(CheckIfEnoughFounds(crtUser))
             {
                 DBUpdates.CheckoutCartItems(crtUser);
                 listBox4.DataSource = BindCartProducts(crtUser);
                 HideShowAllPanels(panelShoppingCart);
                 UpdateShoppingCartNr(crtUser);
-                //TBD: new sys message here
-
-                //string[] purchaseInfo = GetLastTransInfo(crtUser);
                 string[] transInfo = GetLastTransInfo(crtUser);
-                //string[] transInfoTest = new string[] { "testBuyer","testId", "testCost","testInfo"};
-
-                //string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfoTest);
                 string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfo);
-                //CreatePurchaseInfo
                 var newMessage = SysMessaging.CreateSysMessage(purchaseInfo);
                 WriteMessageToDB(newMessage);
-                //string[] transactionData = GetLastTransInfo(crtUser);
-
-                //purchaseInfo
-
             }
             else
             {
                 MessageBox.Show("Insufficient fonds. Please add more credit");
             }
-            
         }
 
         private void button39_Click(object sender, EventArgs e) //Remove selection(wishlist)
@@ -696,27 +683,21 @@ namespace PSO1
             panelTransactions.Show();
         }
 
-
         private void UpdateShoppingCartNr(string user)
         {
             string nr = GetNrOfProductsInCart(crtUser).ToString();
-            if (nr != "0")
-            {
-                string updatedText = "Shopping cart" + "(" + nr + ")";
-                button5.Text = updatedText;
-                buttonShoppingCart1.Text = updatedText;
-                button5.Show();
-                buttonShoppingCart1.Show();
-            }
-            else
-            {
-                string defaultText = "Shopping cart";
-                button5.Text = defaultText;
-                buttonShoppingCart1.Text = defaultText;
-                button5.Show();
-                buttonShoppingCart1.Show();
-            }
-            
+            UpdateButtonText(button5, "Shopping cart", nr);
+            UpdateButtonText(buttonShoppingCart1, "Shopping cart", nr);
+
+        }
+
+        private void UpdateUnreadMsgNr(string user)
+        {
+            string nr = GetNrOfUnreadMessages(crtUser).ToString();
+            UpdateButtonText(button2, "Messages", nr);
+            //UpdateButtonText(button16, "Inbox", nr);
+            //button16
+
         }
 
         private void button42_Click(object sender, EventArgs e) //Download spec sheet

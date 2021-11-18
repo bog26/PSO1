@@ -321,6 +321,8 @@ namespace PSO1
             this.ResumeLayout(false);
             this.PerformLayout();
 
+            UpdateUnreadMsgNr(crtUser);
+
         }
 
         #endregion

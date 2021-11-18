@@ -368,5 +368,14 @@ namespace PSO1.Model
             }
             return productReviewIds;
         }
+
+        public static int GetNrOfUnreadMessages(string userName)
+        {
+            var psContext = new psDBContext();
+            var queryUnreadMessages = psContext.Messages.Where(x => x.Receiver == userName
+                                                                && x.MessageReceiverStatus == "unread").ToList();
+            int unreadMessages = queryUnreadMessages.Count();
+            return unreadMessages;
+        }
     }
 }

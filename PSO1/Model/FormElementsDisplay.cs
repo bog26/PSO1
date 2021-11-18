@@ -631,8 +631,18 @@ namespace PSO1.Model
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             panel.Controls.Add(pictureBox);
 
-
         }
-
+        public static void UpdateButtonText(Button button, string defaultText, string update)
+        {
+            if (update != "0")
+            {
+                button.Text = defaultText + "(" + update + ")";
+            }
+            else
+            {
+                button.Text = defaultText;
+            }
+            button.Show();
+        }
     }
 }
