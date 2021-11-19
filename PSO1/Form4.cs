@@ -66,17 +66,11 @@ namespace PSO1
             HideShowPanels(panel21);
             await Task.Run(() =>
             {
-                /*
-                for (int i = 0; i <= 10000000; i++)
-                {
-                    //get trans count
-                    string transCount = InternalDBQueries.GetAllTransCount().ToString(); 
-                    UpdateTransactionCount(transCount);
-                }*/
                 while(true)
                 {
                     string transCount = InternalDBQueries.GetAllTransCount().ToString();
                     UpdateTransactionCount(transCount);
+                    Thread.Sleep(1000);
                 }
 
             } );
@@ -84,22 +78,10 @@ namespace PSO1
 
         public void UpdateTransactionCount(string value)
         {
-            var timeNow = DateTime.Now;
-            if ((DateTime.Now - previousTime).Milliseconds <= 50)
-            {
-                return;
-            }
-
             synchronizationContext.Post(new SendOrPostCallback(o =>
             {
                 label39.Text = o.ToString();
             }), value);
-
-            previousTime = timeNow;
-
-
-
-
         }
 
         private void button5_Click(object sender, EventArgs e)

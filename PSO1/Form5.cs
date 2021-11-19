@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
@@ -20,6 +21,7 @@ namespace PSO1
 {
     public partial class Form5 : Form
     {
+        private readonly SynchronizationContext synchronizationContext;
         public Form5()
         {
             InitializeComponent();
