@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static PSO1.Model.FormElementsDisplay;
@@ -16,10 +17,13 @@ namespace PSO1
 {
     public partial class Form4 : Form
     {
+        private readonly SynchronizationContext synchronizationContext;
+        private DateTime previousTime = DateTime.Now;
         public Form4()
         {
             InitializeComponent();
             InitializeManualAddedComponent();
+            synchronizationContext = SynchronizationContext.Current;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -57,8 +61,44 @@ namespace PSO1
 
         }
 
-        private void button11_Click(object sender, EventArgs e)
+        private async void button11_Click(object sender, EventArgs e) //Transactions
         {
+            HideShowPanels(panel21);
+            await Task.Run(() =>
+            {
+                /*
+                for (int i = 0; i <= 10000000; i++)
+                {
+                    //get trans count
+                    string transCount = InternalDBQueries.GetAllTransCount().ToString(); 
+                    UpdateTransactionCount(transCount);
+                }*/
+                while(true)
+                {
+                    string transCount = InternalDBQueries.GetAllTransCount().ToString();
+                    UpdateTransactionCount(transCount);
+                }
+
+            } );
+        }
+
+        public void UpdateTransactionCount(string value)
+        {
+            var timeNow = DateTime.Now;
+            if ((DateTime.Now - previousTime).Milliseconds <= 50)
+            {
+                return;
+            }
+
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label39.Text = o.ToString();
+            }), value);
+
+            previousTime = timeNow;
+
+
+
 
         }
 
@@ -298,7 +338,7 @@ namespace PSO1
             panel12.Hide();
             panel13.Hide();
             panel7.Hide();
-
+            panel21.Hide();
             panel15.Show();
         }
 
@@ -412,13 +452,14 @@ namespace PSO1
 
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void button7_Click(object sender, EventArgs e) //Products
         {
             panel7.Hide();
             panel13.Hide();
             panel15.Hide();
             HideEmailPanels();
-            panel11.Show();
+            //panel11.Show();
+            HideShowPanels(panel11);
         }
         private void button19_Click(object sender, EventArgs e)
         {
@@ -1016,6 +1057,23 @@ namespace PSO1
             panel19.Hide();
             panel20.Hide();
         }
+
+        private void HideShowPanels(Panel panel)
+        {
+            panel11.Hide();
+            panel8.Hide();
+            panel9.Hide();
+            panel10.Hide();
+            panel11.Hide();
+            panel12.Hide();
+            panel13.Hide();
+            panel15.Hide();
+            HideEmailPanels();
+            panel7.Hide();
+            panel21.Hide();
+            panel.Show();
+        }
+
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {

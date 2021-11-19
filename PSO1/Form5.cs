@@ -117,7 +117,7 @@ namespace PSO1
             panelInbox1.Show();
         }
 
-
+       
 
         private void button11_Click(object sender, EventArgs e)
         {

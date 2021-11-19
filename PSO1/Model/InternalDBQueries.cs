@@ -377,5 +377,11 @@ namespace PSO1.Model
             int unreadMessages = queryUnreadMessages.Count();
             return unreadMessages;
         }
+        public static int GetAllTransCount()
+        {
+            var psContext = new psDBContext();
+            int allTransCount = psContext.Transactions.Count(); 
+            return allTransCount;
+        }
     }
 }

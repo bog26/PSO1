@@ -497,6 +497,9 @@ namespace PSO1
             this.button36 = new System.Windows.Forms.Button();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
 
+            this.panel21 = new System.Windows.Forms.Panel();
+            this.label39 = new System.Windows.Forms.Label();
+
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
             int origY = panelItemsOriginCoord[1];
@@ -824,7 +827,6 @@ namespace PSO1
 
             DisplayNewButtonOnPanel(button27, panel12, label24, new int[2] { 0, yItemsSpace }, new int[2]
                 { LONGITEM, SMALLTEXT }, "Back", standardFont);
-
             this.button27.Click += new System.EventHandler(this.button27_Click);
 
             DisplayNewButtonOnPanel(button28, panel12, button27, new int[2] { 0, yItemsSpace }, new int[2]
@@ -1122,9 +1124,17 @@ namespace PSO1
             string checkBox4Text = "encryption";
             DisplayCheckBox(checkBox4, panel20, button36, new int[2] { 5*xItemsSpace, 0 },
                             new int[2] { CalculateLabelLenght(checkBox1Text), SMALLTEXT }, checkBox4Text, standardFont);
-             
 
+            DisplayNewPanel(panel21, new int[2] { 235, 46 }, new int[2] { 900, 350 }, "panel21", true);
+            this.Controls.Add(this.panel21);
+            panel21.Hide();
 
+            DisplayNewLabelOnPanel(label39, panel21, new int[2] { xMargin, yMargin }, new int[2]
+               { 70, 24 }, "0");
+            /*
+             DisplayNewPanel(panel7, new int[2] { 235, 46 }, new int[2] { 900, 350 }, "panel7", true);
+            Form.ActiveForm.Controls.Add(panel7);
+             * */
 
         }
 
@@ -1262,5 +1272,7 @@ namespace PSO1
         private string crtUser = Model.IOMethods.GetUserName();
         private System.Windows.Forms.CheckBox checkBox4;
 
+        private System.Windows.Forms.Panel panel21;
+        private System.Windows.Forms.Label label39;
     }
 }
