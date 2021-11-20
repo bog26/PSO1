@@ -499,6 +499,19 @@ namespace PSO1
 
             this.panel21 = new System.Windows.Forms.Panel();
             this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label52 = new System.Windows.Forms.Label();
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -1129,12 +1142,19 @@ namespace PSO1
             this.Controls.Add(this.panel21);
             panel21.Hide();
 
-            DisplayNewLabelOnPanel(label39, panel21, new int[2] { xMargin, yMargin }, new int[2]
-               { 70, 24 }, "0");
-            /*
-             DisplayNewPanel(panel7, new int[2] { 235, 46 }, new int[2] { 900, 350 }, "panel7", true);
-            Form.ActiveForm.Controls.Add(panel7);
-             * */
+            DisplayNewLabelOnPanel(label40, panel21, new int[2] { xMargin, yMargin }, new int[2]
+               { 70, 24 }, "Transactions count");
+
+            DisplayNewLabelOnPanel(label39, panel21, label40, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "0", standardFont);
+
+            int xPosLabel41 = label40.Location.X + label40.Size.Width + 8 * xItemsSpace;
+            int yPosLabel41 = label40.Location.Y;
+            DisplayNewLabelOnPanel(label41, panel21, new int[2] { xPosLabel41, yPosLabel41 }, new int[2]
+               { 70, 24 }, "Messages count");
+
+            DisplayNewLabelOnPanel(label42, panel21, label41, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "0", standardFont);
 
         }
 
@@ -1274,5 +1294,18 @@ namespace PSO1
 
         private System.Windows.Forms.Panel panel21;
         private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label label52;
     }
 }

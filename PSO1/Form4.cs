@@ -24,6 +24,42 @@ namespace PSO1
             InitializeComponent();
             InitializeManualAddedComponent();
             synchronizationContext = SynchronizationContext.Current;
+            BackgroundTasks();
+        }
+
+        private async void BackgroundTasks()
+        {
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    string transCount = InternalDBQueries.GetAllTransCount().ToString();
+                    UpdateTransactionCount(transCount);
+                    string msgCount = InternalDBQueries.GetSentMesssagesCount().ToString();
+                    UpdateMessageCount(msgCount);
+                    //UpdateMessageCount(transCount);
+                    Thread.Sleep(500);
+                }
+
+            });
+
+        }
+
+        public void UpdateTransactionCount(string value)
+        {
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label39.Text = o.ToString();
+            }), value);
+        }
+
+
+        public void UpdateMessageCount(string value)
+        {
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label42.Text = o.ToString();
+            }), value);
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -61,6 +97,7 @@ namespace PSO1
 
         }
 
+        /*
         private async void button11_Click(object sender, EventArgs e) //Transactions
         {
             HideShowPanels(panel21);
@@ -75,14 +112,15 @@ namespace PSO1
 
             } );
         }
-
-        public void UpdateTransactionCount(string value)
+        */
+        
+        private void button11_Click(object sender, EventArgs e) //Transactions
         {
-            synchronizationContext.Post(new SendOrPostCallback(o =>
-            {
-                label39.Text = o.ToString();
-            }), value);
+            HideShowPanels(panel21);
         }
+        
+
+        
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -128,17 +166,18 @@ namespace PSO1
         private void button4_Click(object sender, EventArgs e)
         {
             //panel5.Hide();
-            panel11.Hide();
+            //panel11.Hide();
             //panel6.Hide();
-            panel8.Hide();
-            panel9.Hide();
-            panel10.Hide();
-            panel11.Hide();
-            panel12.Hide();
-            panel13.Hide();
-            panel15.Hide();
+            //panel8.Hide();
+            //panel9.Hide();
+            //panel10.Hide();
+            //panel11.Hide();
+            //panel12.Hide();
+            //panel13.Hide();
+            //panel15.Hide();
             HideEmailPanels();
-            panel7.Show();
+            //panel7.Show();
+            HideShowPanels(panel7);
             DisplayNewPanel(panel7, new int[2] { 235, 46 }, new int[2] { 900, 350 }, "panel7", true);
             Form.ActiveForm.Controls.Add(panel7);
             int[] panelItemsOriginCoord = new int[2] {5, 5};

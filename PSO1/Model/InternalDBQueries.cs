@@ -383,5 +383,52 @@ namespace PSO1.Model
             int allTransCount = psContext.Transactions.Count(); 
             return allTransCount;
         }
+        public static int GetSentMesssagesCount()
+        {
+            var psContext = new psDBContext();
+            int allMsgCount = psContext.Messages.Count();
+            return allMsgCount;
+        }
+        public static int GetReviewsCount()
+        {
+            var psContext = new psDBContext();
+            int allRevsCount = psContext.UserItemReviews.Count();
+            return allRevsCount;
+        }
+        public static int GetSoldProductsCount()
+        {
+            var psContext = new psDBContext();
+            int allSoldProdCount = 0;
+            var queryTransItems = psContext.TransactionItems.ToList();
+            foreach(TransactionItem item in queryTransItems)
+            {
+                allSoldProdCount += item.Amount;
+            }
+            return allSoldProdCount;
+        }
+        public static decimal GetTotalIncome()
+        {
+            var psContext = new psDBContext();
+            decimal totalIncome = 0;
+            var queryTransItems = psContext.TransactionItems.ToList();
+            foreach (TransactionItem item in queryTransItems)
+            {
+                totalIncome += item.Cost;
+            }
+            return totalIncome;
+        }
+
+        public static decimal GetTotalBoughtCredit()
+        {
+            var psContext = new psDBContext();
+            decimal totalCreditBought = 0;
+            var allTransactions = psContext.Transactions.Where(x => x.TotalCost>0).ToList();
+            foreach(Transaction trans in allTransactions)
+            {
+                totalCreditBought += trans.TotalCost;
+            }
+            return totalCreditBought;
+        }
+
     }
 }
