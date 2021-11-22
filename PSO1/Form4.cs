@@ -60,29 +60,55 @@ namespace PSO1
             {
                 while (true)
                 {
-                    string transCount = await InternalDBQueries.GetAllTransCountAsync();
-                    UpdateTransactionCount(transCount);
+                    Task<string> transCountTsk = InternalDBQueries.GetAllTransCountAsync();
+                    Task<string> msgCountTsk = InternalDBQueries.GetSentMesssagesCountAsync();
+                    Task<string> revCountTsk = InternalDBQueries.GetReviewsCountAsync();
+                    Task<string> soldProdCountTsk = InternalDBQueries.GetSoldProductsCountAsync();
+                    Task<string> totalIncomeTsk = InternalDBQueries.GetTotalIncomeAsync();
+                    Task<string> totalBoughtCreditTsk = InternalDBQueries.GetTotalBoughtCreditAsync();
 
-                    string msgCount = await InternalDBQueries.GetSentMesssagesCountAsync();
-                    UpdateMessageCount(msgCount);
+                    var backgroundTasks = new List<Task> { transCountTsk, msgCountTsk, revCountTsk,
+                                                        soldProdCountTsk, totalIncomeTsk, totalBoughtCreditTsk};
+                    var backgroundTasksDict = new Dictionary<int, Task>();
+                    int taskDictKey = 0;
+                    foreach(Task task in backgroundTasks)
+                    {
+                        backgroundTasksDict.Add(taskDictKey, task);
+                        taskDictKey++;
+                    }
 
-                    string revCount = await InternalDBQueries.GetReviewsCountAsync();
-                    UpdateReviewsCount(revCount);
-
-                    string soldProdCount = await InternalDBQueries.GetSoldProductsCountAsync();
-                    UpdateSoldProductsCount(soldProdCount);
-
-                    string totalIncome = await InternalDBQueries.GetTotalIncomeAsync();
-                    UpdateTotalIncome(totalIncome);
-
-                    string totalBoughtCredit = await InternalDBQueries.GetTotalBoughtCreditAsync();
-                    UpdateBoughtCredit(totalBoughtCredit);
-
+                    while (backgroundTasks.Count>0)
+                    {
+                        Task finishedTask = await Task.WhenAny(backgroundTasks);
+                        string result = ((Task<string>)finishedTask).Result;
+                        int dKey = backgroundTasksDict.First(x => x.Value == finishedTask).Key;
+ 
+                        switch (dKey)
+                        {
+                            case 0:
+                                UpdateTransactionCount(result);
+                                break;
+                            case 1:
+                                UpdateMessageCount(result);
+                                break;
+                            case 2:
+                                UpdateReviewsCount(result);
+                                break;
+                            case 3:
+                                UpdateSoldProductsCount(result);
+                                break;
+                            case 4:
+                                UpdateTotalIncome(result);
+                                break;
+                            case 5:
+                                UpdateBoughtCredit(result);
+                                break;
+                        }
+                        backgroundTasks.Remove(finishedTask);
+                    }
                 }
             });
 
-
-            
         }
 
         public void UpdateTransactionCount(string value)
