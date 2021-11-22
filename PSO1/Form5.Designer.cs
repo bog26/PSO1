@@ -456,6 +456,7 @@ namespace PSO1
             this.button42 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.richTextBox11 = new System.Windows.Forms.RichTextBox();
+            this.label46 = new System.Windows.Forms.Label();
 
 
             this.panelFinancialStatus = new System.Windows.Forms.Panel();
@@ -1012,6 +1013,11 @@ namespace PSO1
                 { MiniPanel.X *2, MiniPanel.Y }, "richTextBox11", standardFont);
             richTextBox11.Text = "Product review";
 
+            int label46PosX = richTextBox11.Location.X;
+            int label46PosY = richTextBox11.Location.Y - 6 * yItemsSpace;
+            DisplayNewLabelOnPanel(label46, panelProductSpec, new int[2] { label46PosX, label46PosY }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, "User rating: ", mediumFont, blackText);
+
             DisplayNewPanel(panelFinancialStatus, new int[2] { StandardPanel.PosX, StandardPanel.PosY },
                            new int[2] { StandardPanel.X, StandardPanel.Y }, "panelFinancialStatus ", true);
             this.Controls.Add(this.panelFinancialStatus);
@@ -1295,6 +1301,7 @@ namespace PSO1
         private System.Windows.Forms.Button button42;
         private SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.RichTextBox richTextBox11;
+        private System.Windows.Forms.Label label46;
 
         private System.Windows.Forms.Panel panelFinancialStatus;
         private System.Windows.Forms.Label label33;

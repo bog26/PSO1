@@ -67,9 +67,9 @@ namespace PSO1
                     Task<string> totalIncomeTsk = InternalDBQueries.GetTotalIncomeAsync();
                     Task<string> totalBoughtCreditTsk = InternalDBQueries.GetTotalBoughtCreditAsync();
 
-                    var backgroundTasks = new List<Task> { transCountTsk, msgCountTsk, revCountTsk,
+                    List<Task> backgroundTasks = new List<Task> { transCountTsk, msgCountTsk, revCountTsk,
                                                         soldProdCountTsk, totalIncomeTsk, totalBoughtCreditTsk};
-                    var backgroundTasksDict = new Dictionary<int, Task>();
+                    Dictionary<int, Task> backgroundTasksDict = new Dictionary<int, Task>();
                     int taskDictKey = 0;
                     foreach(Task task in backgroundTasks)
                     {
@@ -81,6 +81,7 @@ namespace PSO1
                     {
                         Task finishedTask = await Task.WhenAny(backgroundTasks);
                         string result = ((Task<string>)finishedTask).Result;
+
                         int dKey = backgroundTasksDict.First(x => x.Value == finishedTask).Key;
  
                         switch (dKey)
@@ -106,6 +107,7 @@ namespace PSO1
                         }
                         backgroundTasks.Remove(finishedTask);
                     }
+                    Thread.Sleep(500);
                 }
             });
 

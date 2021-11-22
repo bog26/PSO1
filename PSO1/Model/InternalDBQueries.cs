@@ -496,5 +496,22 @@ namespace PSO1.Model
             return totalCreditBought.ToString();
         }
 
+        public static string GetProductRating(int PID)
+        {
+            string ratingStr = "Not rated";
+            double ratingsSum = 0;
+            var psContext = new psDBContext();
+            var queryProductRatings = psContext.UserItemReviews.Where(x => x.ProductId == PID).ToList();
+            if (queryProductRatings.Count>0)
+            {
+                foreach(UserItemReview review in queryProductRatings)
+                {
+                    ratingsSum += review.UserItemScore;
+                }
+                ratingStr = (ratingsSum / queryProductRatings.Count).ToString();
+            }
+            return ratingStr;
+        }
+
     }
 }

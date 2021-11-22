@@ -510,6 +510,8 @@ namespace PSO1
                 label32.Text = GetProductPrice(productID).ToString();
                 label32.Show();
                 richTextBox11.Text = ConstructProductReviews(productID);
+                label46.Text = "Rating: " + GetProductRating(productID);
+                //GetProductRating(productID)
                 try
                 {
                     byte[] pictureData = DBUpdates.GetPictureData(productID);
