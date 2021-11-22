@@ -383,11 +383,27 @@ namespace PSO1.Model
             int allTransCount = psContext.Transactions.Count(); 
             return allTransCount;
         }
+
+        public async static Task<string> GetAllTransCountAsync()
+        {
+            var psContext = new psDBContext();
+            int allTransCount = psContext.Transactions.Count();
+            await Task.Delay(50); // simulation DB read delay
+            return allTransCount.ToString();
+        }
+
         public static int GetSentMesssagesCount()
         {
             var psContext = new psDBContext();
             int allMsgCount = psContext.Messages.Count();
             return allMsgCount;
+        }
+        public async static Task<string> GetSentMesssagesCountAsync()
+        {
+            var psContext = new psDBContext();
+            int allMsgCount = psContext.Messages.Count();
+            await Task.Delay(50); // simulation DB read delay
+            return allMsgCount.ToString();
         }
         public static int GetReviewsCount()
         {
@@ -395,6 +411,15 @@ namespace PSO1.Model
             int allRevsCount = psContext.UserItemReviews.Count();
             return allRevsCount;
         }
+
+        public async static Task<string> GetReviewsCountAsync()
+        {
+            var psContext = new psDBContext();
+            int allRevsCount = psContext.UserItemReviews.Count();
+            await Task.Delay(50); // simulation DB read delay
+            return allRevsCount.ToString();
+        }
+
         public static int GetSoldProductsCount()
         {
             var psContext = new psDBContext();
@@ -406,6 +431,21 @@ namespace PSO1.Model
             }
             return allSoldProdCount;
         }
+
+        public async static Task<string> GetSoldProductsCountAsync()
+        {
+            var psContext = new psDBContext();
+            int allSoldProdCount = 0;
+            var queryTransItems = psContext.TransactionItems.ToList();
+            foreach (TransactionItem item in queryTransItems)
+            {
+                allSoldProdCount += item.Amount;
+            }
+            await Task.Delay(50); // simulation DB read delay
+            return allSoldProdCount.ToString();
+        }
+
+
         public static decimal GetTotalIncome()
         {
             var psContext = new psDBContext();
@@ -418,6 +458,19 @@ namespace PSO1.Model
             return totalIncome;
         }
 
+        public async static Task<string> GetTotalIncomeAsync()
+        {
+            var psContext = new psDBContext();
+            decimal totalIncome = 0;
+            var queryTransItems = psContext.TransactionItems.ToList();
+            foreach (TransactionItem item in queryTransItems)
+            {
+                totalIncome += item.Cost;
+            }
+            await Task.Delay(50); // simulation DB read delay
+            return totalIncome.ToString();
+        }
+
         public static decimal GetTotalBoughtCredit()
         {
             var psContext = new psDBContext();
@@ -428,6 +481,19 @@ namespace PSO1.Model
                 totalCreditBought += trans.TotalCost;
             }
             return totalCreditBought;
+        }
+
+        public async static Task<string> GetTotalBoughtCreditAsync()
+        {
+            var psContext = new psDBContext();
+            decimal totalCreditBought = 0;
+            var allTransactions = psContext.Transactions.Where(x => x.TotalCost > 0).ToList();
+            foreach (Transaction trans in allTransactions)
+            {
+                totalCreditBought += trans.TotalCost;
+            }
+            await Task.Delay(50); // simulation DB read delay
+            return totalCreditBought.ToString();
         }
 
     }

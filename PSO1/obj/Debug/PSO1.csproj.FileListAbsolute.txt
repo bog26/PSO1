@@ -23,3 +23,4 @@ F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddUserItemReviews.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddTitleToUserItemReviews.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddTitleAndReviewToUserItemReviews.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddReviewTimeToUserItemReviews.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form6.resources

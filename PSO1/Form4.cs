@@ -19,14 +19,17 @@ namespace PSO1
     {
         private readonly SynchronizationContext synchronizationContext;
         private DateTime previousTime = DateTime.Now;
+        
         public Form4()
         {
             InitializeComponent();
             InitializeManualAddedComponent();
             synchronizationContext = SynchronizationContext.Current;
-            BackgroundTasks();
+            //BackgroundTasks();
+            BackgroundTasksAsync();
         }
 
+        //https://stephenhaunts.com/2014/10/14/using-async-and-await-to-update-the-ui-thread/comment-page-1/
         private async void BackgroundTasks()
         {
             await Task.Run(() =>
@@ -37,12 +40,49 @@ namespace PSO1
                     UpdateTransactionCount(transCount);
                     string msgCount = InternalDBQueries.GetSentMesssagesCount().ToString();
                     UpdateMessageCount(msgCount);
-                    //UpdateMessageCount(transCount);
-                    Thread.Sleep(500);
+                    string revCount = InternalDBQueries.GetReviewsCount().ToString();
+                    UpdateReviewsCount(revCount);
+                    string soldProdCount = InternalDBQueries.GetSoldProductsCount().ToString();
+                    UpdateSoldProductsCount(soldProdCount);
+                    string totalIncome = InternalDBQueries.GetTotalIncome().ToString();
+                    UpdateTotalIncome(totalIncome);
+                    string totalBoughtCredit = InternalDBQueries.GetTotalBoughtCredit().ToString();
+                    UpdateBoughtCredit(totalBoughtCredit);
+                    Thread.Sleep(100);
                 }
 
             });
+        }
 
+        private async void BackgroundTasksAsync()
+        {
+            await Task.Run(async () =>
+            {
+                while (true)
+                {
+                    string transCount = await InternalDBQueries.GetAllTransCountAsync();
+                    UpdateTransactionCount(transCount);
+
+                    string msgCount = await InternalDBQueries.GetSentMesssagesCountAsync();
+                    UpdateMessageCount(msgCount);
+
+                    string revCount = await InternalDBQueries.GetReviewsCountAsync();
+                    UpdateReviewsCount(revCount);
+
+                    string soldProdCount = await InternalDBQueries.GetSoldProductsCountAsync();
+                    UpdateSoldProductsCount(soldProdCount);
+
+                    string totalIncome = await InternalDBQueries.GetTotalIncomeAsync();
+                    UpdateTotalIncome(totalIncome);
+
+                    string totalBoughtCredit = await InternalDBQueries.GetTotalBoughtCreditAsync();
+                    UpdateBoughtCredit(totalBoughtCredit);
+
+                }
+            });
+
+
+            
         }
 
         public void UpdateTransactionCount(string value)
@@ -61,6 +101,38 @@ namespace PSO1
                 label42.Text = o.ToString();
             }), value);
         }
+
+        public void UpdateReviewsCount(string value)
+        {
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label44.Text = o.ToString();
+            }), value);
+        }
+
+        public void UpdateSoldProductsCount(string value)
+        {
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label46.Text = o.ToString();
+            }), value);
+        }
+
+        public void UpdateTotalIncome(string value)
+        {
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label48.Text = o.ToString();
+            }), value);
+        }
+        public void UpdateBoughtCredit(string value)
+        {
+            synchronizationContext.Post(new SendOrPostCallback(o =>
+            {
+                label50.Text = o.ToString();
+            }), value);
+        }
+
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -450,6 +522,13 @@ namespace PSO1
         }
         private void button13_Click(object sender, EventArgs e)
         {
+
+        }
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Form6 f6 = new Form6();
+            f6.Text = crtUser + " - DASHBOARD";
+            f6.Show();
 
         }
         private void button18_Click(object sender, EventArgs e)

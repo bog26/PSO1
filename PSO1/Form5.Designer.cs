@@ -321,7 +321,7 @@ namespace PSO1
             this.ResumeLayout(false);
             this.PerformLayout();
 
-            UpdateUnreadMsgNr(crtUser);
+            //this.UpdateUnreadMsgNr(crtUser);
 
         }
 
@@ -337,6 +337,7 @@ namespace PSO1
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form5));
 
+            UpdateUnreadMsgNr(crtUser);
             this.buttonShoppingCart1 = new System.Windows.Forms.Button();
 
             this.panelMessage1 = new System.Windows.Forms.Panel();

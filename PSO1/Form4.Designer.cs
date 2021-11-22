@@ -231,8 +231,9 @@ namespace PSO1
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(123, 23);
             this.button12.TabIndex = 4;
-            this.button12.Text = "Statistics";
+            this.button12.Text = "Dashboard";
             this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
             // button11
             // 
@@ -1154,6 +1155,38 @@ namespace PSO1
                { 70, 24 }, "Messages count");
 
             DisplayNewLabelOnPanel(label42, panel21, label41, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "0", standardFont);
+
+            int xPosLabel43 = label41.Location.X + label41.Size.Width + 8 * xItemsSpace;
+            int yPosLabel43 = label41.Location.Y;
+            DisplayNewLabelOnPanel(label43, panel21, new int[2] { xPosLabel43, yPosLabel43 }, new int[2]
+               { 70, 24 }, "Reviews count");
+
+            DisplayNewLabelOnPanel(label44, panel21, label43, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "0", standardFont);
+
+            int xPosLabel45 = label43.Location.X + label43.Size.Width + 8 * xItemsSpace;
+            int yPosLabel45 = label43.Location.Y;
+            DisplayNewLabelOnPanel(label45, panel21, new int[2] { xPosLabel45, yPosLabel45 }, new int[2]
+               { 70, 24 }, "Sold Products");
+
+            DisplayNewLabelOnPanel(label46, panel21, label45, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "0", standardFont);
+
+            int xPosLabel47 = label45.Location.X + label45.Size.Width + 8 * xItemsSpace;
+            int yPosLabel47 = label45.Location.Y;
+            DisplayNewLabelOnPanel(label47, panel21, new int[2] { xPosLabel47, yPosLabel47 }, new int[2]
+               { 70, 24 }, "Total income");
+
+            DisplayNewLabelOnPanel(label48, panel21, label47, new int[2] { 0, 2 * yItemsSpace }, new int[2]
+                { SHORTITEM, SMALLTEXT }, "0", standardFont);
+
+            int xPosLabel49 = label39.Location.X;
+            int yPosLabel49 = label39.Location.Y + label39.Size.Height + 12 * yItemsSpace;
+            DisplayNewLabelOnPanel(label49, panel21, new int[2] { xPosLabel49, yPosLabel49 }, new int[2]
+               { 70, 24 }, "Total credit bought");
+
+            DisplayNewLabelOnPanel(label50, panel21, label49, new int[2] { 0, 2 * yItemsSpace }, new int[2]
                 { SHORTITEM, SMALLTEXT }, "0", standardFont);
 
         }
