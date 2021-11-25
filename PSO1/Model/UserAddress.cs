@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class UserAddress
+    public class UserAddress : IPSOEntity
     {
         public int Id { get; set; }
         private string street;

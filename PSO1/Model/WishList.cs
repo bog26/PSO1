@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class WishList
+    public class WishList : IPSOEntity
     {
 
         public int Id { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class Message
+    public class Message : IPSOEntity
     {
         public int Id { get; set; }
         public string Sender { get; set; }

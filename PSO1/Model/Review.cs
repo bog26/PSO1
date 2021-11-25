@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class Review
+    public class Review : IPSOEntity, ISearchProductId, ISearchUserId
     {
         public int Id { get; set; }
         public int ReviewMark { get; set; }

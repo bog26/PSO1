@@ -104,6 +104,9 @@ namespace PSO1
                             case 5:
                                 UpdateBoughtCredit(result);
                                 break;
+                            default:
+                                break;
+
                         }
                         backgroundTasks.Remove(finishedTask);
                     }

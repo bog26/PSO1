@@ -1337,6 +1337,10 @@ namespace PSO1
         private System.Windows.Forms.TextBox textBox13;
         private System.Windows.Forms.RichTextBox richTextBox9;
         private System.Windows.Forms.Button button47;
+        //private readonly Model.ISearchProductId searchWithProductId;
+        //private readonly Model.GenericDBItemsQueries<Model.ISearchProductId> searchWithProductId;
+        private Model.GenericDBItemsQueries<Model.UserItemReview> searchWithProductId;
+        //GenericDBItemsQueries<ISearchProductId>  query
 
     }
 }

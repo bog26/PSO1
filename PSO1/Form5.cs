@@ -509,9 +509,13 @@ namespace PSO1
                 label30.Text = ConstructProductHierarchy(productID);
                 label32.Text = GetProductPrice(productID).ToString();
                 label32.Show();
-                richTextBox11.Text = ConstructProductReviews(productID);
-                label46.Text = "Rating: " + GetProductRating(productID);
-                //GetProductRating(productID)
+
+                searchWithProductId = new GenericDBItemsQueries<UserItemReview>(productID);
+                richTextBox11.Text = ConstructProductReviewsProt(searchWithProductId);
+                //richTextBox11.Text = ConstructProductReviews(productID);
+                //ConstructProductReviewsProt
+                label46.Text = "Rating: " + GetProductRatingProt1(searchWithProductId);
+
                 try
                 {
                     byte[] pictureData = DBUpdates.GetPictureData(productID);

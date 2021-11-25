@@ -7,7 +7,7 @@ using System.IO;
 
 namespace PSO1.Model
 {
-    class ProductSpecification
+    class ProductSpecification : IPSOEntity, ISearchProductId
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

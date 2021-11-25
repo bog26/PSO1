@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class User:IUser
+    public class User:IUser, IPSOEntity
     {
         public int Id { get; set; }
         public string UserName { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PSO1.Model
 {
     //class Messaging<IUser, Message>
-    public class Messaging
+    public class Messaging 
     {
         //public static Message CreateMessage(string sender, string receiver,string title, string body)
         public static Message CreateMessage(string[] args)

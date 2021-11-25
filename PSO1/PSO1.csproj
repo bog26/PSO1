@@ -124,10 +124,17 @@
     <Compile Include="Model\DBUpdates.cs" />
     <Compile Include="Model\Encryption.cs" />
     <Compile Include="Model\FormElementsDisplay.cs" />
+    <Compile Include="Model\GenericDBItemsQueries.cs" />
+    <Compile Include="Model\GenericDBUserQueries.cs" />
     <Compile Include="Model\InfoMessagesConstruction.cs" />
     <Compile Include="Model\InternalDBQueries.cs" />
     <Compile Include="Model\IOMethods.cs" />
+    <Compile Include="Model\IPSOEntity.cs" />
+    <Compile Include="Model\IQuery.cs" />
+    <Compile Include="Model\ISearchProductId.cs" />
+    <Compile Include="Model\ISearchUserId.cs" />
     <Compile Include="Model\IUser.cs" />
+    <Compile Include="Model\ListQueries.cs" />
     <Compile Include="Model\Manufacturer.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Messaging.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class ShoppingCartItem
+    public class ShoppingCartItem : IPSOEntity, ISearchProductId, ISearchUserId
     {
         public int Id { get; set; }
         public int UserId { get; set; }

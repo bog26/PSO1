@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class ProductCategory
+    public class ProductCategory : IPSOEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
