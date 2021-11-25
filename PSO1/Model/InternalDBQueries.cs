@@ -300,8 +300,14 @@ namespace PSO1.Model
             string prodName = psContext.Products.First(x =>x.Id == PID).ProductName; 
             return prodName;
         }
+        public static string GetProductNameProt(GenericDBEntityQueries<Product> query)
+        {
 
-        
+            string prodName = query.GetItem().ProductName;
+            return prodName;
+        }
+
+
 
         public static int GetCrtReviewId(string user, int index)
         {
@@ -373,12 +379,8 @@ namespace PSO1.Model
 
         public static List<int> GetProductReviewIdsProt(GenericDBItemsQueries<UserItemReview> query)
         {
-            //var psContext = new psDBContext();
             List<int> productReviewIds = new List<int>();
-
             var queryUserItemReviews = query.GetItemsList();
-            //List<UserItemReview> queryUserItemReviews = psContext.UserItemReviews.Where(x => x.ProductId == PID).ToList();
-
             foreach (UserItemReview item in queryUserItemReviews)
             {
                 productReviewIds.Add(item.Id);
@@ -522,23 +524,6 @@ namespace PSO1.Model
             if (queryProductRatings.Count>0)
             {
                 foreach(UserItemReview review in queryProductRatings)
-                {
-                    ratingsSum += review.UserItemScore;
-                }
-                ratingStr = (ratingsSum / queryProductRatings.Count).ToString();
-            }
-            return ratingStr;
-        }
-
-        public static string GetProductRatingGen(int PID)
-        {
-            string ratingStr = "Not rated";
-            double ratingsSum = 0;
-            var queryProductRatings = new GenericDBItemsQueries<UserItemReview>(PID).GetItemsList();
-            
-            if (queryProductRatings.Count > 0)
-            {
-                foreach (UserItemReview review in queryProductRatings)
                 {
                     ratingsSum += review.UserItemScore;
                 }

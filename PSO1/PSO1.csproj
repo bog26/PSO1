@@ -124,6 +124,7 @@
     <Compile Include="Model\DBUpdates.cs" />
     <Compile Include="Model\Encryption.cs" />
     <Compile Include="Model\FormElementsDisplay.cs" />
+    <Compile Include="Model\GenericDBEntityQueries.cs" />
     <Compile Include="Model\GenericDBItemsQueries.cs" />
     <Compile Include="Model\GenericDBUserQueries.cs" />
     <Compile Include="Model\InfoMessagesConstruction.cs" />

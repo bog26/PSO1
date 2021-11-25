@@ -45,8 +45,6 @@ namespace PSO1.Model
             StringBuilder allReviews = new StringBuilder();
             List<int> productReviewIds = GetProductReviewIds(PID);
 
-            //var searchWithProductId = new GenericDBItemsQueries<UserItemReview>(PID);
-
             foreach (int id in productReviewIds)
             {
                 allReviews.Append(GetReviewer(id) + " reviewed " + GetReviewProductName(id) +
@@ -57,14 +55,10 @@ namespace PSO1.Model
             return allReviews.ToString();
         }
         
-        //searchWithProductId = new GenericDBItemsQueries<UserItemReview>(productID);
         public static string ConstructProductReviewsProt(GenericDBItemsQueries<UserItemReview> query)
         {
             StringBuilder allReviews = new StringBuilder();
-            //GenericDBItemsQueries<UserItemReview> searchWithProductId = new GenericDBItemsQueries<UserItemReview>(PID);
             List<int> productReviewIds = GetProductReviewIdsProt(query);
-
-            //var searchWithProductId = new GenericDBItemsQueries<UserItemReview>(PID);
 
             foreach (int id in productReviewIds)
             {
