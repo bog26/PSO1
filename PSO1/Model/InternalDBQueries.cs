@@ -531,7 +531,7 @@ namespace PSO1.Model
             }
             return ratingStr;
         }
-
+        
         public static string GetProductRatingProt1(GenericDBItemsQueries<UserItemReview> query)
         {
             string ratingStr = "Not rated";
@@ -548,6 +548,21 @@ namespace PSO1.Model
             }
             return ratingStr;
         }
+        public static bool CheckIfAlarmIsCreated(string user, int PID)
+        {
+            bool alarmCreated = false;
+            var psContext = new psDBContext();
+            int userId = psContext.Users.First(x => x.UserName == user).Id;
+            var queryWarehouseProductStockAlarms = psContext.WarehouseProductStockAlarms.Where(x => x.UserId == userId
+                                                                                                && x.ProductId == PID).ToList();
+            if(queryWarehouseProductStockAlarms.Count !=0)
+            {
+                alarmCreated = true;
+            }
+            return alarmCreated;
+        }
+
+        
 
     }
 }

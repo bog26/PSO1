@@ -584,6 +584,24 @@ namespace PSO1.Model
             return purchasedProducts;
         }
 
+
+        public static BindingSource BindWarehouseProductsToGrid(string user)
+        {
+            psDBContext psContext = new psDBContext();
+            BindingSource binding = new BindingSource();
+
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var queryWarehouseProducts = psContext.Products.Where(x => x.Id >= 0).
+                                                            Select(x => new
+                                                            {
+                                                                Id = x.Id,
+                                                                Product = x.ProductName,
+                                                                Amount = x.Stock
+                                                            });
+            binding.DataSource = queryWarehouseProducts.ToList();
+            return binding;
+        }
+
     }
 
 }

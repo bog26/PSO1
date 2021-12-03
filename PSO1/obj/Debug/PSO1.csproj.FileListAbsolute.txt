@@ -24,3 +24,6 @@ F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddTitleToUserItemReviews.res
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddTitleAndReviewToUserItemReviews.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.AddReviewTimeToUserItemReviews.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form6.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.WarehouseProductStockAlarmAdded.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.addedMinAmountToWarehouseProductStockAlarm.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form7.resources

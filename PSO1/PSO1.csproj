@@ -93,6 +93,12 @@
     <Compile Include="Form6.Designer.cs">
       <DependentUpon>Form6.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form7.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form7.Designer.cs">
+      <DependentUpon>Form7.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\202111101148299_FirstMigration.cs" />
     <Compile Include="Migrations\202111101148299_FirstMigration.designer.cs">
       <DependentUpon>202111101148299_FirstMigration.cs</DependentUpon>
@@ -117,6 +123,14 @@
     <Compile Include="Migrations\202111151446186_AddReviewTimeToUserItemReviews.designer.cs">
       <DependentUpon>202111151446186_AddReviewTimeToUserItemReviews.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112021622598_WarehouseProductStockAlarmAdded.cs" />
+    <Compile Include="Migrations\202112021622598_WarehouseProductStockAlarmAdded.designer.cs">
+      <DependentUpon>202112021622598_WarehouseProductStockAlarmAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112021652278_addedMinAmountToWarehouseProductStockAlarm.cs" />
+    <Compile Include="Migrations\202112021652278_addedMinAmountToWarehouseProductStockAlarm.designer.cs">
+      <DependentUpon>202112021652278_addedMinAmountToWarehouseProductStockAlarm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
@@ -127,6 +141,7 @@
     <Compile Include="Model\GenericDBEntityQueries.cs" />
     <Compile Include="Model\GenericDBItemsQueries.cs" />
     <Compile Include="Model\GenericDBUserQueries.cs" />
+    <Compile Include="Model\IAlarm.cs" />
     <Compile Include="Model\InfoMessagesConstruction.cs" />
     <Compile Include="Model\InternalDBQueries.cs" />
     <Compile Include="Model\IOMethods.cs" />
@@ -156,6 +171,7 @@
     <Compile Include="Model\UserInputCheck.cs" />
     <Compile Include="Model\UserItemReview.cs" />
     <Compile Include="Model\UserPersonalData.cs" />
+    <Compile Include="Model\WarehouseProductStockAlarm.cs" />
     <Compile Include="Model\WishList.cs" />
     <Compile Include="Model\WishListItem.cs" />
     <Compile Include="Program.cs" />
@@ -178,6 +194,9 @@
     <EmbeddedResource Include="Form6.resx">
       <DependentUpon>Form6.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form7.resx">
+      <DependentUpon>Form7.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111101148299_FirstMigration.resx">
       <DependentUpon>202111101148299_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,6 +214,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111151446186_AddReviewTimeToUserItemReviews.resx">
       <DependentUpon>202111151446186_AddReviewTimeToUserItemReviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112021622598_WarehouseProductStockAlarmAdded.resx">
+      <DependentUpon>202112021622598_WarehouseProductStockAlarmAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112021652278_addedMinAmountToWarehouseProductStockAlarm.resx">
+      <DependentUpon>202112021652278_addedMinAmountToWarehouseProductStockAlarm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

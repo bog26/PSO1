@@ -187,8 +187,9 @@ namespace PSO1
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(123, 23);
             this.button6.TabIndex = 1;
-            this.button6.Text = "Warehause";
+            this.button6.Text = "Warehouse";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // label3
             // 
@@ -513,6 +514,19 @@ namespace PSO1
             this.label50 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
             this.label52 = new System.Windows.Forms.Label();
+
+            this.panelWarehouse = new System.Windows.Forms.Panel();
+            this.label53 = new System.Windows.Forms.Label();
+            this.dataGridView8 = new System.Windows.Forms.DataGridView();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.button51 = new System.Windows.Forms.Button();
+            this.noStockAlarmSubPanel = new System.Windows.Forms.Panel();
+            this.existingStockAlarmSubPanel = new System.Windows.Forms.Panel();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
+            this.button52 = new System.Windows.Forms.Button();
+
 
             int[] panelItemsOriginCoord = new int[2] { 20, 20 };
             int origX = panelItemsOriginCoord[0];
@@ -1189,8 +1203,73 @@ namespace PSO1
             DisplayNewLabelOnPanel(label50, panel21, label49, new int[2] { 0, 2 * yItemsSpace }, new int[2]
                 { SHORTITEM, SMALLTEXT }, "0", standardFont);
 
+            DisplayNewPanel(panelWarehouse, new int[2] { 235, 46 }, new int[2] { 900, 350 }, "panelWarehouse", true);
+            this.Controls.Add(this.panelWarehouse);
+            panelWarehouse.Hide();
+
+            DisplayNewLabelOnPanel(label53, panelWarehouse, new int[2] { xMargin, yMargin }, new int[2]
+            { 70, 24 }, "Warehouse");
+
+            int xPosDataGridView8 = label53.Location.X;
+            int yPosDataGridView8 = label53.Location.Y + label53.Size.Height + 3 * yItemsSpace;
+            int sizeXDataGridView8 = 400;
+            int sizeYDataGridView8 = 150;
+            DisplayNewDataGridViewOnPanel(dataGridView8, panelWarehouse, new int[2]
+                { xPosDataGridView8, yPosDataGridView8}, new int[2] { sizeXDataGridView8, sizeYDataGridView8 });
+            dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView8.CellContentClick += new DataGridViewCellEventHandler(dataGridView8_CellContentClick);
+
+            int noStockAlarmSubPanelPosX = dataGridView8.Location.X + dataGridView8.Size.Width + 4 * xItemsSpace;
+            int noStockAlarmSubPanelPosY = dataGridView8.Location.Y;
+            DisplayNewPanel(noStockAlarmSubPanel, panelWarehouse, new int[2] { noStockAlarmSubPanelPosX, noStockAlarmSubPanelPosY },
+                           new int[2] { 200, 150 }, "noStockAlarmSubPanel", true);
+            noStockAlarmSubPanel.Hide();
+
+            //int label39PosX = label38.Location.X + 4 * xItemsSpace;
+            //int label39PosY = label38.Location.Y + label38.Size.Height + 4 * yItemsSpace;
+
+            string label54Text = "Alarm set:";
+            DisplayNewLabelOnPanel(label54, noStockAlarmSubPanel, new int[2] { 4*xMargin, 2*yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT },  label54Text, standardFont);
+
+            string label55Text = "No";
+            DisplayNewLabelOnPanel(label55, noStockAlarmSubPanel, label54, new int[2] { 2 * xItemsSpace, 0 },
+                new int[2] { CalculateLabelLenght(label55Text), SMALLTEXT }, label55Text, standardFont);
+            //label55.Hide();
+
+            DisplayNewButtonOnPanel(button51, noStockAlarmSubPanel, label54, new int[2] { 0, 4*yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Create alarm", standardFont);
+            this.button51.Click += new System.EventHandler(this.button51_Click);
+            //button51.Hide();
+
+
+            //existingStockAlarmSubPanel
+            int existingStockAlarmSubPanelPosX = dataGridView8.Location.X + dataGridView8.Size.Width + 4 * xItemsSpace;
+            int existingStockAlarmSubPanelPosY = dataGridView8.Location.Y;
+            DisplayNewPanel(existingStockAlarmSubPanel, panelWarehouse, new int[2] { existingStockAlarmSubPanelPosX, existingStockAlarmSubPanelPosY },
+                           new int[2] { 200, 150 }, "existingStockAlarmSubPanel", true);
+            existingStockAlarmSubPanel.Hide();
+
+            //int label39PosX = label38.Location.X + 4 * xItemsSpace;
+            //int label39PosY = label38.Location.Y + label38.Size.Height + 4 * yItemsSpace;
+
+            string label56Text = "Alarm set:";
+            DisplayNewLabelOnPanel(label56, existingStockAlarmSubPanel, new int[2] { 4 * xMargin, 2 * yMargin }, new int[2]
+                { STDTEXTBOX, SMALLTEXT }, label56Text, standardFont);
+
+            string label57Text = "Yes";
+            DisplayNewLabelOnPanel(label57, existingStockAlarmSubPanel, label56, new int[2] { 2 * xItemsSpace, 0 },
+                new int[2] { CalculateLabelLenght(label55Text), SMALLTEXT }, label57Text, standardFont);
+            //label55.Hide();
+
+            DisplayNewButtonOnPanel(button52, existingStockAlarmSubPanel, label56, new int[2] { 0, 4 * yItemsSpace }, new int[2]
+                { LONGITEM, SMALLTEXT }, "Edit alarm", standardFont);
+            this.button52.Click += new System.EventHandler(this.button52_Click);
+
+
         }
 
+        private Form7 f7;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
@@ -1325,6 +1404,7 @@ namespace PSO1
         private string crtUser = Model.IOMethods.GetUserName();
         private System.Windows.Forms.CheckBox checkBox4;
 
+
         private System.Windows.Forms.Panel panel21;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.Label label40;
@@ -1340,5 +1420,18 @@ namespace PSO1
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.Label label52;
+
+        private System.Windows.Forms.Panel panelWarehouse;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.DataGridView dataGridView8;
+        private System.Windows.Forms.Panel noStockAlarmSubPanel;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Button button51;
+        private System.Windows.Forms.Panel existingStockAlarmSubPanel;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.Button button52;
+
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
+using static PSO1.Model.InternalDBQueries;
 using PSO1.Model;
 using System.IO;
 
@@ -463,6 +464,7 @@ namespace PSO1
             panel13.Hide();
             panel7.Hide();
             panel21.Hide();
+            panelWarehouse.Hide();
             panel15.Show();
         }
 
@@ -1202,6 +1204,7 @@ namespace PSO1
             HideEmailPanels();
             panel7.Hide();
             panel21.Hide();
+            panelWarehouse.Hide();
             panel.Show();
         }
 
@@ -1210,5 +1213,86 @@ namespace PSO1
         {
 
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            HideShowPanels(panelWarehouse);
+            dataGridView8.DataSource = BindWarehouseProductsToGrid(crtUser);
+        }
+
+        private void dataGridView8_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //TBD: method that checks if clicked product has an alarm set
+            //bool alarmIsCreated = CheckIfAlarmIsCreated(crtUser,)
+
+
+            int columnHeadIndex = -1;
+            int rowSelection = e.RowIndex;
+            int crtProductId = int.Parse(dataGridView8.Rows[rowSelection].Cells[0].Value.ToString());
+
+            if (rowSelection != columnHeadIndex)
+            {
+                bool alarmIsCreated = CheckIfAlarmIsCreated(crtUser, crtProductId);
+                if(alarmIsCreated)
+                {
+                    HideShowAlarmSubPanels(existingStockAlarmSubPanel);
+                }
+                else
+                {
+                    HideShowAlarmSubPanels(noStockAlarmSubPanel);
+                }
+                //MessageBox.Show("Alarm created: " + alarmIsCreated.ToString());
+                
+            }
+
+
+
+            //string cellContent = dataGridView8.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            //textBox16.Text = cellContent;
+            //textBox16.Refresh();
+  
+        }
+
+        private void HideShowAlarmSubPanels(Panel panel)
+        {
+            existingStockAlarmSubPanel.Hide();
+            noStockAlarmSubPanel.Hide();
+            panel.Show();
+        }
+
+
+
+        private void button51_Click(object sender, EventArgs e) //Create alarm
+        {
+            //TBD: use singleton
+            int PID = 1;
+            //Form7 f7 = new Form7(PID, false);
+            //f7 = new Form7(PID, false);
+            //f7.Text = PID.ToString();
+            //f7.Show();
+            bool existingAlarm = false;
+            AlarmDialogInit(PID, existingAlarm);
+        }
+
+        private void button52_Click(object sender, EventArgs e) //Edit alarm
+        {
+            int PID = 1;
+            //f7 = new Form7(PID, true);
+            //f7.Text = PID.ToString();
+            //f7.Show();
+            bool existingAlarm = true;
+            AlarmDialogInit(PID, existingAlarm);
+        }
+
+        private void AlarmDialogInit(int prodId, bool existingAlarm )
+        {
+
+            f7 = new Form7(prodId, existingAlarm);
+            f7.Show();
+            
+        }
+
+
+
     }
 }

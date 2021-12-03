@@ -935,5 +935,18 @@ namespace PSO1.Model
             psContext.SaveChanges();
         }
 
+        public static void CreateNewWarehouseProductStockAlarm(string user, int PID, int minAmount )
+        {
+            psDBContext psContext = new psDBContext();
+            WarehouseProductStockAlarm newWarehouseProductStockAlarm = new WarehouseProductStockAlarm();
+            var crtUser = psContext.Users.First(x => x.UserName == user);
+            newWarehouseProductStockAlarm.UserId = crtUser.Id;
+            newWarehouseProductStockAlarm.ProductId = PID;
+            newWarehouseProductStockAlarm.MinAmount = minAmount;
+            newWarehouseProductStockAlarm.CreateMessage();
+            psContext.WarehouseProductStockAlarms.Add(newWarehouseProductStockAlarm);
+            psContext.SaveChanges();
+        }
+
     }
 }
