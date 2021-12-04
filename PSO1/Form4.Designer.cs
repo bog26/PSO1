@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
 using System.Collections.Generic;
+using PSO1.Model;
 
 namespace PSO1
 {
@@ -1270,6 +1271,9 @@ namespace PSO1
         }
 
         private Form7 f7;
+        //private OpenDialog f7;
+        //OpenDialog
+        private bool AlarmDialogOpened = false;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;

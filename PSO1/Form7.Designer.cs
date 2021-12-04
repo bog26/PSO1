@@ -45,8 +45,11 @@ namespace PSO1
             this.ResumeLayout(false);
 
         }
-        private void InitializeManualAddedComponent(bool alarm)
+        private void InitializeManualAddedComponent(int PID)
+        //private void InitializeManualAddedComponent(bool alarm)
         {
+            crtProdID = PID;
+
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form7));
             this.panelCreateAlarm = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -106,7 +109,7 @@ namespace PSO1
 
 
             DisplayNewPanel(panelEditAlarm, new int[2] { 2 * xMargin, yMargin },
-                           new int[2] { this.Size.Width - 4 * xMargin, this.Size.Height - 4 * yMargin },
+                           new int[2] { this.Size.Width - 6 * xMargin, this.Size.Height - 10 * yMargin },
                            "panelEditAlarm ", true);
             this.Controls.Add(this.panelEditAlarm);
             panelEditAlarm.Hide();
@@ -114,7 +117,7 @@ namespace PSO1
             DisplayNewLabelOnPanel(label3, panelEditAlarm, new int[2] { xMargin, yMargin }, new int[2]
                 { STDTEXTBOX, SMALLTEXT }, "Edit alarm", mediumFont, blackText);
 
-            DisplayNewLabelOnPanel(label4, panelEditAlarm, label3, new int[2] { xItemsSpace, yItemsSpace }, new int[2]
+            DisplayNewLabelOnPanel(label4, panelEditAlarm, label3, new int[2] { 0, yItemsSpace }, new int[2]
                 { STDTEXTBOX, SMALLTEXT }, "Min Amount", standardFont);
 
             int numericUpDown2PosX = label4.Location.X + label4.Size.Width + 4 * xItemsSpace;
@@ -124,9 +127,10 @@ namespace PSO1
             numericUpDown2.Minimum = 1;
 
             DisplayNewButtonOnPanel(button2, panelEditAlarm, label4, new int[2] { 1, 4 * yItemsSpace }, new int[2]
-                { LONGITEM, SMALLTEXT }, "Edit Alarm", standardFont);
+                { LONGITEM, SMALLTEXT }, "Update Alarm", standardFont);
             this.button2.Click += new System.EventHandler(this.button2_Click);
 
+            /*
             if (alarm)
             {
                 panelCreateAlarm.Hide();
@@ -137,8 +141,11 @@ namespace PSO1
                 panelCreateAlarm.Show();
                 panelEditAlarm.Hide();
             }
+            */
 
         }
+        private int crtProdID;
+        private string crtUser = Model.IOMethods.GetUserName();
         private System.Windows.Forms.Panel panelCreateAlarm;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

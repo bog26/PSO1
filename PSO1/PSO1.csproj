@@ -154,6 +154,9 @@
     <Compile Include="Model\Manufacturer.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Messaging.cs" />
+    <Compile Include="Model\OpenDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductCategory.cs" />
     <Compile Include="Model\ProductPicture.cs" />

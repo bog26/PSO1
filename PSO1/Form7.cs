@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSO1.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static PSO1.Model.DBUpdates;
 
 namespace PSO1
 {
@@ -15,15 +17,33 @@ namespace PSO1
         public Form7(int PID, bool alarmCreated)
         {
             InitializeComponent();
-            InitializeManualAddedComponent(alarmCreated);
+            //InitializeManualAddedComponent(alarmCreated);
+            InitializeManualAddedComponent(PID);
+            HideShowAlarmPanels(alarmCreated);
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //Create Alarm
         {
+            CreateNewWarehouseProductStockAlarm(crtUser, crtProdID, (int)numericUpDown1.Value);
 
+            this.Hide();
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) //Edit Alarm
         {
-
+            ModifyWarehouseProductStockAlarm(crtUser, crtProdID, (int)numericUpDown2.Value);
+            this.Hide();
+        }
+        private void HideShowAlarmPanels(bool alarm)
+        {
+            if (alarm)
+            {
+                panelCreateAlarm.Hide();
+                panelEditAlarm.Show();
+            }
+            else
+            {
+                panelCreateAlarm.Show();
+                panelEditAlarm.Hide();
+            }
         }
     }
 }

@@ -1264,32 +1264,36 @@ namespace PSO1
 
         private void button51_Click(object sender, EventArgs e) //Create alarm
         {
-            //TBD: use singleton
-            int PID = 1;
-            //Form7 f7 = new Form7(PID, false);
-            //f7 = new Form7(PID, false);
-            //f7.Text = PID.ToString();
-            //f7.Show();
             bool existingAlarm = false;
-            AlarmDialogInit(PID, existingAlarm);
+            AlarmMenuStart(existingAlarm);
         }
 
         private void button52_Click(object sender, EventArgs e) //Edit alarm
         {
-            int PID = 1;
-            //f7 = new Form7(PID, true);
-            //f7.Text = PID.ToString();
-            //f7.Show();
             bool existingAlarm = true;
-            AlarmDialogInit(PID, existingAlarm);
+            AlarmMenuStart(existingAlarm);
         }
 
-        private void AlarmDialogInit(int prodId, bool existingAlarm )
+        private void AlarmMenuStart(bool existingAlarm)
         {
+            int columnHeadIndex = -1;
+            int selection = dataGridView8.CurrentRow.Index;
+            if (selection != columnHeadIndex)
+            {
+                int crtProductId = int.Parse(dataGridView8.Rows[selection].Cells[0].Value.ToString());
+                AlarmDialogInit(crtProductId, existingAlarm);
+            }
+        }
 
-            f7 = new Form7(prodId, existingAlarm);
+       
+        private void AlarmDialogInit(int prodId, bool existingAlarm)
+        {
+            if(!AlarmDialogOpened)
+            {
+                f7 = new Form7(prodId, existingAlarm);
+                AlarmDialogOpened = true;
+            }
             f7.Show();
-            
         }
 
 
