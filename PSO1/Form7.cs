@@ -19,7 +19,7 @@ namespace PSO1
             InitializeComponent();
             //InitializeManualAddedComponent(alarmCreated);
             InitializeManualAddedComponent(PID);
-            HideShowAlarmPanels(alarmCreated);
+            HideShowAlarmPanels(alarmCreated, PID); //TBD : fix => show correct panel
         }
         private void button1_Click(object sender, EventArgs e) //Create Alarm
         {
@@ -32,8 +32,24 @@ namespace PSO1
             ModifyWarehouseProductStockAlarm(crtUser, crtProdID, (int)numericUpDown2.Value);
             this.Hide();
         }
-        private void HideShowAlarmPanels(bool alarm)
+        /*
+        public void HideShowAlarmPanels(bool alarm)
         {
+            if (alarm)
+            {
+                panelCreateAlarm.Hide();
+                panelEditAlarm.Show();
+            }
+            else
+            {
+                panelCreateAlarm.Show();
+                panelEditAlarm.Hide();
+            }
+        }*/
+
+        public void HideShowAlarmPanels(bool alarm, int ctrPID)
+        {
+            crtProdID = ctrPID;
             if (alarm)
             {
                 panelCreateAlarm.Hide();

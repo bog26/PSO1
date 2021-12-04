@@ -1293,6 +1293,7 @@ namespace PSO1
                 f7 = new Form7(prodId, existingAlarm);
                 AlarmDialogOpened = true;
             }
+            f7.HideShowAlarmPanels(existingAlarm, prodId);
             f7.Show();
         }
 
