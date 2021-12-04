@@ -2,6 +2,7 @@
 using System.Drawing;
 using static PSO1.Model.FormElementsDisplay;
 using static PSO1.Model.DBBindings;
+using System.Windows.Forms;
 
 namespace PSO1
 {
@@ -44,6 +45,12 @@ namespace PSO1
             this.Text = "Form7";
             this.ResumeLayout(false);
 
+            //remove top form controls completely:
+            //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.ControlBox = false;
         }
         private void InitializeManualAddedComponent(int PID)
         //private void InitializeManualAddedComponent(bool alarm)
