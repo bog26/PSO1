@@ -14,6 +14,7 @@ namespace PSO1.Model
         int ProductId { get; set; }
         //Product Product { get; set; }
         string message { get; set; }
+        bool IsTriggered { get; set; }
         void CreateMessage();
     }
 }

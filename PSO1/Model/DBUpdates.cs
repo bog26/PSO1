@@ -818,6 +818,8 @@ namespace PSO1.Model
                     crtProduct.decreaseStock(newItem.Amount);
                     crtUser.ModifyCredit(-newItem.Cost);
                     psContext.SaveChanges();
+                    StockCheck(item.ProductId);
+                    //TBD: check for Alarms
                 }
             }
             else 
@@ -825,7 +827,22 @@ namespace PSO1.Model
                 MessageBox.Show("Cart is empty!");
             }
         }
-        public static void ModifyShoppingCartItemAmount(string user, int selection, int newAmount)
+
+        public static void StockCheck(int PID)
+        {
+            psDBContext psContext = new psDBContext();
+            Product crtProduct = psContext.Products.First(x => x.Id == PID);
+            if(InternalDBQueries.CheckIfProductAlarmExists(PID))
+            {
+                if(InternalDBQueries.GetWarehouseProductAlarmTriggerValue(PID) > crtProduct.Stock)
+                { 
+                    var queryWarehouseAlarm = psContext.WarehouseProductStockAlarms.First(x => x.ProductId == PID);
+                    queryWarehouseAlarm.TriggerAlarm(crtProduct.Stock);
+                    psContext.SaveChanges();
+                }
+            }
+        }
+    public static void ModifyShoppingCartItemAmount(string user, int selection, int newAmount)
         {
             psDBContext psContext = new psDBContext();
             var crtUser = psContext.Users.First(x => x.UserName == user);

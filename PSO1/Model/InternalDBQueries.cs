@@ -561,8 +561,26 @@ namespace PSO1.Model
             }
             return alarmCreated;
         }
+        public static bool CheckIfProductAlarmExists(int PID)
+        {
+            bool alarmExists = false;
+            var psContext = new psDBContext();
+            var queryAlarm = psContext.WarehouseProductStockAlarms.Where(x => x.ProductId == PID).ToList();
+            if(queryAlarm.Count != 0)
+            {
+                alarmExists = true; 
+            }
+            return alarmExists;
+        }
+        public static int GetWarehouseProductAlarmTriggerValue(int PID)
+        {
+            var psContext = new psDBContext();
+            var queryAlarm = psContext.WarehouseProductStockAlarms.First(x => x.ProductId == PID);
+            return queryAlarm.MinAmount;
+        }
 
-        
+
+
 
     }
 }

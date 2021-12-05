@@ -131,6 +131,14 @@
     <Compile Include="Migrations\202112021652278_addedMinAmountToWarehouseProductStockAlarm.designer.cs">
       <DependentUpon>202112021652278_addedMinAmountToWarehouseProductStockAlarm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112042300284_addedIsTriggeredToWarehouseProductStockAlarm.cs" />
+    <Compile Include="Migrations\202112042300284_addedIsTriggeredToWarehouseProductStockAlarm.designer.cs">
+      <DependentUpon>202112042300284_addedIsTriggeredToWarehouseProductStockAlarm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.cs" />
+    <Compile Include="Migrations\202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.designer.cs">
+      <DependentUpon>202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
@@ -223,6 +231,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112021652278_addedMinAmountToWarehouseProductStockAlarm.resx">
       <DependentUpon>202112021652278_addedMinAmountToWarehouseProductStockAlarm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112042300284_addedIsTriggeredToWarehouseProductStockAlarm.resx">
+      <DependentUpon>202112042300284_addedIsTriggeredToWarehouseProductStockAlarm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.resx">
+      <DependentUpon>202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
