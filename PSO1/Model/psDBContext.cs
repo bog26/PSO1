@@ -7,7 +7,7 @@ using System.Data.Entity;
 
 namespace PSO1.Model
 {
-    class psDBContext : DbContext
+    public class psDBContext : DbContext
     {
         public DbSet<T> GetDbSet<T>() where T : class
         {

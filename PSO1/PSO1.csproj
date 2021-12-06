@@ -139,6 +139,10 @@
     <Compile Include="Migrations\202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.designer.cs">
       <DependentUpon>202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112062214521_addedChanges.cs" />
+    <Compile Include="Migrations\202112062214521_addedChanges.designer.cs">
+      <DependentUpon>202112062214521_addedChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Client.cs" />
@@ -150,8 +154,10 @@
     <Compile Include="Model\GenericDBItemsQueries.cs" />
     <Compile Include="Model\GenericDBUserQueries.cs" />
     <Compile Include="Model\IAlarm.cs" />
+    <Compile Include="Model\IDbConnection.cs" />
     <Compile Include="Model\InfoMessagesConstruction.cs" />
     <Compile Include="Model\InternalDBQueries.cs" />
+    <Compile Include="Model\InternalDBQueriesGen.cs" />
     <Compile Include="Model\IOMethods.cs" />
     <Compile Include="Model\IPSOEntity.cs" />
     <Compile Include="Model\IQuery.cs" />
@@ -162,6 +168,7 @@
     <Compile Include="Model\Manufacturer.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Messaging.cs" />
+    <Compile Include="Model\MSSQLConnection.cs" />
     <Compile Include="Model\OpenDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.resx">
       <DependentUpon>202112042314052_addedTriggerMessageToWarehouseProductStockAlarm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112062214521_addedChanges.resx">
+      <DependentUpon>202112062214521_addedChanges.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -29,3 +29,4 @@ F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.addedMinAmountToWarehouseProd
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Form7.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.addedIsTriggeredToWarehouseProductStockAlarm.resources
 F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.addedTriggerMessageToWarehouseProductStockAlarm.resources
+F:\C#\projects\PSO1\PSO1\obj\Debug\PSO1.Migrations.addedChanges.resources

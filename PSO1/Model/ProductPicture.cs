@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    class ProductPicture : IPSOEntity, ISearchProductId
+    public class ProductPicture : IPSOEntity, ISearchProductId
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

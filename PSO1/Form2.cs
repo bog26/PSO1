@@ -58,7 +58,7 @@ namespace PSO1
                 f5.Show();
             }
         }
-
+        /*
         private void button1_Click(object sender, EventArgs e)
         {
             if (textBox1.Text != String.Empty)
@@ -73,8 +73,25 @@ namespace PSO1
                     MessageBox.Show("wrong user name or password");
                 }
             }
+        }*/
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != String.Empty)
+            {
+                var context = new MSSQLConnection();
+                if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, context) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))
+                {
+                    IOMethods.SetUserFile(textBox1.Text);
+                    OpenUserWindow(InternalDBQueries.CheckForAdminRights(textBox1.Text));
+                }
+                else
+                {
+                    MessageBox.Show("wrong user name or password");
+                }
+            }
         }
-        
+
 
         private void button2_Click(object sender, EventArgs e)
         {

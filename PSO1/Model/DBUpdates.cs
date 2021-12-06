@@ -819,7 +819,6 @@ namespace PSO1.Model
                     crtUser.ModifyCredit(-newItem.Cost);
                     psContext.SaveChanges();
                     StockCheck(item.ProductId);
-                    //TBD: check for Alarms
                 }
             }
             else 

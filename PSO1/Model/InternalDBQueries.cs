@@ -9,12 +9,10 @@ namespace PSO1.Model
 {
     public class InternalDBQueries
     {
-
         public static bool CheckForExistingUser(string userName)
         {
             bool exisitingUser = false;
             var psContext = new psDBContext();
-
             var queryUsers = psContext.Users.Where(x => x.UserName == userName).ToList();
             if (queryUsers.Count !=0)
             {
@@ -23,6 +21,19 @@ namespace PSO1.Model
 
             return exisitingUser;
         }
+
+        public static bool CheckForExistingUserGen(string userName, IDbConnection<psDBContext> context)
+        {
+            bool exisitingUser = false;
+
+            var queryUsers = context.Connection().Users.Where(x => x.UserName == userName).ToList();
+            if (queryUsers.Count != 0)
+            {
+                exisitingUser = true;
+            }
+            return exisitingUser;
+        }
+
         public static int GetUserPersonalDataId(string userName)
         {
             var psContext = new psDBContext();
