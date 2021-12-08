@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public interface IDbConnection<T>
+    //public interface IDbConnection<T>
+    public interface IDbConnection<T> 
     {
+        T Context { get; set; }
         T Connection();
         ISet<User> Users { get; set; }
         ISet<User> Products { get; set; }

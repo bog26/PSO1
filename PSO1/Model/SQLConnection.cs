@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class MSSQLConnection : IDbConnection<psDBContext>
+    class SQLConnection<T> : IDbConnection<T> where T: new()
     {
-        //private psDBContext context;
-        public psDBContext Context{ get; set; }
-        public MSSQLConnection()
+        public T Context { get; set; }
+        //public SQLConnection()
+        //{
+        //    Context = new T();
+        //}
+        public T Connection()
         {
-            Context = new psDBContext();
-        }
-        public psDBContext Connection()
-        {
-            return new psDBContext();
+            return new T();
         }
         public ISet<User> Users { get; set; }
         public ISet<User> Products { get; set; }
@@ -35,6 +34,5 @@ namespace PSO1.Model
         public ISet<User> ProductSpecifications { get; set; }
         public ISet<User> UserItemReviews { get; set; }
         public ISet<User> WarehouseProductStockAlarms { get; set; }
-
     }
 }

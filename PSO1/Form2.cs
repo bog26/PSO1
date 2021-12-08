@@ -79,8 +79,24 @@ namespace PSO1
         {
             if (textBox1.Text != String.Empty)
             {
-                var context = new MSSQLConnection();
-                if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, context) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))
+                //var context = new MSSQLConnection().Connection();
+                //var context = new psDBContext();
+                //var context = new MSSQLConnection().Context;
+
+                //var context = new SQLConnection<psDBContext>();
+                //var context = new SQLConnection<psDBContext>().Connection();
+                //var context = new MSSQLConnection();
+
+                //var context = new MSSQLConnection().Connection();
+                //var context = new MSSQLConnection().Context;
+                //if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, context) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))
+                
+                var connection = new MSSQLConnection();
+                if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, connection) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))
+
+                //var context = new SQLConnection<psDBContext>().Connection();
+                //if (InternalDBQueriesGen<psDBContext>.CheckForExistingUserGen(textBox1.Text, context) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))
+
                 {
                     IOMethods.SetUserFile(textBox1.Text);
                     OpenUserWindow(InternalDBQueries.CheckForAdminRights(textBox1.Text));

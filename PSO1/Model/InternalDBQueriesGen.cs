@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class InternalDBQueriesGen<T>
+    public class InternalDBQueriesGen<T> where T: IDbConnection<T>
     {
-        public static bool CheckForExistingUserGen(string userName, IDbConnection<T> context)
+        //public static bool CheckForExistingUserGen(string userName, IDbConnection<T> context)
+        public static bool CheckForExistingUserGen(string userName, T context)
         {
             bool exisitingUser = false;
-
-            //var psContext = new psDBContext();
-            //var psContext = new MSSQLConnection().Connection();
-            //IDbConnection<psDBContext> psContext = (IDbConnection<psDBContext>)new MSSQLConnection().Connection();
-            //IDbConnection
-
+            //var queryUsers = context.Users.Where(x => x.UserName == userName).ToList();
             var queryUsers = context.Users.Where(x => x.UserName == userName).ToList();
             if (queryUsers.Count != 0)
             {

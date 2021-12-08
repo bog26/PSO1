@@ -21,8 +21,36 @@ namespace PSO1.Model
 
             return exisitingUser;
         }
+        
+        public static bool CheckForExistingUserGen(string userName, IDbConnection<psDBContext> connection)
+        {
+            bool exisitingUser = false;
+            //var queryUsers = context.Connection().Users.Where(x => x.UserName == userName).ToList();
+            var queryUsers = connection.Context.Users.Where(x => x.UserName == userName).ToList();
+            if (queryUsers.Count != 0)
+            {
+                exisitingUser = true;
+            }
+            return exisitingUser;
+        }
 
-        public static bool CheckForExistingUserGen(string userName, IDbConnection<psDBContext> context)
+         /* //TBD
+        public static bool CheckForExistingUserGen<T>(string userName, IDbConnection<T> connection)
+        {
+            bool exisitingUser = false;
+            //var queryUsers = context.Connection().Users.Where(x => x.UserName == userName).ToList();
+            var queryUsers = connection.Context. .Users.Where(x => x.UserName == userName).ToList();
+            if (queryUsers.Count != 0)
+            {
+                exisitingUser = true;
+            }
+            return exisitingUser;
+        }*/
+        
+
+
+        /*
+        public static bool CheckForExistingUserGen<T>(string userName, IDbConnection<T> context) where T: IDbConnection<T>
         {
             bool exisitingUser = false;
 
@@ -32,7 +60,7 @@ namespace PSO1.Model
                 exisitingUser = true;
             }
             return exisitingUser;
-        }
+        }*/
 
         public static int GetUserPersonalDataId(string userName)
         {

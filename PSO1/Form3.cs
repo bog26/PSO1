@@ -48,7 +48,7 @@ namespace PSO1
         {
 
         }
-
+        /*
         private void button1_Click(object sender, EventArgs e)
         {
             if (CheckFillDataCorrectness())
@@ -68,7 +68,30 @@ namespace PSO1
             {
                 MessageBox.Show("input data is wrong");
             }
+        }*/
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (CheckFillDataCorrectness())
+            {
+                MessageBox.Show("input data is correct.");
+                var connection = new MSSQLConnection();
+                if (!InternalDBQueries.CheckForExistingUserGen(textBox1.Text, connection))
+                {
+                    CreateUser();
+                }
+                else
+                {
+                    MessageBox.Show("user already existing");
+                }
+            }
+            else
+            {
+                MessageBox.Show("input data is wrong");
+            }
         }
+
+
         public bool CheckFillDataCorrectness()
         {
             bool correctUserData = false;
