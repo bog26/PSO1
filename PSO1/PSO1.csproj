@@ -158,7 +158,6 @@
     <Compile Include="Model\IDbContext.cs" />
     <Compile Include="Model\InfoMessagesConstruction.cs" />
     <Compile Include="Model\InternalDBQueries.cs" />
-    <Compile Include="Model\InternalDBQueriesGen.cs" />
     <Compile Include="Model\IOMethods.cs" />
     <Compile Include="Model\IPSOEntity.cs" />
     <Compile Include="Model\IQuery.cs" />

@@ -194,9 +194,11 @@ namespace PSO1
             var newUser = new User();
             newUser.UserName = textBox1.Text;
             newUser.Password = textBox12.Text;
-            newUser.UserAddressId = GetUserPersonalDataId(newUser.UserName);
-            newUser.UserPersonalDataId = GetUserAddressId(newUser.UserName);
-            bool alreadyExistingAdmin = CheckForExistingAdmin();
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            newUser.UserAddressId = GetUserPersonalDataId(newUser.UserName, connection);
+            connection = new MSSQLConnection<psDBContext>().Context;
+            newUser.UserPersonalDataId = GetUserAddressId(newUser.UserName, connection);
+            bool alreadyExistingAdmin = CheckForExistingAdmin(connection);
             if (!alreadyExistingAdmin || ExecutedFromAdminAccount)
             {
                 newUser.isAdmin = true;

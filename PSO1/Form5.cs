@@ -443,10 +443,11 @@ namespace PSO1
 
         private void button31_Click(object sender, EventArgs e) //"Update Password"
         {
-            if (InternalDBQueries.CheckForCorrectPassword(Form.ActiveForm.Text, textBox6.Text))
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            if (CheckForCorrectPassword(ActiveForm.Text, textBox6.Text,connection))
             {
                 string newPassVal = textBox7.Text;
-                DBUpdates.WriteNewPassToDB(newPassVal);
+                WriteNewPassToDB(newPassVal);
                 MessageBox.Show("password changed");
             }
             else
@@ -502,9 +503,10 @@ namespace PSO1
             if (e.RowIndex != columnHeadIndex)
             {
                 int productID = Int32.Parse(dataGridView7.Rows[rowSelection].Cells[0].Value.ToString());
-                richTextBox6.Text = DBUpdates.GetProductSpec(productID);
-                richTextBox8.Text = DBUpdates.GetProductSpec(productID);
-                numericUpDown1.Maximum = InternalDBQueries.GetMaxAmount(productID);
+                richTextBox6.Text = GetProductSpec(productID);
+                richTextBox8.Text = GetProductSpec(productID);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                numericUpDown1.Maximum = GetMaxAmount(productID,connection);
                 richTextBox6.Refresh();
                 button40.Show();
                 label30.Text = ConstructProductHierarchy(productID);
@@ -519,7 +521,7 @@ namespace PSO1
 
                 try
                 {
-                    byte[] pictureData = DBUpdates.GetPictureData(productID);
+                    byte[] pictureData = GetPictureData(productID);
                     Bitmap picture = GetBitmap(pictureData);
                     pictureBox1.Image = picture;
                     pictureBox1.Show();
@@ -544,9 +546,10 @@ namespace PSO1
                 int rowIndex = Int32.Parse(dataGridView7.CurrentCell.RowIndex.ToString());
                 int productID = Int32.Parse(dataGridView7.Rows[rowIndex].Cells[0].Value.ToString());
                 int amount = Int32.Parse(numericUpDown1.Value.ToString());
-                if (amount > 0 && !InternalDBQueries.IsProductInCart(crtUser, productID))
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                if (amount > 0 && !IsProductInCart(crtUser, productID, connection))
                 {
-                    DBUpdates.CreateNewShoppingCartItem(crtUser, productID, amount);
+                    CreateNewShoppingCartItem(crtUser, productID, amount);
                     string plural = (amount > 1) ? "s" : string.Empty;
                     MessageBox.Show($"{amount} item{plural} with PID {productID} added to cart");
                     UpdateShoppingCartNr(crtUser);
@@ -571,7 +574,8 @@ namespace PSO1
             {
                 MessageBox.Show("please select a product");
             }
-            MessageBox.Show($"size of wish list: {InternalDBQueries.GetWishListSize(crtUser)} ");
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            MessageBox.Show($"size of wish list: {InternalDBQueries.GetWishListSize(crtUser, connection)} ");
 
         }
 

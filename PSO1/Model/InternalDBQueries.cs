@@ -9,20 +9,6 @@ namespace PSO1.Model
 {
     public class InternalDBQueries
     {
-        public static bool CheckForExistingUser(string userName)
-        {
-            bool exisitingUser = false;
-            var psContext = new psDBContext();
-            var queryUsers = psContext.Users.Where(x => x.UserName == userName).ToList();
-            if (queryUsers.Count !=0)
-            {
-                exisitingUser = true;
-            }
-
-            return exisitingUser;
-        }
-
-
         public static bool CheckForExistingUserGen<T>(string userName, T context) where T : IDbContext// psDBContext
         {
 
@@ -35,29 +21,26 @@ namespace PSO1.Model
             return exisitingUser;
         }
 
-        public static int GetUserPersonalDataId(string userName)
+        public static int GetUserPersonalDataId<T>(string userName, T context) where T: IDbContext
         {
-            var psContext = new psDBContext();
-            int UserPersonalDataId = psContext.UserPersonalDatas.First(x => x.UserName == userName).Id; 
+            int UserPersonalDataId = context.UserPersonalDatas.First(x => x.UserName == userName).Id;
             return UserPersonalDataId;
         }
-        public static int GetUserAddressId(string userName)
+
+        public static int GetUserAddressId<T>(string userName, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            int UserAddressId = psContext.UserAddresses.First(x => x.UserName == userName).Id;
+            int UserAddressId = context.UserAddresses.First(x => x.UserName == userName).Id;
             return UserAddressId;
         }
-        public static bool CheckForCorrectPassword(string loggedUser, string password)
-        {
-            var psContext = new psDBContext();
-            bool correctPassword = false;
 
-            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
+        public static bool CheckForCorrectPassword<T>(string loggedUser, string password, T context) where T: IDbContext
+        {
+            bool correctPassword = false;
+            var crtUser = context.Users.First(x => x.UserName == loggedUser);
             if (crtUser.Password == password)
             {
                 correctPassword = true;
             }
-
             return correctPassword;
         }
 
@@ -68,20 +51,17 @@ namespace PSO1.Model
             return crtUser.Password;
         }
 
-
-        public static bool CheckForAdminRights(string userName)
+        public static bool CheckForAdminRights<T>(string userName, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == userName);
+            var crtUser = context.Users.First(x => x.UserName == userName);
             bool isAdmin = crtUser.isAdmin;
             return isAdmin;
         }
 
-        public static bool CheckForExistingAdmin()
+        public static bool CheckForExistingAdmin<T>(T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
             bool alreadyExistingAdmin = false;
-            var queryAdmins = psContext.Users.Where(x => x.isAdmin == true).ToList();
+            var queryAdmins = context.Users.Where(x => x.isAdmin == true).ToList();
             if(queryAdmins.Count!=0)
             {
                 alreadyExistingAdmin = true;
@@ -89,7 +69,7 @@ namespace PSO1.Model
             return alreadyExistingAdmin;
         }
 
-        public static int GetWishListSize(string userName)
+        public static int GetWishListSize<T>(string userName, T context)
         {
             var psContext = new psDBContext();
             int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
@@ -97,12 +77,11 @@ namespace PSO1.Model
             return wishListSize;
         }
 
-            public static bool IsProductInCart(string user, int PID)
+        public static bool IsProductInCart<T>(string user, int PID, T context) where T:IDbContext
         {
             bool productinCart = false;
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
-            var item = psContext.ShoppingCartItems.Where(x => (x.ProductId == PID) && (x.UserId == crtUser.Id)).ToList();
+            var crtUser = context.Users.First(x => x.UserName == user);
+            var item = context.ShoppingCartItems.Where(x => (x.ProductId == PID) && (x.UserId == crtUser.Id)).ToList();
 
             if (item.Count > 0)
             {
@@ -111,11 +90,19 @@ namespace PSO1.Model
             return productinCart;
         }
 
+        /*
         public static int GetMaxAmount(int PID)
         {
             int amount;
             var psContext = new psDBContext();
             Product productQuery = psContext.Products.First(x => x.Id == PID);
+            amount = productQuery.Stock;
+            return amount;
+        }*/
+        public static int GetMaxAmount<T>(int PID, T context) where T:IDbContext
+        {
+            int amount;
+            Product productQuery = context.Products.First(x => x.Id == PID);
             amount = productQuery.Stock;
             return amount;
         }

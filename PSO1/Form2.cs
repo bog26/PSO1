@@ -80,10 +80,11 @@ namespace PSO1
             if (textBox1.Text != String.Empty)
             {
                 var connection = new MSSQLConnection<psDBContext>().Context;
-                if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, connection) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))  
+                if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, connection)
+                    && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text,connection))  
                 {
                     IOMethods.SetUserFile(textBox1.Text);
-                    OpenUserWindow(InternalDBQueries.CheckForAdminRights(textBox1.Text));
+                    OpenUserWindow(InternalDBQueries.CheckForAdminRights(textBox1.Text, connection));
                 }
                 else
                 {

@@ -566,7 +566,8 @@ namespace PSO1
         }
         private void button18_Click(object sender, EventArgs e)
         {
-            if(InternalDBQueries.CheckForCorrectPassword(Form.ActiveForm.Text, textBox3.Text))
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            if (CheckForCorrectPassword(ActiveForm.Text, textBox3.Text, connection))
             {
                 //MessageBox.Show("correct password");
                 string newPassVal = textBox4.Text;
