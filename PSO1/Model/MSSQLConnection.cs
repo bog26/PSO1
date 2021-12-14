@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    public class MSSQLConnection : IDbConnection<psDBContext>
+    //public class MSSQLConnection : IDbConnection<psDBContext>
+    //public class MSSQLConnection<T> : IDbConnection<T> where T: psDBContext,IDbContext, new()
+    public class MSSQLConnection<T> where T : psDBContext, new() //psDBContext, IDbContext, 
+    //public class MSSQLConnection<T> where T : new() //ok
     {
         //private psDBContext context;
+
+        /*
         public psDBContext Context{ get; set; }
         public MSSQLConnection()
         {
@@ -18,6 +23,17 @@ namespace PSO1.Model
         {
             return new psDBContext();
         }
+        */
+        public T Context { get; set; }
+        public MSSQLConnection()
+        {
+            Context = new T();
+        }
+        public T Connection()
+        {
+            return new T();
+        }
+
         /*
         public ISet<User> Users { get; set; }
         public ISet<User> Products { get; set; }

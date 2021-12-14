@@ -21,9 +21,15 @@ namespace PSO1.Model
 
             return exisitingUser;
         }
-        
-        public static bool CheckForExistingUserGen(string userName, IDbConnection<psDBContext> connection)
+
+        //public static bool CheckForExistingUserGen(string userName, IDbConnection<psDBContext> connection)
+        //public static bool CheckForExistingUserGen<T>(string userName, IDbConnection<T> connection)
+        //public static bool CheckForExistingUserGen(string userName, IDbConnection<psDBContext> connection)
+        //public static bool CheckForExistingUserGen<T>(string userName, T context) where T: psDBContext // ok
+        //public static bool CheckForExistingUserGen<T>(string userName, T context) where T : psDBContext
+        public static bool CheckForExistingUserGen<T>(string userName, T context) where T : psDBContext, IDbContext
         {
+            /*
             bool exisitingUser = false;
             //var queryUsers = context.Connection().Users.Where(x => x.UserName == userName).ToList();
             var queryUsers = connection.Context.Users.Where(x => x.UserName == userName).ToList();
@@ -32,6 +38,18 @@ namespace PSO1.Model
                 exisitingUser = true;
             }
             return exisitingUser;
+            */
+            bool exisitingUser = false;
+            //var queryUsers = context.Connection().Users.Where(x => x.UserName == userName).ToList();
+            //var queryUsers = context.Users.Where(x => x.UserName == userName).ToList();
+            var queryUsers =context.Users.Where(x => x.UserName == userName).ToList();
+            if (queryUsers.Count != 0)
+            {
+                exisitingUser = true;
+            }
+            return exisitingUser;
+
+
         }
 
         /*  //TBD

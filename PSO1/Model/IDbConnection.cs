@@ -8,7 +8,7 @@ namespace PSO1.Model
 {
     //public interface IDbConnection<T> where T : IDbContext
     //public interface IDbConnection<T> where T: psDBContext
-    public interface IDbConnection<T>
+    public interface IDbConnection<T> where T: psDBContext,IDbContext
     {
         T Context { get; set; }
         T Connection();

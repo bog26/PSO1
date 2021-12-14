@@ -75,7 +75,8 @@ namespace PSO1
             if (CheckFillDataCorrectness())
             {
                 MessageBox.Show("input data is correct.");
-                var connection = new MSSQLConnection();
+                //var connection = new MSSQLConnection();
+                var connection = new MSSQLConnection<psDBContext>().Context;
                 if (!InternalDBQueries.CheckForExistingUserGen(textBox1.Text, connection))
                 {
                     CreateUser();
