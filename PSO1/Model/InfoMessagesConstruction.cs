@@ -30,46 +30,47 @@ namespace PSO1.Model
         }
         public static string ConstructProductReviewInfo(int reviewId)
         {
-            string reviewer = GetReviewer(reviewId);
-            string product = GetReviewProductName(reviewId);
-            string rating = GetReviewProductRating(reviewId);
-            string title = GetReviewTitle(reviewId);
-            string review = GetReview(reviewId);
-            string date = GetReviewDate(reviewId);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            string reviewer = GetReviewer(reviewId, connection);
+            string product = GetReviewProductName(reviewId,connection);
+            string rating = GetReviewProductRating(reviewId,connection);
+            string title = GetReviewTitle(reviewId,connection);
+            string review = GetReview(reviewId,connection);
+            string date = GetReviewDate(reviewId,connection);
             string productReview = $"{reviewer} rewiewed {product} on {date} and rated it with {rating} stars \n" +
                                    $"{title}\n{review}";
             return productReview.ToString();
         }
         
-        public static string ConstructProductReviews(int PID)
+        public static string ConstructProductReviews<T>(int PID, T context) where T:IDbContext
         {
             StringBuilder allReviews = new StringBuilder();
-            List<int> productReviewIds = GetProductReviewIds(PID);
-
+            List<int> productReviewIds = GetProductReviewIds(PID, context);
             foreach (int id in productReviewIds)
             {
-                allReviews.Append(GetReviewer(id) + " reviewed " + GetReviewProductName(id) +
-                                  " on " + GetReviewDate(id) + "\n");
-                allReviews.Append(GetReviewProductRating(id) + " stars: " + GetReviewTitle(id) + "\n");
-                allReviews.Append(GetReview(id) + "\n\n"); 
+                allReviews.Append(GetReviewer(id, context) + " reviewed " + GetReviewProductName(id, context) +
+                                  " on " + GetReviewDate(id, context) + "\n");
+                allReviews.Append(GetReviewProductRating(id, context) + " stars: " + GetReviewTitle(id, context) + "\n");
+                allReviews.Append(GetReview(id, context) + "\n\n"); 
             }
             return allReviews.ToString();
         }
         
+        /*
         public static string ConstructProductReviewsProt(GenericDBItemsQueries<UserItemReview> query)
         {
             StringBuilder allReviews = new StringBuilder();
             List<int> productReviewIds = GetProductReviewIdsProt(query);
-
+            var connection = new MSSQLConnection<psDBContext>().Context;
             foreach (int id in productReviewIds)
             {
-                allReviews.Append(GetReviewer(id) + " reviewed " + GetReviewProductName(id) +
-                                  " on " + GetReviewDate(id) + "\n");
-                allReviews.Append(GetReviewProductRating(id) + " stars: " + GetReviewTitle(id) + "\n");
-                allReviews.Append(GetReview(id) + "\n\n");
+                allReviews.Append(GetReviewer(id, connection) + " reviewed " + GetReviewProductName(id,connection) +
+                                  " on " + GetReviewDate(id,connection) + "\n");
+                allReviews.Append(GetReviewProductRating(id,connection) + " stars: " + GetReviewTitle(id,connection) + "\n");
+                allReviews.Append(GetReview(id, connection) + "\n\n");
             }
             return allReviews.ToString();
-        }
+        }*/
     }
    
 }

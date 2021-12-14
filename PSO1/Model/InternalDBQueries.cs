@@ -203,24 +203,22 @@ namespace PSO1.Model
             return productPrice;
         }
 
-        public static string ConstructProductHierarchy(int PID)
+        public static string ConstructProductHierarchy<T>(int PID, T context) where T:IDbContext
         {
             string hierarchyText = string.Empty;
-            var psContext = new psDBContext();
-            Product crtProduct = psContext.Products.First(x => x.Id == PID);
-            ProductSubCategory crtSubCategory = psContext.ProductSubCategories.First(x => x.Id == crtProduct.ProductSubCategoryId);
-            string categoryName = psContext.ProductCategories.First(x => x.Id == crtSubCategory.ProductCategoryId).Name;
+            Product crtProduct = context.Products.First(x => x.Id == PID);
+            ProductSubCategory crtSubCategory = context.ProductSubCategories.First(x => x.Id == crtProduct.ProductSubCategoryId);
+            string categoryName = context.ProductCategories.First(x => x.Id == crtSubCategory.ProductCategoryId).Name;
             hierarchyText = categoryName + ">" + crtSubCategory.Name + ">" + crtProduct.Model.ToString();
             return hierarchyText;
         }
 
        
-        public static int GetNrOfProductsInCart(string userName)
+        public static int GetNrOfProductsInCart<T>(string userName, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
             int productsInCart = 0;
-            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
-            var queryCartProducts = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList();
+            int crtUserId = context.Users.First(x => x.UserName == userName).Id;
+            var queryCartProducts = context.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList();
             foreach(ShoppingCartItem item in queryCartProducts)
             {
                 productsInCart += item.Amount;                               
@@ -240,24 +238,22 @@ namespace PSO1.Model
             return enoughCredit;
         }
 
-        public static string GetCrtCreditStatus(string user)
+        public static string GetCrtCreditStatus<T>(string user, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var crtUser = context.Users.First(x => x.UserName == user);
             string crtCredit = crtUser.Credit.ToString();
             return crtCredit;
         }
 
-        public static bool CheckIfReviewedProduct(string user, int index)
+        public static bool CheckIfReviewedProduct<T>(string user, int index, T context) where T:IDbContext
         {
             bool wasReviewed = false;
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var crtUser = context.Users.First(x => x.UserName == user);
 
             List<Product> purchasedProducts = DBBindings.BuildUserPurchasedProductsList(user);
             int crtPID = purchasedProducts[index].Id;  
 
-            List <UserItemReview> userReviews = psContext.UserItemReviews.Where(x => x.UserId == crtUser.Id).ToList();
+            List <UserItemReview> userReviews = context.UserItemReviews.Where(x => x.UserId == crtUser.Id).ToList();
             foreach(UserItemReview review in userReviews)
             {
                 if(review.ProductId == crtPID)
@@ -268,19 +264,17 @@ namespace PSO1.Model
             }
             return wasReviewed; 
         }
-        public static int GetCrtPIDFromPurchasedProdList(string user, int index)
+        public static int GetCrtPIDFromPurchasedProdList<T>(string user, int index, T context) where T:IDbContext 
         {
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var crtUser = context.Users.First(x => x.UserName == user);
             List<Product> purchasedProducts = DBBindings.BuildUserPurchasedProductsList(user);
             int crtPID = purchasedProducts[index].Id;
             return crtPID;
         }
 
-        public static string GetProductName(int PID)
+        public static string GetProductName<T>(int PID, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            string prodName = psContext.Products.First(x =>x.Id == PID).ProductName; 
+            string prodName = context.Products.First(x =>x.Id == PID).ProductName; 
             return prodName;
         }
         public static string GetProductNameProt(GenericDBEntityQueries<Product> query)
@@ -292,67 +286,61 @@ namespace PSO1.Model
 
 
 
-        public static int GetCrtReviewId(string user, int index)
+        public static int GetCrtReviewId<T>(string user, int index, T context ) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
-            int PID = GetCrtPIDFromPurchasedProdList(user, index);
-            int reviewId = psContext.UserItemReviews.First(x => (x.UserId == crtUser.Id)
+            var crtUser = context.Users.First(x => x.UserName == user);
+            int PID = GetCrtPIDFromPurchasedProdList(user, index, context);
+            int reviewId = context.UserItemReviews.First(x => (x.UserId == crtUser.Id)
                                                                 && (x.ProductId == PID)).Id; 
             return reviewId;
         }
-        public static string GetReviewer(int reviewId)
+        public static string GetReviewer<T>(int reviewId, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            int userId = psContext.UserItemReviews.First(x => x.Id == reviewId).UserId;
-            string reviewer = psContext.Users.First(x => x.Id == userId).UserName;
+            int userId = context.UserItemReviews.First(x => x.Id == reviewId).UserId;
+            string reviewer = context.Users.First(x => x.Id == userId).UserName;
             return reviewer; 
         }
-        public static string GetReviewProductName(int reviewId)
+        public static string GetReviewProductName<T>(int reviewId, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            int PID = psContext.UserItemReviews.First(x => x.Id == reviewId).ProductId;
-            string productName = GetProductName(PID);
+            int PID = context.UserItemReviews.First(x => x.Id == reviewId).ProductId;
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            string productName = GetProductName(PID,connection);
             return productName;
         }
 
-        public static string GetReviewTitle(int reviewId)
+        public static string GetReviewTitle<T>(int reviewId, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            string title = psContext.UserItemReviews.First(x => x.Id == reviewId).Title;
+            string title = context.UserItemReviews.First(x => x.Id == reviewId).Title;
             return title;
         }
-        public static string GetReview(int reviewId)
+        public static string GetReview<T>(int reviewId, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            string review = psContext.UserItemReviews.First(x => x.Id == reviewId).Review;
+            string review = context.UserItemReviews.First(x => x.Id == reviewId).Review;
             return review;
         }
-        public static string GetReviewProductRating(int reviewId)
+        public static string GetReviewProductRating<T>(int reviewId, T context) where T:IDbContext 
         {
-            var psContext = new psDBContext();
-            string rating = psContext.UserItemReviews.First(x => x.Id == reviewId).UserItemScore.ToString();
+            string rating = context.UserItemReviews.First(x => x.Id == reviewId).UserItemScore.ToString();
             return rating;
         }
 
-        public static string GetReviewDate(int reviewId)
+        public static string GetReviewDate<T>(int reviewId, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            string reviewDate = psContext.UserItemReviews.First(x => x.Id == reviewId).ReviewTime.ToString();
+            string reviewDate = context.UserItemReviews.First(x => x.Id == reviewId).ReviewTime.ToString();
             return reviewDate;
         }
 
+        /*
         public static UserItemReview GetUserItemReview(int UserItemReviewId)
         {
             var psContext = new psDBContext();
             UserItemReview userItemReview = psContext.UserItemReviews.First(x => x.Id == UserItemReviewId);
             return userItemReview;
-        }
-        public static List<int> GetProductReviewIds(int PID)
+        }*/
+        public static List<int> GetProductReviewIds<T>(int PID, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
             List<int> productReviewIds = new List<int>();
-            List<UserItemReview> queryUserItemReviews = psContext.UserItemReviews.Where(x => x.ProductId ==PID).ToList(); 
+            List<UserItemReview> queryUserItemReviews = context.UserItemReviews.Where(x => x.ProductId ==PID).ToList(); 
             foreach(UserItemReview item in queryUserItemReviews)
             {
                 productReviewIds.Add(item.Id);
@@ -360,6 +348,7 @@ namespace PSO1.Model
             return productReviewIds;
         }
 
+        /*
         public static List<int> GetProductReviewIdsProt(GenericDBItemsQueries<UserItemReview> query)
         {
             List<int> productReviewIds = new List<int>();
@@ -369,7 +358,7 @@ namespace PSO1.Model
                 productReviewIds.Add(item.Id);
             }
             return productReviewIds;
-        }
+        }*/
 
         public static int GetNrOfUnreadMessages(string userName)
         {
@@ -498,12 +487,11 @@ namespace PSO1.Model
             return totalCreditBought.ToString();
         }
 
-        public static string GetProductRating(int PID)
+        public static string GetProductRating<T>(int PID, T context) where T:IDbContext
         {
             string ratingStr = "Not rated";
             double ratingsSum = 0;
-            var psContext = new psDBContext();
-            var queryProductRatings = psContext.UserItemReviews.Where(x => x.ProductId == PID).ToList();
+            var queryProductRatings = context.UserItemReviews.Where(x => x.ProductId == PID).ToList();
             if (queryProductRatings.Count>0)
             {
                 foreach(UserItemReview review in queryProductRatings)
@@ -514,7 +502,7 @@ namespace PSO1.Model
             }
             return ratingStr;
         }
-        
+        /*
         public static string GetProductRatingProt1(GenericDBItemsQueries<UserItemReview> query)
         {
             string ratingStr = "Not rated";
@@ -530,7 +518,8 @@ namespace PSO1.Model
                 ratingStr = (ratingsSum / queryProductRatings.Count).ToString();
             }
             return ratingStr;
-        }
+        }*/
+        
         public static bool CheckIfAlarmIsCreated(string user, int PID)
         {
             bool alarmCreated = false;

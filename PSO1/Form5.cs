@@ -509,15 +509,17 @@ namespace PSO1
                 numericUpDown1.Maximum = GetMaxAmount(productID,connection);
                 richTextBox6.Refresh();
                 button40.Show();
-                label30.Text = ConstructProductHierarchy(productID);
+                label30.Text = ConstructProductHierarchy(productID, connection);
                 label32.Text = GetProductPrice(productID, connection).ToString();
                 label32.Show();
 
                 searchWithProductId = new GenericDBItemsQueries<UserItemReview>(productID);
-                richTextBox11.Text = ConstructProductReviewsProt(searchWithProductId);
-                //richTextBox11.Text = ConstructProductReviews(productID);
+                //richTextBox11.Text = ConstructProductReviewsProt(searchWithProductId);
+                richTextBox11.Text = ConstructProductReviews(productID, connection);
                 //ConstructProductReviewsProt
-                label46.Text = "Rating: " + GetProductRatingProt1(searchWithProductId);
+                //label46.Text = "Rating: " + GetProductRatingProt1(searchWithProductId);
+                label46.Text = "Rating: " + GetProductRating(productID,connection);
+                //GetProductRating
 
                 try
                 {
@@ -700,7 +702,8 @@ namespace PSO1
 
         private void UpdateShoppingCartNr(string user)
         {
-            string nr = GetNrOfProductsInCart(crtUser).ToString();
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            string nr = GetNrOfProductsInCart(crtUser, connection).ToString();
             UpdateButtonText(button5, "Shopping cart", nr);
             UpdateButtonText(buttonShoppingCart1, "Shopping cart", nr);
 
@@ -742,7 +745,8 @@ namespace PSO1
 
         private void button9_Click(object sender, EventArgs e) //Status
         {
-            label37.Text = GetCrtCreditStatus(crtUser);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            label37.Text = GetCrtCreditStatus(crtUser, connection);
             dataGridView9.DataSource = BindTransactionsToGrid(crtUser);
             HideShowAllPanels(panelFinancialStatus);
         }
@@ -789,11 +793,12 @@ namespace PSO1
         private void listBox5_Click(object sender, EventArgs e)
         {
             int selection = listBox5.SelectedIndex;
-            bool existingReview = CheckIfReviewedProduct(crtUser, selection);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            bool existingReview = CheckIfReviewedProduct(crtUser, selection, connection);
             if(existingReview)
             {
 
-                int reviewId = GetCrtReviewId(crtUser, selection);
+                int reviewId = GetCrtReviewId(crtUser, selection,connection);
                 richTextBox10.Text = ConstructProductReviewInfo(reviewId);
                 HideReviewSubPanels(existingReviewsSubPanel);
             }
@@ -809,7 +814,8 @@ namespace PSO1
         private void button47_Click(object sender, EventArgs e) //Submit
         {
             int selection = listBox5.SelectedIndex;
-            int PID = GetCrtPIDFromPurchasedProdList(crtUser, selection);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            int PID = GetCrtPIDFromPurchasedProdList(crtUser, selection, connection);
             int rating = (int)numericUpDown3.Value;
             string title = textBox13.Text;
             string review = richTextBox9.Text;
