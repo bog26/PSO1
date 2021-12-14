@@ -8,8 +8,9 @@ namespace PSO1.Model
 {
     //public class MSSQLConnection : IDbConnection<psDBContext>
     //public class MSSQLConnection<T> : IDbConnection<T> where T: psDBContext,IDbContext, new()
-    public class MSSQLConnection<T> where T : psDBContext, new() //psDBContext, IDbContext, 
-    //public class MSSQLConnection<T> where T : new() //ok
+    //public class MSSQLConnection<T> where T : psDBContext, new() //psDBContext, IDbContext,  //ok
+    public class MSSQLConnection<T> where T : IDbContext, new()
+        //public class MSSQLConnection<T> where T : new() //ok
     {
         //private psDBContext context;
 

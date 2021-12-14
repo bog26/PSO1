@@ -7,12 +7,14 @@ using System.Data.Entity;
 
 namespace PSO1.Model
 {
-    public class psDBContext : DbContext
+    public class psDBContext : DbContext , IDbContext
     {
         public DbSet<T> GetDbSet<T>() where T : class
         {
             return Set<T>();
         }
+
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -34,7 +36,6 @@ namespace PSO1.Model
         public DbSet<ProductSpecification> ProductSpecifications { get; set; }
         public DbSet<UserItemReview> UserItemReviews { get; set; }
         public DbSet<WarehouseProductStockAlarm> WarehouseProductStockAlarms { get; set; }
-        //WarehouseProductStockAlarm
-
+        
     }
 }
