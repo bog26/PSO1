@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    class SQLConnection<T> : IDbConnection<T> where T: new()
-    {
+    //class SQLConnection<T> : IDbConnection<T> where T: new()
+    //class SQLConnection<T> where T : psDBContext, IDbContext<T>
+    class SQLConnection<T> where T : psDBContext
+    { 
         public T Context { get; set; }
         //public SQLConnection()
         //{
         //    Context = new T();
         //}
-        public T Connection()
-        {
-            return new T();
-        }
+        
         public ISet<User> Users { get; set; }
         public ISet<User> Products { get; set; }
         public ISet<User> Transactions { get; set; }

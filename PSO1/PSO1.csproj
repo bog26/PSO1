@@ -155,6 +155,7 @@
     <Compile Include="Model\GenericDBUserQueries.cs" />
     <Compile Include="Model\IAlarm.cs" />
     <Compile Include="Model\IDbConnection.cs" />
+    <Compile Include="Model\IDbContext.cs" />
     <Compile Include="Model\InfoMessagesConstruction.cs" />
     <Compile Include="Model\InternalDBQueries.cs" />
     <Compile Include="Model\InternalDBQueriesGen.cs" />

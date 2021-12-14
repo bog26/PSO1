@@ -18,6 +18,7 @@ namespace PSO1.Model
         {
             return new psDBContext();
         }
+        /*
         public ISet<User> Users { get; set; }
         public ISet<User> Products { get; set; }
         public ISet<User> Transactions { get; set; }
@@ -35,6 +36,6 @@ namespace PSO1.Model
         public ISet<User> ProductSpecifications { get; set; }
         public ISet<User> UserItemReviews { get; set; }
         public ISet<User> WarehouseProductStockAlarms { get; set; }
-
+        */
     }
 }

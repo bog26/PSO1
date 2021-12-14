@@ -93,6 +93,9 @@ namespace PSO1
                 
                 var connection = new MSSQLConnection();
                 if (InternalDBQueries.CheckForExistingUserGen(textBox1.Text, connection) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))
+                
+                //var connection = new SQLConnection<psDBContext>();
+
 
                 //var context = new SQLConnection<psDBContext>().Connection();
                 //if (InternalDBQueriesGen<psDBContext>.CheckForExistingUserGen(textBox1.Text, context) && InternalDBQueries.CheckForCorrectPassword(textBox1.Text, textBox2.Text))

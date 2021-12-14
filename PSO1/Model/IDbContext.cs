@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
-    //public interface IDbConnection<T> where T : IDbContext
-    //public interface IDbConnection<T> where T: psDBContext
-    public interface IDbConnection<T>
+    public interface IDbContext :IDisposable
     {
-        T Context { get; set; }
-        T Connection();
-        /*
+        //DbSet<TEntity> Set<TEntity>() where TEntity : class;
+        
         ISet<User> Users { get; set; }
         ISet<User> Products { get; set; }
         ISet<User> Transactions { get; set; }
@@ -30,6 +28,6 @@ namespace PSO1.Model
         ISet<User> ProductSpecifications { get; set; }
         ISet<User> UserItemReviews { get; set; }
         ISet<User> WarehouseProductStockAlarms { get; set; }
-        */
+
     }
 }

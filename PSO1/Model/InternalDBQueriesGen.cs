@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSO1.Model
 {
+    /*
     public class InternalDBQueriesGen<T> where T: IDbConnection<T>
     {
         //public static bool CheckForExistingUserGen(string userName, IDbConnection<T> context)
@@ -23,5 +24,7 @@ namespace PSO1.Model
             return exisitingUser;
         }
 
+
     }
+    */
 }
