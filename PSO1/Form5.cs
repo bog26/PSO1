@@ -510,7 +510,7 @@ namespace PSO1
                 richTextBox6.Refresh();
                 button40.Show();
                 label30.Text = ConstructProductHierarchy(productID);
-                label32.Text = GetProductPrice(productID).ToString();
+                label32.Text = GetProductPrice(productID, connection).ToString();
                 label32.Show();
 
                 searchWithProductId = new GenericDBItemsQueries<UserItemReview>(productID);
@@ -619,7 +619,7 @@ namespace PSO1
         private void button37_Click(object sender, EventArgs e) //Remove selection
         {
             int selection = listBox4.SelectedIndex;
-            DBUpdates.DeleteCartItem(crtUser, selection);
+            DeleteCartItem(crtUser, selection);
             listBox4.DataSource = BindCartProducts(crtUser);
             HideShowAllPanels(panelShoppingCart);
             UpdateShoppingCartNr(crtUser);
@@ -628,21 +628,22 @@ namespace PSO1
         private void listBox4_Click(object sender, EventArgs e)
         {
             int selection = listBox4.SelectedIndex;
-            numericUpDown2.Value = GetShoppingCartItemAmount(crtUser, selection);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            numericUpDown2.Value = GetShoppingCartItemAmount(crtUser, selection, connection);
         }
 
         private void button38_Click(object sender, EventArgs e) //Checkout
         {
             if(CheckIfEnoughFounds(crtUser))
             {
-                DBUpdates.CheckoutCartItems(crtUser);
+                CheckoutCartItems(crtUser);
                 listBox4.DataSource = BindCartProducts(crtUser);
                 HideShowAllPanels(panelShoppingCart);
                 UpdateShoppingCartNr(crtUser);
-                string[] transInfo = GetLastTransInfo(crtUser);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                string[] transInfo = GetLastTransInfo(crtUser,connection);
                 string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfo);
                 var newMessage = SysMessaging.CreateSysMessage(purchaseInfo);
-                var connection = new MSSQLConnection<psDBContext>().Context;
                 WriteMessageToDB(newMessage, connection);
             }
             else
@@ -654,7 +655,7 @@ namespace PSO1
         private void button39_Click(object sender, EventArgs e) //Remove selection(wishlist)
         {
             int selection = listBox3.SelectedIndex;
-            DBUpdates.DeleteWishListItem(crtUser, selection);
+            DeleteWishListItem(crtUser, selection);
             listBox3.DataSource = BindWishListProducts(crtUser);
             HideShowAllPanels(panelWishList);
         }

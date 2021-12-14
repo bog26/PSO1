@@ -16,13 +16,14 @@ namespace PSO1.Model
         public static string ConstructTransactionInfo(int transId, string user)
         {
             string transInfo;
-            int nrOfItems = GetNrOfTransItems(user, transId);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            int nrOfItems = GetNrOfTransItems(user, transId, connection);
             transInfo = nrOfItems.ToString() + " " + "different products in total" + "\n";
 
-            List<int> transItemsIds = GetTransactionItemsIds(transId);
+            List<int> transItemsIds = GetTransactionItemsIds(transId, connection);
             foreach (int transItemsId in transItemsIds)
             {
-                transInfo = transInfo + ConstructTransactionItemInfo(transItemsId);
+                transInfo = transInfo + ConstructTransactionItemInfo(transItemsId, connection);
             }
 
             return transInfo;

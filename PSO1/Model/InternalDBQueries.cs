@@ -90,15 +90,6 @@ namespace PSO1.Model
             return productinCart;
         }
 
-        /*
-        public static int GetMaxAmount(int PID)
-        {
-            int amount;
-            var psContext = new psDBContext();
-            Product productQuery = psContext.Products.First(x => x.Id == PID);
-            amount = productQuery.Stock;
-            return amount;
-        }*/
         public static int GetMaxAmount<T>(int PID, T context) where T:IDbContext
         {
             int amount;
@@ -107,28 +98,24 @@ namespace PSO1.Model
             return amount;
         }
 
-        public static int GetShoppingCartItemAmount(string user, int index)
+        public static int GetShoppingCartItemAmount<T>(string user, int index, T context) where T:IDbContext
         {
-            
-            var psContext = new psDBContext();
-            var crtUserId = psContext.Users.First(x => x.UserName == user).Id;
-            int amount = psContext.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList()[index].Amount;
+            var crtUserId = context.Users.First(x => x.UserName == user).Id;
+            int amount = context.ShoppingCartItems.Where(x => x.UserId == crtUserId).ToList()[index].Amount;
             return amount;
         }
-        public static int GetNrOfTransItems(string user, int transId)
+        public static int GetNrOfTransItems<T>(string user, int transId, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
-            int transItemsNr = psContext.TransactionItems.Where(x => (x.UserId == crtUser.Id)
+            var crtUser = context.Users.First(x => x.UserName == user);
+            int transItemsNr = context.TransactionItems.Where(x => (x.UserId == crtUser.Id)
                                                                   && (x.TransactionId == transId)).ToList().Count;
             return transItemsNr;
         }
 
-        public static List<int> GetTransactionItemsIds(int transId)
+        public static List<int> GetTransactionItemsIds<T>(int transId, T context) where T:IDbContext 
         {
             List<int> transactionItemsIds = new List<int>();
-            var psContext = new psDBContext();
-            var queryTransactionItems = psContext.TransactionItems.Where(x => x.TransactionId == transId).ToList();
+            var queryTransactionItems = context.TransactionItems.Where(x => x.TransactionId == transId).ToList();
             foreach(TransactionItem item in queryTransactionItems)
             {
                 transactionItemsIds.Add(item.Id);
@@ -165,15 +152,14 @@ namespace PSO1.Model
             return transItemsNr;
         }
 
-        public static string ConstructTransactionItemInfo(int transItemId)
+        public static string ConstructTransactionItemInfo<T>(int transItemId, T context) where T: IDbContext
         {
-            var psContext = new psDBContext();
             string itemInfo = string.Empty;
             StringBuilder infoBuilder = new StringBuilder();
 
-            var crtTransItem = psContext.TransactionItems.First(x => x.Id == transItemId);
+            var crtTransItem = context.TransactionItems.First(x => x.Id == transItemId);
             string TransItemId = crtTransItem.Id.ToString();
-            var crtProduct = psContext.Products.First(x => x.Id == crtTransItem.ProductId);
+            var crtProduct = context.Products.First(x => x.Id == crtTransItem.ProductId);
             int amount = crtTransItem.Amount;
             string plural = (amount > 1) ? "s" : string.Empty;
             string cost = (crtTransItem.Cost / amount).ToString();
@@ -199,23 +185,21 @@ namespace PSO1.Model
             return itemPrice;
         }
 
-        public static string[] GetLastTransInfo(string user)
+        public static string[] GetLastTransInfo<T>(string user, T context) where T:IDbContext
         {
             string[] lastTransInfo = new string[4];
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var crtUser = context.Users.First(x => x.UserName == user);
             lastTransInfo[0] = crtUser.UserName;
-            Transaction lastTransaction = psContext.Transactions.Where(x => x.UserId == crtUser.Id).ToList().Last();
+            Transaction lastTransaction = context.Transactions.Where(x => x.UserId == crtUser.Id).ToList().Last();
             lastTransInfo[1] = lastTransaction.Id.ToString();
             lastTransInfo[2] = lastTransaction.TotalCost.ToString();
             lastTransInfo[3] = InfoMessagesConstruction.ConstructTransactionInfo(lastTransaction.Id, user);
             return lastTransInfo;
         }
 
-        public static decimal GetProductPrice(int PID)
+        public static decimal GetProductPrice<T>(int PID, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            decimal productPrice = psContext.Products.First(x => x.Id == PID).crtSellPrice;
+            decimal productPrice = context.Products.First(x => x.Id == PID).crtSellPrice;
             return productPrice;
         }
 
