@@ -939,7 +939,8 @@ namespace PSO1
                 string[] messageFields = new string[] { Form.ActiveForm.Text, textBox17.Text, textBox18.Text, messageBody, withEncryption };
                 //var newMessage = Messaging.CreateMessage(messageFields);
                 var newMessage = Messaging.CreateMessage(messageFields);
-                if (DBUpdates.WriteMessageToDB(newMessage))
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                if (DBUpdates.WriteMessageToDB(newMessage, connection))
                 {
                     MessageBox.Show("Message sent");
                 }

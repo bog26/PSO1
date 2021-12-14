@@ -27,5 +27,6 @@ namespace PSO1.Model
         DbSet<ProductSpecification> ProductSpecifications { get; set; }
         DbSet<UserItemReview> UserItemReviews { get; set; }
         DbSet<WarehouseProductStockAlarm> WarehouseProductStockAlarms { get; set; }
+        int SaveChanges();
     }
 }

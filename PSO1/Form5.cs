@@ -351,7 +351,8 @@ namespace PSO1
                 }
                 string[] messageFields = new string[] { Form.ActiveForm.Text, textBox2.Text, textBox3.Text, messageBody, withEncryption };
                 var newMessage = Messaging.CreateMessage(messageFields);
-                if (DBUpdates.WriteMessageToDB(newMessage))
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                if (WriteMessageToDB(newMessage, connection))
                 {
                     MessageBox.Show("Message sent");
                 }
@@ -637,7 +638,8 @@ namespace PSO1
                 string[] transInfo = GetLastTransInfo(crtUser);
                 string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfo);
                 var newMessage = SysMessaging.CreateSysMessage(purchaseInfo);
-                WriteMessageToDB(newMessage);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                WriteMessageToDB(newMessage, connection);
             }
             else
             {

@@ -438,7 +438,7 @@ namespace PSO1.Model
             }
             return specData;
         }
-
+        /*
         public static bool WriteMessageToDB(Message newMessage)
         {
             bool writeToDBSuccessful = false;
@@ -450,7 +450,20 @@ namespace PSO1.Model
                 writeToDBSuccessful = true;
             }
             return writeToDBSuccessful;
+        }*/
+
+        public static bool WriteMessageToDB<T>(Message newMessage, T context) where T:IDbContext
+        {
+            bool writeToDBSuccessful = false;
+            if (InternalDBQueries.CheckForExistingUserGen(newMessage.Receiver, context))
+            {
+                context.Messages.Add(newMessage);
+                context.SaveChanges();
+                writeToDBSuccessful = true;
+            }
+            return writeToDBSuccessful;
         }
+
         public static string GetMessage(string user, int messageIndex)
         {
             psDBContext psContext = new psDBContext();

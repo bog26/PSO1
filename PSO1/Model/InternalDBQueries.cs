@@ -33,8 +33,6 @@ namespace PSO1.Model
                 exisitingUser = true;
             }
             return exisitingUser;
-
-
         }
 
         public static int GetUserPersonalDataId(string userName)
