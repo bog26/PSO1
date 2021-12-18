@@ -554,7 +554,7 @@ namespace PSO1
                     CreateNewShoppingCartItem(crtUser, productID, amount);
                     string plural = (amount > 1) ? "s" : string.Empty;
                     MessageBox.Show($"{amount} item{plural} with PID {productID} added to cart");
-                    UpdateShoppingCartNr(crtUser);
+                    UpdateShoppingCartNr(crtUser, connection);
                 }
             }
             
@@ -624,7 +624,8 @@ namespace PSO1
             DeleteCartItem(crtUser, selection);
             listBox4.DataSource = BindCartProducts(crtUser);
             HideShowAllPanels(panelShoppingCart);
-            UpdateShoppingCartNr(crtUser);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            UpdateShoppingCartNr(crtUser,connection);
         }
 
         private void listBox4_Click(object sender, EventArgs e)
@@ -638,11 +639,11 @@ namespace PSO1
         {
             if(CheckIfEnoughFounds(crtUser))
             {
-                CheckoutCartItems(crtUser);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                CheckoutCartItems(crtUser,connection);
                 listBox4.DataSource = BindCartProducts(crtUser);
                 HideShowAllPanels(panelShoppingCart);
-                UpdateShoppingCartNr(crtUser);
-                var connection = new MSSQLConnection<psDBContext>().Context;
+                UpdateShoppingCartNr(crtUser,connection);
                 string[] transInfo = GetLastTransInfo(crtUser,connection);
                 string[] purchaseInfo = SysMessaging.CreatePurchaseInfo(transInfo);
                 var newMessage = SysMessaging.CreateSysMessage(purchaseInfo);
@@ -700,10 +701,11 @@ namespace PSO1
             panelTransactions.Show();
         }
 
-        private void UpdateShoppingCartNr(string user)
+        private void UpdateShoppingCartNr<T>(string user, T context) where T:IDbContext
         {
-            var connection = new MSSQLConnection<psDBContext>().Context;
-            string nr = GetNrOfProductsInCart(crtUser, connection).ToString();
+            //var connection = new MSSQLConnection<psDBContext>().Context;
+            //string nr = GetNrOfProductsInCart(crtUser, connection).ToString();
+            string nr = GetNrOfProductsInCart(crtUser, context).ToString();
             UpdateButtonText(button5, "Shopping cart", nr);
             UpdateButtonText(buttonShoppingCart1, "Shopping cart", nr);
 
@@ -711,7 +713,8 @@ namespace PSO1
 
         private void UpdateUnreadMsgNr(string user)
         {
-            string nr = GetNrOfUnreadMessages(crtUser).ToString();
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            string nr = GetNrOfUnreadMessages(crtUser, connection).ToString();
             UpdateButtonText(button2, "Messages", nr);
             //UpdateButtonText(button16, "Inbox", nr);
             //button16

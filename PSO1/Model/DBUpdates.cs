@@ -810,10 +810,9 @@ namespace PSO1.Model
         {
 
         }
-        public static void CheckoutCartItems(string user)
+        public static void CheckoutCartItems<T>(string user, T context) where T:IDbContext
         {
-            psDBContext psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var crtUser = context.Users.First(x => x.UserName == user);
             List<ShoppingCartItem> CartItems = GetCartItems(user);
             if(CartItems.Count !=0)
             {
@@ -821,17 +820,17 @@ namespace PSO1.Model
                 foreach (ShoppingCartItem item in CartItems)
                 {
                     TransactionItem newItem = CreateNewTransactionItem(item, crtTransaction);
-                    psContext.TransactionItems.Add(newItem);
-                    ShoppingCartItem crtItem = psContext.ShoppingCartItems.First(x => (x.UserId == item.UserId)
+                    context.TransactionItems.Add(newItem);
+                    ShoppingCartItem crtItem = context.ShoppingCartItems.First(x => (x.UserId == item.UserId)
                                                                                 && (x.ProductId == item.ProductId));
-                    psContext.ShoppingCartItems.Remove(crtItem);
-                    psContext.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost -= newItem.Cost;
-                    Product crtProduct = psContext.Products.First(x => x.Id == item.ProductId);
+                    context.ShoppingCartItems.Remove(crtItem);
+                    context.Transactions.First(x => x.Id == crtTransaction.Id).TotalCost -= newItem.Cost;
+                    Product crtProduct = context.Products.First(x => x.Id == item.ProductId);
 
                     crtProduct.decreaseStock(newItem.Amount);
                     crtUser.ModifyCredit(-newItem.Cost);
-                    psContext.SaveChanges();
-                    StockCheck(item.ProductId);
+                    context.SaveChanges();
+                    StockCheck(item.ProductId, context);
                 }
             }
             else 
@@ -840,17 +839,16 @@ namespace PSO1.Model
             }
         }
 
-        public static void StockCheck(int PID)
+        public static void StockCheck<T>(int PID, T context) where T: IDbContext
         {
-            psDBContext psContext = new psDBContext();
-            Product crtProduct = psContext.Products.First(x => x.Id == PID);
-            if(InternalDBQueries.CheckIfProductAlarmExists(PID))
+            Product crtProduct = context.Products.First(x => x.Id == PID);
+            if(InternalDBQueries.CheckIfProductAlarmExists(PID, context))
             {
-                if(InternalDBQueries.GetWarehouseProductAlarmTriggerValue(PID) > crtProduct.Stock)
+                if(InternalDBQueries.GetWarehouseProductAlarmTriggerValue(PID, context) > crtProduct.Stock)
                 { 
-                    var queryWarehouseAlarm = psContext.WarehouseProductStockAlarms.First(x => x.ProductId == PID);
+                    var queryWarehouseAlarm = context.WarehouseProductStockAlarms.First(x => x.ProductId == PID);
                     queryWarehouseAlarm.TriggerAlarm(crtProduct.Stock);
-                    psContext.SaveChanges();
+                    context.SaveChanges();
                 }
             }
         }

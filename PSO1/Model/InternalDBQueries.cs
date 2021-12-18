@@ -226,11 +226,11 @@ namespace PSO1.Model
             return productsInCart;
         }
 
-        public static bool CheckIfEnoughCreditforPurcahasing(string user, decimal purchaseValue)
+        public static bool CheckIfEnoughCreditforPurcahasing<T>(string user, decimal purchaseValue, T context) 
+                                                                where T:IDbContext 
         {
             bool enoughCredit = false;
-            var psContext = new psDBContext();
-            var crtUser = psContext.Users.First(x => x.UserName == user);
+            var crtUser = context.Users.First(x => x.UserName == user);
             if(crtUser.Credit >= purchaseValue)
             {
                 enoughCredit = true;
@@ -303,8 +303,7 @@ namespace PSO1.Model
         public static string GetReviewProductName<T>(int reviewId, T context) where T:IDbContext
         {
             int PID = context.UserItemReviews.First(x => x.Id == reviewId).ProductId;
-            var connection = new MSSQLConnection<psDBContext>().Context;
-            string productName = GetProductName(PID,connection);
+            string productName = GetProductName(PID, context);
             return productName;
         }
 
@@ -360,25 +359,32 @@ namespace PSO1.Model
             return productReviewIds;
         }*/
 
-        public static int GetNrOfUnreadMessages(string userName)
+        public static int GetNrOfUnreadMessages<T>(string userName, T context) where T: IDbContext
         {
-            var psContext = new psDBContext();
-            var queryUnreadMessages = psContext.Messages.Where(x => x.Receiver == userName
+            var queryUnreadMessages = context.Messages.Where(x => x.Receiver == userName
                                                                 && x.MessageReceiverStatus == "unread").ToList();
             int unreadMessages = queryUnreadMessages.Count();
             return unreadMessages;
         }
-        public static int GetAllTransCount()
+        
+        public static int GetAllTransCount() 
         {
             var psContext = new psDBContext();
+
             int allTransCount = psContext.Transactions.Count(); 
             return allTransCount;
         }
-
+        /*
         public async static Task<string> GetAllTransCountAsync()
         {
             var psContext = new psDBContext();
             int allTransCount = psContext.Transactions.Count();
+            await Task.Delay(50); // simulation DB read delay
+            return allTransCount.ToString();
+        }*/
+        public async static Task<string> GetAllTransCountAsync(IDbContext context) 
+        {
+            int allTransCount = context.Transactions.Count();
             await Task.Delay(50); // simulation DB read delay
             return allTransCount.ToString();
         }
@@ -389,7 +395,7 @@ namespace PSO1.Model
             int allMsgCount = psContext.Messages.Count();
             return allMsgCount;
         }
-        public async static Task<string> GetSentMesssagesCountAsync()
+        public async static Task<string> GetSentMesssagesCountAsync(IDbContext context)
         {
             var psContext = new psDBContext();
             int allMsgCount = psContext.Messages.Count();
@@ -403,10 +409,9 @@ namespace PSO1.Model
             return allRevsCount;
         }
 
-        public async static Task<string> GetReviewsCountAsync()
+        public async static Task<string> GetReviewsCountAsync(IDbContext context)
         {
-            var psContext = new psDBContext();
-            int allRevsCount = psContext.UserItemReviews.Count();
+            int allRevsCount = context.UserItemReviews.Count();
             await Task.Delay(50); // simulation DB read delay
             return allRevsCount.ToString();
         }
@@ -423,11 +428,10 @@ namespace PSO1.Model
             return allSoldProdCount;
         }
 
-        public async static Task<string> GetSoldProductsCountAsync()
+        public async static Task<string> GetSoldProductsCountAsync(IDbContext context)
         {
-            var psContext = new psDBContext();
             int allSoldProdCount = 0;
-            var queryTransItems = psContext.TransactionItems.ToList();
+            var queryTransItems = context.TransactionItems.ToList();
             foreach (TransactionItem item in queryTransItems)
             {
                 allSoldProdCount += item.Amount;
@@ -449,11 +453,10 @@ namespace PSO1.Model
             return totalIncome;
         }
 
-        public async static Task<string> GetTotalIncomeAsync()
+        public async static Task<string> GetTotalIncomeAsync(IDbContext context)
         {
-            var psContext = new psDBContext();
             decimal totalIncome = 0;
-            var queryTransItems = psContext.TransactionItems.ToList();
+            var queryTransItems = context.TransactionItems.ToList();
             foreach (TransactionItem item in queryTransItems)
             {
                 totalIncome += item.Cost;
@@ -474,11 +477,10 @@ namespace PSO1.Model
             return totalCreditBought;
         }
 
-        public async static Task<string> GetTotalBoughtCreditAsync()
+        public async static Task<string> GetTotalBoughtCreditAsync(IDbContext context)
         {
-            var psContext = new psDBContext();
             decimal totalCreditBought = 0;
-            var allTransactions = psContext.Transactions.Where(x => x.TotalCost > 0).ToList();
+            var allTransactions = context.Transactions.Where(x => x.TotalCost > 0).ToList();
             foreach (Transaction trans in allTransactions)
             {
                 totalCreditBought += trans.TotalCost;
@@ -520,12 +522,11 @@ namespace PSO1.Model
             return ratingStr;
         }*/
         
-        public static bool CheckIfAlarmIsCreated(string user, int PID)
+        public static bool CheckIfAlarmIsCreated<T>(string user, int PID, T context) where T: IDbContext
         {
             bool alarmCreated = false;
-            var psContext = new psDBContext();
-            int userId = psContext.Users.First(x => x.UserName == user).Id;
-            var queryWarehouseProductStockAlarms = psContext.WarehouseProductStockAlarms.Where(x => x.UserId == userId
+            int userId = context.Users.First(x => x.UserName == user).Id;
+            var queryWarehouseProductStockAlarms = context.WarehouseProductStockAlarms.Where(x => x.UserId == userId
                                                                                                 && x.ProductId == PID).ToList();
             if(queryWarehouseProductStockAlarms.Count !=0)
             {
@@ -533,21 +534,19 @@ namespace PSO1.Model
             }
             return alarmCreated;
         }
-        public static bool CheckIfProductAlarmExists(int PID)
+        public static bool CheckIfProductAlarmExists<T>(int PID, T context) where T:IDbContext 
         {
             bool alarmExists = false;
-            var psContext = new psDBContext();
-            var queryAlarm = psContext.WarehouseProductStockAlarms.Where(x => x.ProductId == PID).ToList();
+            var queryAlarm = context.WarehouseProductStockAlarms.Where(x => x.ProductId == PID).ToList();
             if(queryAlarm.Count != 0)
             {
                 alarmExists = true; 
             }
             return alarmExists;
         }
-        public static int GetWarehouseProductAlarmTriggerValue(int PID)
+        public static int GetWarehouseProductAlarmTriggerValue<T>(int PID, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            var queryAlarm = psContext.WarehouseProductStockAlarms.First(x => x.ProductId == PID);
+            var queryAlarm = context.WarehouseProductStockAlarms.First(x => x.ProductId == PID);
             return queryAlarm.MinAmount;
         }
 

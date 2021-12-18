@@ -31,6 +31,7 @@ namespace PSO1
         }
 
         //https://stephenhaunts.com/2014/10/14/using-async-and-await-to-update-the-ui-thread/comment-page-1/
+        /*
         private async void BackgroundTasks()
         {
             await Task.Run(() =>
@@ -53,7 +54,7 @@ namespace PSO1
                 }
 
             });
-        }
+        }*/
 
         private async void BackgroundTasksAsync()
         {
@@ -61,57 +62,62 @@ namespace PSO1
             {
                 while (true)
                 {
-                    Task<string> transCountTsk = InternalDBQueries.GetAllTransCountAsync();
-                    Task<string> msgCountTsk = InternalDBQueries.GetSentMesssagesCountAsync();
-                    Task<string> revCountTsk = InternalDBQueries.GetReviewsCountAsync();
-                    Task<string> soldProdCountTsk = InternalDBQueries.GetSoldProductsCountAsync();
-                    Task<string> totalIncomeTsk = InternalDBQueries.GetTotalIncomeAsync();
-                    Task<string> totalBoughtCreditTsk = InternalDBQueries.GetTotalBoughtCreditAsync();
+                    var connection = new MSSQLConnection<psDBContext>().Context;
+                    using(connection)
+                    {
+                        Task<string> transCountTsk = GetAllTransCountAsync(connection);
+                        Task<string> msgCountTsk = GetSentMesssagesCountAsync(connection);
+                        Task<string> revCountTsk = GetReviewsCountAsync(connection);
+                        Task<string> soldProdCountTsk = GetSoldProductsCountAsync(connection);
+                        Task<string> totalIncomeTsk = GetTotalIncomeAsync(connection);
+                        Task<string> totalBoughtCreditTsk = GetTotalBoughtCreditAsync(connection);
 
-                    List<Task> backgroundTasks = new List<Task> { transCountTsk, msgCountTsk, revCountTsk,
+                        List<Task> backgroundTasks = new List<Task> { transCountTsk, msgCountTsk, revCountTsk,
                                                         soldProdCountTsk, totalIncomeTsk, totalBoughtCreditTsk};
-                    Dictionary<int, Task> backgroundTasksDict = new Dictionary<int, Task>();
-                    int taskDictKey = 0;
-                    foreach(Task task in backgroundTasks)
-                    {
-                        backgroundTasksDict.Add(taskDictKey, task);
-                        taskDictKey++;
-                    }
-
-                    while (backgroundTasks.Count>0)
-                    {
-                        Task finishedTask = await Task.WhenAny(backgroundTasks);
-                        string result = ((Task<string>)finishedTask).Result;
-
-                        int dKey = backgroundTasksDict.First(x => x.Value == finishedTask).Key;
- 
-                        switch (dKey)
+                        Dictionary<int, Task> backgroundTasksDict = new Dictionary<int, Task>();
+                        int taskDictKey = 0;
+                        foreach (Task task in backgroundTasks)
                         {
-                            case 0:
-                                UpdateTransactionCount(result);
-                                break;
-                            case 1:
-                                UpdateMessageCount(result);
-                                break;
-                            case 2:
-                                UpdateReviewsCount(result);
-                                break;
-                            case 3:
-                                UpdateSoldProductsCount(result);
-                                break;
-                            case 4:
-                                UpdateTotalIncome(result);
-                                break;
-                            case 5:
-                                UpdateBoughtCredit(result);
-                                break;
-                            default:
-                                break;
-
+                            backgroundTasksDict.Add(taskDictKey, task);
+                            taskDictKey++;
                         }
-                        backgroundTasks.Remove(finishedTask);
+
+                        while (backgroundTasks.Count > 0)
+                        {
+                            Task finishedTask = await Task.WhenAny(backgroundTasks);
+                            string result = ((Task<string>)finishedTask).Result;
+
+                            int dKey = backgroundTasksDict.First(x => x.Value == finishedTask).Key;
+
+                            switch (dKey)
+                            {
+                                case 0:
+                                    UpdateTransactionCount(result);
+                                    break;
+                                case 1:
+                                    UpdateMessageCount(result);
+                                    break;
+                                case 2:
+                                    UpdateReviewsCount(result);
+                                    break;
+                                case 3:
+                                    UpdateSoldProductsCount(result);
+                                    break;
+                                case 4:
+                                    UpdateTotalIncome(result);
+                                    break;
+                                case 5:
+                                    UpdateBoughtCredit(result);
+                                    break;
+                                default:
+                                    break;
+
+                            }
+                            backgroundTasks.Remove(finishedTask);
+                        }
+                        Thread.Sleep(500);
                     }
-                    Thread.Sleep(500);
+                    
                 }
             });
 
@@ -1234,7 +1240,8 @@ namespace PSO1
 
             if (rowSelection != columnHeadIndex)
             {
-                bool alarmIsCreated = CheckIfAlarmIsCreated(crtUser, crtProductId);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                bool alarmIsCreated = CheckIfAlarmIsCreated(crtUser, crtProductId, connection);
                 if(alarmIsCreated)
                 {
                     HideShowAlarmSubPanels(existingStockAlarmSubPanel);
