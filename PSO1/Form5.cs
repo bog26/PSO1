@@ -415,8 +415,9 @@ namespace PSO1
             string value = textBox4.Text;
             int activeCellIndex = dataGridView5.CurrentCell.ColumnIndex;
             string activeColumn = dataGridView5.Columns[activeCellIndex].Name;
+            var connection = new MSSQLConnection<psDBContext>().Context;
             UpdateDataGridMessageBox(activeColumn, value);
-            DBUpdates.WriteUserPersonalDataToDB(activeColumn, value);
+            DBUpdates.WriteUserPersonalDataToDB(activeColumn, value, connection);
             dataGridView5.DataSource = BindCrtUserDataToGrid(crtUser);
             HideShowAllPanels(panelUserInfo);
         }
@@ -427,7 +428,12 @@ namespace PSO1
             int activeCellIndex = dataGridView6.CurrentCell.ColumnIndex;
             string activeColumn = dataGridView6.Columns[activeCellIndex].Name;
             UpdateDataGridMessageBox(activeColumn, value);
-            DBUpdates.WriteUserAddressToDB(activeColumn, value);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
+            {
+                DBUpdates.WriteUserAddressToDB(activeColumn, value,connection);
+            }
+            
             dataGridView6.DataSource = BindCrtUserAddressToGrid(crtUser);
             HideShowAllPanels(panelUserInfo);
         }

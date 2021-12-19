@@ -50,14 +50,13 @@ namespace PSO1.Model
             DeleteUser(userName);
         }
 
-        public static void WriteUserPersonalDataToDB(string choice, string input)
+        public static async void WriteUserPersonalDataToDB<T>(string choice, string input, T context) where T : IDbContext
         {
-            var psContext = new psDBContext();
             string loggedUser = Form.ActiveForm.Text;
-            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
-            UserPersonalData pdata = psContext.UserPersonalDatas.Find(crtUser.UserPersonalDataId);
+            var crtUser = context.Users.First(x => x.UserName == loggedUser);
+            UserPersonalData pdata = context.UserPersonalDatas.Find(crtUser.UserPersonalDataId);
             UserPDataChange(pdata, choice, input);
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public static void UserPDataChange(UserPersonalData userData, string choice, string change)
@@ -113,7 +112,7 @@ namespace PSO1.Model
         }
 
 
-        public static void WriteUserAddressToDB(string choice, string input)
+        /*public static void WriteUserAddressToDB(string choice, string input)
         {
             var psContext = new psDBContext();
             string loggedUser = Form.ActiveForm.Text;
@@ -122,7 +121,20 @@ namespace PSO1.Model
             UserAddress personalAddr = psContext.UserAddresses.Find(crtUser.UserAddressId);
 
             UserAddressChange(personalAddr, choice, input);
+            //psContext.SaveChangesAsync();
             psContext.SaveChanges();
+        }*/
+
+        public static async void WriteUserAddressToDB<T>(string choice, string input, T context) where T :IDbContext
+        {
+            string loggedUser = Form.ActiveForm.Text;
+
+            var crtUser = context.Users.First(x => x.UserName == loggedUser);
+            UserAddress personalAddr = context.UserAddresses.Find(crtUser.UserAddressId);
+
+            UserAddressChange(personalAddr, choice, input);
+            await context.SaveChangesAsync();
+            //psContext.SaveChanges();
         }
 
         public static void UserAddressChange(UserAddress userAddress, string choice, string change)

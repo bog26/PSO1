@@ -480,14 +480,15 @@ namespace PSO1
             int activeCellIndex = dataGridView1.CurrentCell.ColumnIndex;
             string activeColumn = dataGridView1.Columns[activeCellIndex].Name;
             //MessageBox.Show("cell column index:"+activeCellIndex);
-           
+
             //MessageBox.Show("updating " + activeColumn+" with "+ value);
+            var connection = new MSSQLConnection<psDBContext>().Context;
             UpdateDataGridMessageBox(activeColumn, value);
-            DBUpdates.WriteUserPersonalDataToDB(activeColumn, value);
+            DBUpdates.WriteUserPersonalDataToDB(activeColumn, value, connection);
             dataGridView1.Refresh();
         }
 
-        private void button16_Click(object sender, EventArgs e) 
+        private async void button16_Click(object sender, EventArgs e) 
         {
             string value = textBox2.Text;
             int activeCellIndex = dataGridView2.CurrentCell.ColumnIndex;
@@ -495,8 +496,12 @@ namespace PSO1
 
             //MessageBox.Show("updating " + activeColumn + " with " + value);
             UpdateDataGridMessageBox(activeColumn, value);
-
-            DBUpdates.WriteUserAddressToDB(activeColumn, value);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
+            {
+                DBUpdates.WriteUserAddressToDB(activeColumn, value,connection);
+            }
+            
             dataGridView2.Refresh();
         }
 
