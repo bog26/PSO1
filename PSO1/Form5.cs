@@ -450,16 +450,20 @@ namespace PSO1
         private void button31_Click(object sender, EventArgs e) //"Update Password"
         {
             var connection = new MSSQLConnection<psDBContext>().Context;
-            if (CheckForCorrectPassword(ActiveForm.Text, textBox6.Text,connection))
+            using(connection)
             {
-                string newPassVal = textBox7.Text;
-                WriteNewPassToDB(newPassVal);
-                MessageBox.Show("password changed");
+                if (CheckForCorrectPassword(ActiveForm.Text, textBox6.Text, connection))
+                {
+                    string newPassVal = textBox7.Text;
+                    WriteNewPassToDB(newPassVal, connection);
+                    MessageBox.Show("password changed");
+                }
+                else
+                {
+                    MessageBox.Show("wrong password");
+                }
             }
-            else
-            {
-                MessageBox.Show("wrong password");
-            }
+            
             textBox6.Hide();
             textBox7.Hide();
             button31.Hide();

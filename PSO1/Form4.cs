@@ -578,17 +578,22 @@ namespace PSO1
         private void button18_Click(object sender, EventArgs e)
         {
             var connection = new MSSQLConnection<psDBContext>().Context;
-            if (CheckForCorrectPassword(ActiveForm.Text, textBox3.Text, connection))
+
+            using(connection)
             {
-                //MessageBox.Show("correct password");
-                string newPassVal = textBox4.Text;
-                DBUpdates.WriteNewPassToDB(newPassVal);
-                MessageBox.Show("password changed");
+                if (CheckForCorrectPassword(ActiveForm.Text, textBox3.Text, connection))
+                {
+                    //MessageBox.Show("correct password");
+                    string newPassVal = textBox4.Text;
+                    DBUpdates.WriteNewPassToDB(newPassVal, connection);
+                    MessageBox.Show("password changed");
+                }
+                else
+                {
+                    MessageBox.Show("wrong password");
+                }
             }
-            else 
-            {
-                MessageBox.Show("wrong password");
-            }
+            
             
         }
 
@@ -836,29 +841,44 @@ namespace PSO1
         private void button22_Click(object sender, EventArgs e)
         {
             string newCategory = textBox5.Text;
-            if((newCategory!= string.Empty) && (newCategory != "new category") )
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using (connection)
             {
-                DBUpdates.CreateNewCategory(newCategory);
+                if ((newCategory != string.Empty) && (newCategory != "new category"))
+                {
+                    DBUpdates.CreateNewCategory(newCategory, connection);
+                }
             }
+            
         }
 
         private void button23_Click(object sender, EventArgs e)
         {
             string newManufacturer = textBox6.Text;
-            if ((newManufacturer != string.Empty) && (newManufacturer != "new manufacturer"))
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
             {
-                DBUpdates.CreateNewManufacturer(newManufacturer);
+                if ((newManufacturer != string.Empty) && (newManufacturer != "new manufacturer"))
+                {
+                    DBUpdates.CreateNewManufacturer(newManufacturer, connection);
+                }
             }
+            
         }
 
-        private void button24_Click(object sender, EventArgs e)
+        private async void button24_Click(object sender, EventArgs e)
         {
             string subCategory = textBox7.Text;
             string category = listBox1.SelectedItem.ToString();
-            if ((subCategory != string.Empty) && (subCategory != "new subcategory"))
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
             {
-                DBUpdates.CreateNewSubCategory(subCategory, category);
+                if ((subCategory != string.Empty) && (subCategory != "new subcategory"))
+                {
+                    DBUpdates.CreateNewSubCategory(subCategory, category, connection);
+                }
             }
+            
         }
         private void button25_Click(object sender, EventArgs e)
         {

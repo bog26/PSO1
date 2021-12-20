@@ -212,60 +212,54 @@ namespace PSO1.Model
                     break;
             }
         }
-        public static void WriteNewPassToDB(string newPass)
+        public static async void WriteNewPassToDB<T>(string newPass, T context) where T: IDbContext
         {
-            var psContext = new psDBContext();
             string loggedUser = Form.ActiveForm.Text;
 
-            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
+            var crtUser = context.Users.First(x => x.UserName == loggedUser);
             crtUser.Password = newPass;
 
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public static void CreateNewCategory(string category)
+        public static async void CreateNewCategory<T>(string category, T context) where T: IDbContext
         {
-            var psContext = new psDBContext();
-            var existingCategories = psContext.ProductCategories.Where(x => x.Name == category).ToList();
+            var existingCategories = context.ProductCategories.Where(x => x.Name == category).ToList();
             if (existingCategories.Count == 0)
             {
                 var newCategory = new ProductCategory();
                 newCategory.Name = category;
-                psContext.ProductCategories.Add(newCategory);
+                context.ProductCategories.Add(newCategory);
             }
-
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public static void CreateNewManufacturer(string manufacturer)
+        public static async void CreateNewManufacturer<T>(string manufacturer, T context) where T: IDbContext
         {
             var psContext = new psDBContext();
-            var existingManufacturers = psContext.Manufacturers.Where(x => x.Name == manufacturer).ToList();
+            var existingManufacturers = context.Manufacturers.Where(x => x.Name == manufacturer).ToList();
             if (existingManufacturers.Count == 0)
             {
                 var newManufacturer = new Manufacturer();
                 newManufacturer.Name = manufacturer;
-                psContext.Manufacturers.Add(newManufacturer);
+                context.Manufacturers.Add(newManufacturer);
             }
 
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public static void CreateNewSubCategory(string subCategory, string category)
+        public static async void CreateNewSubCategory<T>(string subCategory, string category, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            var Category = psContext.ProductCategories.First(x => x.Name == category);
-            var existingSubCategories = psContext.ProductSubCategories.Where(x => x.Name == subCategory).ToList();
+            var Category = context.ProductCategories.First(x => x.Name == category);
+            var existingSubCategories = context.ProductSubCategories.Where(x => x.Name == subCategory).ToList();
             if (existingSubCategories.Count == 0)
             {
                 var newSubCategory = new ProductSubCategory();
                 newSubCategory.Name = subCategory;
                 newSubCategory.ProductCategoryId = Category.Id;
-                //var prodCategory = psContext.ProductCategories.Find(newSubCategory.ProductCategoryId);
-                psContext.ProductSubCategories.Add(newSubCategory);
+                context.ProductSubCategories.Add(newSubCategory);
             }
-
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public static void CreateNewProduct(string[] productProperties, int initStock, decimal[] prices)
