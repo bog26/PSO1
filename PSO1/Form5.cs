@@ -570,24 +570,28 @@ namespace PSO1
             
             
         }
-        private void button34_Click(object sender, EventArgs e) //"Add to wishlist"
+        private async void button34_Click(object sender, EventArgs e) //"Add to wishlist"
         {
-
-            if (dataGridView7.CurrentCell != null)
-            {
-                int rowIndex = Int32.Parse(dataGridView7.CurrentCell.RowIndex.ToString());
-                int productID = Int32.Parse(dataGridView7.Rows[rowIndex].Cells[0].Value.ToString());
-                DBUpdates.SaveProductToWishlist(crtUser, productID);
-                //DBUpdates.SaveProductToWishlist(crtUser, productID);
-                MessageBox.Show($"product with PID {productID} added to wishlist");
-                
-            }
-            else 
-            {
-                MessageBox.Show("please select a product");
-            }
             var connection = new MSSQLConnection<psDBContext>().Context;
-            MessageBox.Show($"size of wish list: {InternalDBQueries.GetWishListSize(crtUser, connection)} ");
+            using (connection)
+            {
+                if (dataGridView7.CurrentCell != null)
+                {
+                    int rowIndex = Int32.Parse(dataGridView7.CurrentCell.RowIndex.ToString());
+                    int productID = Int32.Parse(dataGridView7.Rows[rowIndex].Cells[0].Value.ToString());
+                    await SaveProductToWishlist(crtUser, productID, connection);
+                    //DBUpdates.SaveProductToWishlist(crtUser, productID);
+                    MessageBox.Show($"product with PID {productID} added to wishlist");
+
+                }
+                else
+                {
+                    MessageBox.Show("please select a product");
+                }
+
+                MessageBox.Show($"size of wish list: {GetWishListSize(crtUser, connection)} ");
+            }
+            
 
         }
 

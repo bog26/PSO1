@@ -69,11 +69,11 @@ namespace PSO1.Model
             return alreadyExistingAdmin;
         }
 
-        public static int GetWishListSize<T>(string userName, T context)
+        public static int GetWishListSize<T>(string userName, T context) where T: IDbContext
         {
             var psContext = new psDBContext();
-            int crtUserId = psContext.Users.First(x => x.UserName == userName).Id;
-            int wishListSize = psContext.WishListItems.Where(x => x.UserId == crtUserId).ToList().Count;
+            int crtUserId = context.Users.First(x => x.UserName == userName).Id;
+            int wishListSize = context.WishListItems.Where(x => x.UserId == crtUserId).ToList().Count;
             return wishListSize;
         }
 

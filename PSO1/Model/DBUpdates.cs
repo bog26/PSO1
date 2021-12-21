@@ -207,7 +207,7 @@ namespace PSO1.Model
                     break;
             }
         }
-        public static async void WriteNewPassToDB<T>(string newPass, T context) where T: IDbContext
+        public static async Task WriteNewPassToDB<T>(string newPass, T context) where T: IDbContext
         {
             string loggedUser = Form.ActiveForm.Text;
 
@@ -217,7 +217,7 @@ namespace PSO1.Model
             await context.SaveChangesAsync();
         }
 
-        public static async void CreateNewCategory<T>(string category, T context) where T: IDbContext
+        public static async Task CreateNewCategory<T>(string category, T context) where T: IDbContext
         {
             var existingCategories = context.ProductCategories.Where(x => x.Name == category).ToList();
             if (existingCategories.Count == 0)
@@ -229,9 +229,8 @@ namespace PSO1.Model
             await context.SaveChangesAsync();
         }
 
-        public static async void CreateNewManufacturer<T>(string manufacturer, T context) where T: IDbContext
+        public static async Task CreateNewManufacturer<T>(string manufacturer, T context) where T: IDbContext
         {
-            var psContext = new psDBContext();
             var existingManufacturers = context.Manufacturers.Where(x => x.Name == manufacturer).ToList();
             if (existingManufacturers.Count == 0)
             {
@@ -257,20 +256,17 @@ namespace PSO1.Model
             await context.SaveChangesAsync();
         }
 
-        public static void CreateNewProduct(string[] productProperties, int initStock, decimal[] prices)
+        public static async Task CreateNewProduct<T>(string[] productProperties, int initStock, decimal[] prices, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
             string productName = productProperties[0];
             string productModel = productProperties[1];
             string productManufacturer = productProperties[2];
             string productSubcategory = productProperties[3];
             decimal sellPrice = prices[0];
             decimal supplierPrice = prices[1];
-            var Manufacturer = psContext.Manufacturers.First(x => x.Name == productManufacturer);
-            var Subcategory = psContext.ProductSubCategories.First(x => x.Name == productSubcategory);
-
-            //check for existing productName
-            var existingProductName = psContext.Products.Where(x => x.ProductName == productName).ToList();
+            var Manufacturer = context.Manufacturers.First(x => x.Name == productManufacturer);
+            var Subcategory = context.ProductSubCategories.First(x => x.Name == productSubcategory);
+            var existingProductName = context.Products.Where(x => x.ProductName == productName).ToList();
             if (existingProductName.Count == 0)
             {
                 var newProduct = new Product();
@@ -278,16 +274,13 @@ namespace PSO1.Model
                 newProduct.Model = productModel;
                 newProduct.ManufacturerId = Manufacturer.Id;
                 newProduct.SubCategory = Subcategory;
-                //newProduct.ProductSubCategoryId = Subcategory.Id;
                 newProduct.Stock = initStock;
                 newProduct.crtSellPrice = sellPrice;
                 newProduct.crtManufacturerPrice = supplierPrice;
                 newProduct.Manufacturer = Manufacturer;
-                psContext.Products.Add(newProduct);
-
+                context.Products.Add(newProduct);
             }
-
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public static bool DataGridViewAllowCustomExtraction(int cellIndex, int[] allowedColumnIndexes)
@@ -304,11 +297,10 @@ namespace PSO1.Model
             return cellDataExtractionAllowed;
         }
 
-        public static bool WriteProductDataToDB(int productId, int column, string value)
+        public static async Task<bool> WriteProductDataToDB<T>(int productId, int column, string value, T context) where T:IDbContext
         {
             bool writeToDBSuccessful = false;
-            var psContext = new psDBContext();
-            var crtProd = psContext.Products.Find(productId);
+            var crtProd = context.Products.Find(productId);
 
             if (column == 1)
             {
@@ -345,25 +337,25 @@ namespace PSO1.Model
                 crtProd.ProductSpecification = value;
                 writeToDBSuccessful = true;
             }
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
             return writeToDBSuccessful;
         }
 
 
-        public static void SaveProductToWishlist(string user, int PID)
+        public static async Task SaveProductToWishlist<T>(string user, int PID, T context) where T:IDbContext
         {
-            var psContext = new psDBContext();
-            int crtUserId = psContext.Users.First(x => x.UserName == user).Id;
-            var queryWishListItems = psContext.WishListItems.Where(x => (x.UserId == crtUserId)
+
+            int crtUserId = context.Users.First(x => x.UserName == user).Id;
+            var queryWishListItems = context.WishListItems.Where(x => (x.UserId == crtUserId)
                                                                          && x.ProductId == PID).ToList();
             if(queryWishListItems.Count == 0)
             {
                 WishListItem newItem = new WishListItem();
                 newItem.ProductId = PID;
                 newItem.UserId = crtUserId;
-                psContext.WishListItems.Add(newItem);
+                context.WishListItems.Add(newItem);
             }
-            psContext.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
 

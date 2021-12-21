@@ -575,7 +575,7 @@ namespace PSO1
             f6.Show();
 
         }
-        private void button18_Click(object sender, EventArgs e)
+        private async void button18_Click(object sender, EventArgs e)
         {
             var connection = new MSSQLConnection<psDBContext>().Context;
 
@@ -585,7 +585,7 @@ namespace PSO1
                 {
                     //MessageBox.Show("correct password");
                     string newPassVal = textBox4.Text;
-                    DBUpdates.WriteNewPassToDB(newPassVal, connection);
+                    await DBUpdates.WriteNewPassToDB(newPassVal, connection);
                     MessageBox.Show("password changed");
                 }
                 else
@@ -719,7 +719,7 @@ namespace PSO1
             }
         }
 
-        private void button30_Click(object sender, EventArgs e) //Update
+        private async void button30_Click(object sender, EventArgs e) //Update
         {
             if( AllowProductUpdate() )
             {
@@ -728,16 +728,22 @@ namespace PSO1
                 int activeColumn = dataGridView3.Columns[activeCellIndex].DisplayIndex;
                 int crtRowIndex = dataGridView3.CurrentCell.RowIndex;
                 int crtProductId = int.Parse(dataGridView3.Rows[crtRowIndex].Cells[0].Value.ToString());
-                bool successfulDBUpdate = DBUpdates.WriteProductDataToDB(crtProductId, activeColumn, value);
-                if(successfulDBUpdate)
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                using(connection)
                 {
-                    ProductsQuery();
-                    MessageBox.Show("DB updated");  
+                    bool successfulDBUpdate = await DBUpdates.WriteProductDataToDB(crtProductId, activeColumn, value, connection);
+                    if (successfulDBUpdate)
+                    {
+                        ProductsQuery();
+                        MessageBox.Show("DB updated");
+                    }
+                    else
+                    {
+                        MessageBox.Show("DB update failed due to incorrect input data");
+                    }
                 }
-                else 
-                {
-                    MessageBox.Show("DB update failed due to incorrect input data");
-                }
+                
+                
             }
         }
         private bool AllowProductUpdate()
@@ -838,7 +844,7 @@ namespace PSO1
 
         }
 
-        private void button22_Click(object sender, EventArgs e)
+        private async void button22_Click(object sender, EventArgs e)
         {
             string newCategory = textBox5.Text;
             var connection = new MSSQLConnection<psDBContext>().Context;
@@ -846,13 +852,13 @@ namespace PSO1
             {
                 if ((newCategory != string.Empty) && (newCategory != "new category"))
                 {
-                    DBUpdates.CreateNewCategory(newCategory, connection);
+                    await DBUpdates.CreateNewCategory(newCategory, connection);
                 }
             }
             
         }
 
-        private void button23_Click(object sender, EventArgs e)
+        private async void button23_Click(object sender, EventArgs e)
         {
             string newManufacturer = textBox6.Text;
             var connection = new MSSQLConnection<psDBContext>().Context;
@@ -860,7 +866,7 @@ namespace PSO1
             {
                 if ((newManufacturer != string.Empty) && (newManufacturer != "new manufacturer"))
                 {
-                    DBUpdates.CreateNewManufacturer(newManufacturer, connection);
+                    await DBUpdates.CreateNewManufacturer(newManufacturer, connection);
                 }
             }
             
@@ -880,7 +886,7 @@ namespace PSO1
             }
             
         }
-        private void button25_Click(object sender, EventArgs e)
+        private async void button25_Click(object sender, EventArgs e)
         {
             
 
@@ -894,8 +900,12 @@ namespace PSO1
                 decimal sellPrice = decimal.Parse(textBox11.Text);
                 decimal supplierPrice = decimal.Parse(textBox12.Text);
                 decimal[] prices = new decimal[2] { sellPrice, supplierPrice };
-
-                DBUpdates.CreateNewProduct(productProperties, startingStock, prices);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                using(connection)
+                {
+                    await DBUpdates.CreateNewProduct(productProperties, startingStock, prices, connection);
+                }
+                
 
             }
         }
