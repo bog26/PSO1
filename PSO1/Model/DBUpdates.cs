@@ -50,7 +50,17 @@ namespace PSO1.Model
             DeleteUser(userName);
         }
 
+        /*
         public static async void WriteUserPersonalDataToDB<T>(string choice, string input, T context) where T : IDbContext
+        {
+            string loggedUser = Form.ActiveForm.Text;
+            var crtUser = context.Users.First(x => x.UserName == loggedUser);
+            UserPersonalData pdata = context.UserPersonalDatas.Find(crtUser.UserPersonalDataId);
+            UserPDataChange(pdata, choice, input);
+            await context.SaveChangesAsync();
+        }*/
+
+        public static async Task WriteUserPersonalDataToDB<T>(string choice, string input, T context) where T : IDbContext
         {
             string loggedUser = Form.ActiveForm.Text;
             var crtUser = context.Users.First(x => x.UserName == loggedUser);
@@ -111,21 +121,7 @@ namespace PSO1.Model
             }
         }
 
-
-        /*public static void WriteUserAddressToDB(string choice, string input)
-        {
-            var psContext = new psDBContext();
-            string loggedUser = Form.ActiveForm.Text;
-
-            var crtUser = psContext.Users.First(x => x.UserName == loggedUser);
-            UserAddress personalAddr = psContext.UserAddresses.Find(crtUser.UserAddressId);
-
-            UserAddressChange(personalAddr, choice, input);
-            //psContext.SaveChangesAsync();
-            psContext.SaveChanges();
-        }*/
-
-        public static async void WriteUserAddressToDB<T>(string choice, string input, T context) where T :IDbContext
+        public static async Task WriteUserAddressToDB<T>(string choice, string input, T context) where T :IDbContext
         {
             string loggedUser = Form.ActiveForm.Text;
 
@@ -134,7 +130,6 @@ namespace PSO1.Model
 
             UserAddressChange(personalAddr, choice, input);
             await context.SaveChangesAsync();
-            //psContext.SaveChanges();
         }
 
         public static void UserAddressChange(UserAddress userAddress, string choice, string change)
@@ -247,8 +242,8 @@ namespace PSO1.Model
 
             await context.SaveChangesAsync();
         }
-
-        public static async void CreateNewSubCategory<T>(string subCategory, string category, T context) where T:IDbContext
+   
+        public static async Task CreateNewSubCategory<T>(string subCategory, string category, T context) where T : IDbContext
         {
             var Category = context.ProductCategories.First(x => x.Name == category);
             var existingSubCategories = context.ProductSubCategories.Where(x => x.Name == subCategory).ToList();

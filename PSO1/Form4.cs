@@ -474,18 +474,18 @@ namespace PSO1
             panel15.Show();
         }
 
-        private void button15_Click(object sender, EventArgs e)
+        private async void button15_Click(object sender, EventArgs e)
         {
             string value = textBox1.Text;
             int activeCellIndex = dataGridView1.CurrentCell.ColumnIndex;
             string activeColumn = dataGridView1.Columns[activeCellIndex].Name;
-            //MessageBox.Show("cell column index:"+activeCellIndex);
-
-            //MessageBox.Show("updating " + activeColumn+" with "+ value);
             var connection = new MSSQLConnection<psDBContext>().Context;
-            UpdateDataGridMessageBox(activeColumn, value);
-            DBUpdates.WriteUserPersonalDataToDB(activeColumn, value, connection);
-            dataGridView1.Refresh();
+            using(connection)
+            {
+                UpdateDataGridMessageBox(activeColumn, value);
+                await DBUpdates.WriteUserPersonalDataToDB(activeColumn, value, connection);
+                dataGridView1.Refresh();
+            }
         }
 
         private async void button16_Click(object sender, EventArgs e) 
@@ -499,7 +499,7 @@ namespace PSO1
             var connection = new MSSQLConnection<psDBContext>().Context;
             using(connection)
             {
-                DBUpdates.WriteUserAddressToDB(activeColumn, value,connection);
+                await DBUpdates.WriteUserAddressToDB(activeColumn, value,connection);
             }
             
             dataGridView2.Refresh();
@@ -875,7 +875,7 @@ namespace PSO1
             {
                 if ((subCategory != string.Empty) && (subCategory != "new subcategory"))
                 {
-                    DBUpdates.CreateNewSubCategory(subCategory, category, connection);
+                    await DBUpdates.CreateNewSubCategory(subCategory, category, connection);
                 }
             }
             

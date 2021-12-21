@@ -422,7 +422,7 @@ namespace PSO1
             HideShowAllPanels(panelUserInfo);
         }
 
-        private void button29_Click(object sender, EventArgs e) //"update"
+        private async void button29_Click(object sender, EventArgs e) //"update"
         {
             string value = textBox5.Text;
             int activeCellIndex = dataGridView6.CurrentCell.ColumnIndex;
@@ -431,7 +431,7 @@ namespace PSO1
             var connection = new MSSQLConnection<psDBContext>().Context;
             using(connection)
             {
-                DBUpdates.WriteUserAddressToDB(activeColumn, value,connection);
+                await WriteUserAddressToDB(activeColumn, value,connection);
             }
             
             dataGridView6.DataSource = BindCrtUserAddressToGrid(crtUser);
