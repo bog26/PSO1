@@ -400,24 +400,7 @@ namespace PSO1.Model
             return writeToDBSuccessful;
         }
 
-        public static string GetMessage(string user, int messageIndex)
-        {
-            psDBContext psContext = new psDBContext();
-            var queryReceivedMessages = from message in psContext.Messages
-                                            //where message.Receiver == user 
-                                        where message.Receiver == user
-                                            //&& message.MessageStatus != "deleted"
-                                            && message.MessageReceiverStatus != "deleted"
-                                            && message.MessageReceiverStatus != "spam"
-                                        select message.MessageBody;
-            string messageToDisplay = "";
-            if (messageIndex >= 0)
-            {
-                messageToDisplay = queryReceivedMessages.ToList()[messageIndex]; // System.ArgumentOutOfRangeException: 'Index was out of range. 
-            }
-
-            return messageToDisplay;
-        }
+        
         public static string GetMessage(string user, int messageIndex, string searchWord)
         {
             psDBContext psContext = new psDBContext();

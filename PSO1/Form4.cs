@@ -832,16 +832,17 @@ namespace PSO1
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string specFileName = saveFileDialog1.FileName;
-                byte[] specData = GetSpecData(crtProductId);
-
-                var bw = new BinaryWriter(File.Open(specFileName, FileMode.OpenOrCreate));
-                using(bw)
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                using(connection)
                 {
-                    bw.Write(specData);
-                }
-
+                    byte[] specData = GetSpecData(crtProductId, connection);
+                    var bw = new BinaryWriter(File.Open(specFileName, FileMode.OpenOrCreate));
+                    using (bw)
+                    {
+                        bw.Write(specData);
+                    }
+                } 
             }
-
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -1042,43 +1043,48 @@ namespace PSO1
             //MessageBox.Show($"row {selection} clicked"); // selection test ok
             string rawText;
             bool encryption;
-            if (textBox20.Text != string.Empty)
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
             {
-                rawText = DBUpdates.GetMessage(crtUser, selection, textBox20.Text);
+                if (textBox20.Text != string.Empty)
+                {
+                    rawText = DBUpdates.GetMessage(crtUser, selection, textBox20.Text);
 
-                if (!DBUpdates.IsMessageEncrypted(crtUser, selection, textBox20.Text))
-                {
-                    encryption = false;
+                    if (!DBUpdates.IsMessageEncrypted(crtUser, selection, textBox20.Text))
+                    {
+                        encryption = false;
+                    }
+                    else
+                    {
+                        encryption = true;
+                    }
                 }
                 else
                 {
-                    encryption = true;
+                    rawText = GetMessage(crtUser, selection, connection);
+                    if (!DBUpdates.IsMessageEncrypted(crtUser, selection))
+                    {
+                        encryption = false;
+                    }
+                    else
+                    {
+                        encryption = true;
+                    }
                 }
-            }
-            else
-            {
-                rawText = DBUpdates.GetMessage(crtUser, selection);
-                if (!DBUpdates.IsMessageEncrypted(crtUser, selection))
+                if (!encryption)
                 {
-                    encryption = false;
+                    richTextBox2.Text = rawText;
                 }
                 else
                 {
-                    encryption = true;
+                    string key = "abracadabra";
+                    string decryptedMessage = Encryption.StringDecrypt(rawText, key);
+                    richTextBox2.Text = decryptedMessage;
                 }
+                DBUpdates.ReadMsg(crtUser, selection);
+                panel16.Show();
             }
-            if (!encryption)
-            {
-                richTextBox2.Text = rawText;
-            }
-            else
-            {
-                string key = "abracadabra";
-                string decryptedMessage = Encryption.StringDecrypt(rawText, key);
-                richTextBox2.Text = decryptedMessage;
-            }
-            DBUpdates.ReadMsg(crtUser, selection);
-            panel16.Show();
+            
         }
 
 

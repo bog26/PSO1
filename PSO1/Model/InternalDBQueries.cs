@@ -571,19 +571,34 @@ namespace PSO1.Model
             return pictureData;
         }
 
-        public static byte[] GetSpecData(int PID)
+        public static byte[] GetSpecData<T>(int PID, T context) where T:IDbContext
         {
-            psDBContext psContext = new psDBContext();
             byte[] specData = new byte[] { };
             try
             {
-                specData = psContext.ProductSpecifications.First(x => x.ProductId == PID).SpecData;
+                specData = context.ProductSpecifications.First(x => x.ProductId == PID).SpecData;
             }
             catch (InvalidOperationException e)
             {
 
             }
             return specData;
+        }
+  
+
+        public static string GetMessage<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            psDBContext psContext = new psDBContext();
+            var queryReceivedMessages = context.Messages.Where(x => x.Receiver == user
+                                                                 && x.MessageReceiverStatus != "deleted"
+                                                                 && x.MessageReceiverStatus != "spam")
+                                                        .Select(x => x.MessageBody);
+            string messageToDisplay = "";
+            if (messageIndex >= 0)
+            {
+                messageToDisplay = queryReceivedMessages.ToList()[messageIndex]; // System.ArgumentOutOfRangeException: 'Index was out of range. 
+            }
+            return messageToDisplay;
         }
 
 
