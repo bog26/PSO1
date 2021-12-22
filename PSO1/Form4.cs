@@ -442,11 +442,15 @@ namespace PSO1
                     int crtProductId = int.Parse(dataGridView3.Rows[crtRowIndex].Cells[0].Value.ToString());
                     try
                     {
-                        byte[] pictureData = DBUpdates.GetPictureData(crtProductId);
-                        Bitmap picture = GetBitmap(pictureData);
-                        pictureBox1.Image = picture;
-                        pictureBox1.Show();
-                        panel13.Show();
+                        var connection = new MSSQLConnection<psDBContext>().Context;
+                        using(connection)
+                        {
+                            byte[] pictureData = GetPictureData(crtProductId, connection);
+                            Bitmap picture = GetBitmap(pictureData);
+                            pictureBox1.Image = picture;
+                            pictureBox1.Show();
+                            panel13.Show();
+                        }
                     }
                     catch(Exception ex)
                     {
@@ -788,29 +792,34 @@ namespace PSO1
                 
         }
 
-        private void button48_Click(object sender, EventArgs e) //Save to DB
+        private async void button48_Click(object sender, EventArgs e) //Save to DB
         {
             int crtRowIndex = dataGridView3.CurrentCell.RowIndex;
             int crtProductId = int.Parse(dataGridView3.Rows[crtRowIndex].Cells[0].Value.ToString());
-
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string imgFileName = openFileDialog1.FileName;
-                DBUpdates.SaveProductImgToDB(crtProductId, imgFileName);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                using(connection)
+                {
+                    await DBUpdates.SaveProductImgToDB(crtProductId, imgFileName, connection);
+                }
                 MessageBox.Show("Image saved to DB");
             }
-
         }
 
-        private void button49_Click(object sender, EventArgs e) //Upload spec sheet
+        private async void button49_Click(object sender, EventArgs e) //Upload spec sheet
         {
             int crtRowIndex = dataGridView3.CurrentCell.RowIndex;
             int crtProductId = int.Parse(dataGridView3.Rows[crtRowIndex].Cells[0].Value.ToString());
-
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string specFileName = openFileDialog1.FileName;
-                DBUpdates.SaveProductSpecToDB(crtProductId, specFileName);
+                var connection = new MSSQLConnection<psDBContext>().Context;
+                using(connection)
+                {
+                    await DBUpdates.SaveProductSpecToDB(crtProductId, specFileName, connection);
+                }
                 MessageBox.Show("File saved to DB");
             }
         }
@@ -823,7 +832,7 @@ namespace PSO1
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string specFileName = saveFileDialog1.FileName;
-                byte[] specData = DBUpdates.GetSpecData(crtProductId);
+                byte[] specData = GetSpecData(crtProductId);
 
                 var bw = new BinaryWriter(File.Open(specFileName, FileMode.OpenOrCreate));
                 using(bw)

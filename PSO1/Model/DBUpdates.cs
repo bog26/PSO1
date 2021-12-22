@@ -358,92 +358,35 @@ namespace PSO1.Model
             await context.SaveChangesAsync();
         }
 
-
-
-            public static string GetProductSpec(int productID)
+        public static async Task SaveProductImgToDB<T>(int PID, string fileName, T context) where T:IDbContext
         {
-            psDBContext psContext = new psDBContext();
-            var queryproducts = from product in psContext.Products
-                                where product.Id == productID
-                                select product.ProductSpecification;
-            string specToDisplay = queryproducts.ToList()[0];
-            return specToDisplay;
-        }
-
-        public static void SaveProductImgToDB(int PID, string fileName)
-        {
-            psDBContext psContext = new psDBContext();
             ProductPicture picture = new ProductPicture();
             picture.ProductId = PID;
             picture.CreateImage(fileName);
-            DeleteProductImageIfExisting();
-            psContext.ProductPictures.Add(picture);
-            psContext.SaveChanges();
+            await DeleteProductImageIfExisting(context);
+            context.ProductPictures.Add(picture);
+            await context.SaveChangesAsync();
         }
-        public static void DeleteProductImageIfExisting()
+        public static async Task DeleteProductImageIfExisting<T>(T context) where T:IDbContext
         {
-            psDBContext psContext = new psDBContext();
-            int imgCount = psContext.ProductPictures.Count(); 
+            int imgCount = context.ProductPictures.Count(); 
             if(imgCount!=0)
             {
-                psContext.ProductPictures.Remove(psContext.ProductPictures.ToList()[0]);
-                psContext.SaveChanges();
+                context.ProductPictures.Remove(context.ProductPictures.ToList()[0]);
+                await context.SaveChangesAsync();
             }
         }
-        public static byte[] GetPictureData(int PID)
+
+
+        public static async Task SaveProductSpecToDB<T>(int PID, string fileName, T context) where T:IDbContext
         {
-            psDBContext psContext = new psDBContext();
-            byte[] pictureData = new byte[] { };
-            try
-            {
-                pictureData = psContext.ProductPictures.First(x => x.ProductId == PID).ImageData;
-
-            }
-            catch (InvalidOperationException e)
-            {
-
-            }
-            //System.InvalidOperationException
-
-            return pictureData;
-        }
-
-        public static void SaveProductSpecToDB(int PID, string fileName)
-        {
-            psDBContext psContext = new psDBContext();
             ProductSpecification spec = new ProductSpecification();
             spec.ProductId = PID;
             spec.CreateSpec(fileName);
-            psContext.ProductSpecifications.Add(spec);
-            psContext.SaveChanges();
+            context.ProductSpecifications.Add(spec);
+            await context.SaveChangesAsync();
         }
-        public static byte[] GetSpecData(int PID)
-        {
-            psDBContext psContext = new psDBContext();
-            byte[] specData = new byte[] { };
-            try
-            {
-                specData = psContext.ProductSpecifications.First(x => x.ProductId == PID).SpecData;
-            }
-            catch (InvalidOperationException e)
-            {
 
-            }
-            return specData;
-        }
-        /*
-        public static bool WriteMessageToDB(Message newMessage)
-        {
-            bool writeToDBSuccessful = false;
-            if (InternalDBQueries.CheckForExistingUser(newMessage.Receiver))
-            {
-                var psContext = new psDBContext();
-                psContext.Messages.Add(newMessage);
-                psContext.SaveChanges();
-                writeToDBSuccessful = true;
-            }
-            return writeToDBSuccessful;
-        }*/
 
         public static bool WriteMessageToDB<T>(Message newMessage, T context) where T:IDbContext
         {

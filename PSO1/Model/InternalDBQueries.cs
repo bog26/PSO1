@@ -550,7 +550,41 @@ namespace PSO1.Model
             return queryAlarm.MinAmount;
         }
 
+        public static string GetProductSpec<T>(int PID, T context) where T : IDbContext
+        {
+            var queryProducts = context.Products.FirstOrDefault(x => x.Id == PID).ProductSpecification;
+            return queryProducts;
+        }
 
+        public static byte[] GetPictureData<T>(int PID, T context) where T : IDbContext
+        {
+            byte[] pictureData = new byte[] { };
+            try
+            {
+                pictureData = context.ProductPictures.First(x => x.ProductId == PID).ImageData;
+
+            }
+            catch (InvalidOperationException e)
+            {
+
+            }
+            return pictureData;
+        }
+
+        public static byte[] GetSpecData(int PID)
+        {
+            psDBContext psContext = new psDBContext();
+            byte[] specData = new byte[] { };
+            try
+            {
+                specData = psContext.ProductSpecifications.First(x => x.ProductId == PID).SpecData;
+            }
+            catch (InvalidOperationException e)
+            {
+
+            }
+            return specData;
+        }
 
 
     }

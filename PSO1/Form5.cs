@@ -505,45 +505,38 @@ namespace PSO1
 
         private void dataGridView7_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
             int columnHeadIndex = -1;
             int rowSelection = e.RowIndex;
-
-
             if (e.RowIndex != columnHeadIndex)
             {
-                int productID = Int32.Parse(dataGridView7.Rows[rowSelection].Cells[0].Value.ToString());
-                richTextBox6.Text = GetProductSpec(productID);
-                richTextBox8.Text = GetProductSpec(productID);
                 var connection = new MSSQLConnection<psDBContext>().Context;
-                numericUpDown1.Maximum = GetMaxAmount(productID,connection);
-                richTextBox6.Refresh();
-                button40.Show();
-                label30.Text = ConstructProductHierarchy(productID, connection);
-                label32.Text = GetProductPrice(productID, connection).ToString();
-                label32.Show();
-
-                searchWithProductId = new GenericDBItemsQueries<UserItemReview>(productID);
-                //richTextBox11.Text = ConstructProductReviewsProt(searchWithProductId);
-                richTextBox11.Text = ConstructProductReviews(productID, connection);
-                //ConstructProductReviewsProt
-                //label46.Text = "Rating: " + GetProductRatingProt1(searchWithProductId);
-                label46.Text = "Rating: " + GetProductRating(productID,connection);
-                //GetProductRating
-
-                try
+                using(connection)
                 {
-                    byte[] pictureData = GetPictureData(productID);
-                    Bitmap picture = GetBitmap(pictureData);
-                    pictureBox1.Image = picture;
-                    pictureBox1.Show();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
-
-                panelProducts.Show();
+                    int productID = Int32.Parse(dataGridView7.Rows[rowSelection].Cells[0].Value.ToString());
+                    richTextBox6.Text = GetProductSpec(productID, connection);
+                    richTextBox8.Text = GetProductSpec(productID, connection);
+                    numericUpDown1.Maximum = GetMaxAmount(productID, connection);
+                    richTextBox6.Refresh();
+                    button40.Show();
+                    label30.Text = ConstructProductHierarchy(productID, connection);
+                    label32.Text = GetProductPrice(productID, connection).ToString();
+                    label32.Show();
+                    searchWithProductId = new GenericDBItemsQueries<UserItemReview>(productID);
+                    richTextBox11.Text = ConstructProductReviews(productID, connection);
+                    label46.Text = "Rating: " + GetProductRating(productID, connection);
+                    try
+                    {
+                        byte[] pictureData = GetPictureData(productID, connection);
+                        Bitmap picture = GetBitmap(pictureData);
+                        pictureBox1.Image = picture;
+                        pictureBox1.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                    panelProducts.Show();
+                } 
             }
         }
         private void button33_Click(object sender, EventArgs e) //"Add to cart"
@@ -743,7 +736,7 @@ namespace PSO1
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string specFileName = saveFileDialog1.FileName;
-                byte[] specData = DBUpdates.GetSpecData(crtProductId);
+                byte[] specData = GetSpecData(crtProductId);
 
                 var bw = new BinaryWriter(File.Open(specFileName, FileMode.OpenOrCreate));
                 using (bw)
