@@ -388,97 +388,22 @@ namespace PSO1.Model
         }
 
 
-        public static bool WriteMessageToDB<T>(Message newMessage, T context) where T:IDbContext
+        public static async Task<bool> WriteMessageToDB<T>(Message newMessage, T context) where T:IDbContext
         {
             bool writeToDBSuccessful = false;
             if (InternalDBQueries.CheckForExistingUserGen(newMessage.Receiver, context))
             {
                 context.Messages.Add(newMessage);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 writeToDBSuccessful = true;
             }
             return writeToDBSuccessful;
         }
 
+
         
-        public static string GetMessage(string user, int messageIndex, string searchWord)
-        {
-            psDBContext psContext = new psDBContext();
-            var queryReceivedMessages = from message in psContext.Messages
-
-                                        where message.Receiver == user
-                                            //&& message.MessageStatus != "deleted"
-                                            && message.MessageReceiverStatus != "deleted"
-                                            && message.MessageReceiverStatus != "spam"
-                                            && message.MessageBody.Contains(searchWord)
-                                        select message.MessageBody;
-            string messageToDisplay = "";
-            if (messageIndex >= 0)
-            {
-                messageToDisplay = queryReceivedMessages.ToList()[messageIndex];
-            }
-            return messageToDisplay;
-        }
-        public static string GetSentMessage(string user, int messageIndex)
-        {
-            psDBContext psContext = new psDBContext();
-            var queryReceivedMessages = from message in psContext.Messages
-                                        where message.Sender == user
-                                            && message.MessageSenderStatus != "deleted"
-                                        select message.MessageBody;
-            string messageToDisplay = "";
-            if (messageIndex >= 0)
-            {
-                messageToDisplay = queryReceivedMessages.ToList()[messageIndex];
-            }
-
-            return messageToDisplay;
-        }
-        public static string GetDeletedMessage(string user, int messageIndex)
-        {
-            psDBContext psContext = new psDBContext();
-            var queryDeletedMessages = from message in psContext.Messages
-                                       where message.Receiver == user
-                                           && message.MessageReceiverStatus == "deleted"
-                                       select message.MessageBody;
-            string messageToDisplay = "";
-            if (messageIndex >= 0)
-            {
-                messageToDisplay = queryDeletedMessages.ToList()[messageIndex];
-            }
-
-            return messageToDisplay;
-        }
-        public static string GetSpamMessage(string user, int messageIndex)
-        {
-            psDBContext psContext = new psDBContext();
-            var querySpamMessages = from message in psContext.Messages
-                                    where message.Receiver == user
-                                        && message.MessageReceiverStatus == "spam"
-                                    select message.MessageBody;
-            string messageToDisplay = "";
-            if (messageIndex >= 0)
-            {
-                messageToDisplay = querySpamMessages.ToList()[messageIndex];
-            }
-
-            return messageToDisplay;
-        }
-        public static string GetReplyReceiver(string user, int messageIndex)
-        {
-            psDBContext psContext = new psDBContext();
-            var queryReplyReceiver = from message in psContext.Messages
-                                     where message.Receiver == user
-                                         && message.MessageReceiverStatus != "deleted"
-                                         && message.MessageReceiverStatus != "spam"
-                                     select message.Sender;
-            string ReplyReceiver = "";
-            if (messageIndex >= 0)
-            {
-                ReplyReceiver = queryReplyReceiver.ToList()[messageIndex];
-            }
-            return ReplyReceiver;
-        }
+        
+        
         public static string GetReplyTitle(string user, int messageIndex)
         {
             psDBContext psContext = new psDBContext();

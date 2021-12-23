@@ -601,6 +601,79 @@ namespace PSO1.Model
             return messageToDisplay;
         }
 
+        public static string GetMessage<T>(string user, int messageIndex, string searchWord, T context) where T:IDbContext
+        {
+            var queryReceivedMessages = context.Messages.Where(x => x.Receiver == user
+                                                                 && x.MessageReceiverStatus != "deleted"
+                                                                 && x.MessageReceiverStatus != "spam"
+                                                                 && x.MessageBody.Contains(searchWord))
+                                                        .Select(x => x.MessageBody);
+            string messageToDisplay = "";
+            if (messageIndex >= 0)
+            {
+                messageToDisplay = queryReceivedMessages.ToList()[messageIndex];
+            }
+            return messageToDisplay;
+        }
+        public static string GetSentMessage<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            var queryReceivedMessages = context.Messages.Where(x => x.Sender == user
+                                                                 && x.MessageSenderStatus != "deleted")
+                                                        .Select(x => x.MessageBody);
+            string messageToDisplay = "";
+            if (messageIndex >= 0)
+            {
+                messageToDisplay = queryReceivedMessages.ToList()[messageIndex];
+            }
+
+            return messageToDisplay;
+        }
+
+        public static string GetDeletedMessage<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            var queryDeletedMessages = context.Messages.Where(x => x.Receiver == user
+                                                                 && x.MessageReceiverStatus == "deleted")
+                                                        .Select(x => x.MessageBody);
+
+            string messageToDisplay = "";
+            if (messageIndex >= 0)
+            {
+                messageToDisplay = queryDeletedMessages.ToList()[messageIndex];
+            }
+
+            return messageToDisplay;
+        }
+
+        public static string GetSpamMessage<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            var querySpamMessages = context.Messages.Where(x => x.Receiver == user
+                                                                 && x.MessageReceiverStatus == "spam")
+                                                        .Select(x => x.MessageBody);
+            string messageToDisplay = "";
+            if (messageIndex >= 0)
+            {
+                messageToDisplay = querySpamMessages.ToList()[messageIndex];
+            }
+            return messageToDisplay;
+        }
+
+        public static string GetReplyReceiver<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            psDBContext psContext = new psDBContext();
+
+            var queryReplyReceiver = context.Messages.Where(x => x.Receiver == user
+                                                              && x.MessageReceiverStatus != "deleted"
+                                                              && x.MessageReceiverStatus != "spam")
+                                                        .Select(x => x.Sender);
+
+            string ReplyReceiver = "";
+            if (messageIndex >= 0)
+            {
+                ReplyReceiver = queryReplyReceiver.ToList()[messageIndex];
+            }
+            return ReplyReceiver;
+        }
+
 
     }
 }

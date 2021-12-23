@@ -84,7 +84,7 @@ namespace PSO1
             {
                 if (textBox1.Text != string.Empty)
                 {
-                    rawText = DBUpdates.GetMessage(crtUser, selection, textBox1.Text);
+                    rawText = GetMessage(crtUser, selection, textBox1.Text, connection);
 
                     if (!DBUpdates.IsMessageEncrypted(crtUser, selection, textBox1.Text))
                     {
@@ -280,11 +280,16 @@ namespace PSO1
         {
             //int selection = listBox7.SelectedIndex;
             int selection = dataGridView1.CurrentCell.RowIndex;
-            string receiverText = DBUpdates.GetReplyReceiver(crtUser, selection);
-            string titleText = "re: " + DBUpdates.GetReplyTitle(crtUser, selection);
-            string messageText = "\n" + richTextBox1.Text;
-            string[] messageFields = new string[3] { receiverText, titleText, messageText };
-            return messageFields;
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
+            {
+                string receiverText = GetReplyReceiver(crtUser, selection, connection);
+                string titleText = "re: " + GetReplyTitle(crtUser, selection);
+                string messageText = "\n" + richTextBox1.Text;
+                string[] messageFields = new string[3] { receiverText, titleText, messageText };
+                return messageFields;
+            }
+            
         }
         private string[] MessageFWDFieldsInit()
         {
@@ -314,8 +319,13 @@ namespace PSO1
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int selection = e.RowIndex;
-            string rawText = DBUpdates.GetSentMessage(crtUser, selection);
-            DisplayClickedMessage(selection, richTextBox2, panelSent1, rawText, DBUpdates.IsSentMessageEncrypted, DBUpdates.ReadSentMsg, crtUser);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
+            {
+                string rawText = GetSentMessage(crtUser, selection, connection);
+                DisplayClickedMessage(selection, richTextBox2, panelSent1, rawText, DBUpdates.IsSentMessageEncrypted, DBUpdates.ReadSentMsg, crtUser);
+            }
+            
         }
         private void button26_Click(object sender, EventArgs e)
         {
@@ -326,17 +336,27 @@ namespace PSO1
         private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int selection = e.RowIndex;
-            string rawText = DBUpdates.GetDeletedMessage(crtUser, selection);
-            DisplayClickedMessage(selection, richTextBox3, panelDeleted1, rawText, DBUpdates.IsDeletedMessageEncrypted, DBUpdates.ReadDeletedMsg, crtUser);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
+            {
+                string rawText = GetDeletedMessage(crtUser, selection, connection);
+                DisplayClickedMessage(selection, richTextBox3, panelDeleted1, rawText, DBUpdates.IsDeletedMessageEncrypted, DBUpdates.ReadDeletedMsg, crtUser);
+            }
+            
         }
         private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int selection = e.RowIndex;
-            string rawText = DBUpdates.GetSpamMessage(crtUser, selection);
-            DisplayClickedMessage(selection, richTextBox4, panelSpam1, rawText, DBUpdates.IsSpamMessageEncrypted, DBUpdates.ReadSpamMsg, crtUser);
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            using(connection)
+            {
+                string rawText = GetSpamMessage(crtUser, selection, connection);
+                DisplayClickedMessage(selection, richTextBox4, panelSpam1, rawText, IsSpamMessageEncrypted, DBUpdates.ReadSpamMsg, crtUser);
+            }
+            
         }
 
-        private void button27_Click(object sender, EventArgs e) //"Send"
+        private async void button27_Click(object sender, EventArgs e) //"Send"
         {
             if (CheckIfEmailDataInputNotEmpty())
             {
@@ -357,7 +377,7 @@ namespace PSO1
                 string[] messageFields = new string[] { Form.ActiveForm.Text, textBox2.Text, textBox3.Text, messageBody, withEncryption };
                 var newMessage = Messaging.CreateMessage(messageFields);
                 var connection = new MSSQLConnection<psDBContext>().Context;
-                if (WriteMessageToDB(newMessage, connection))
+                if (await WriteMessageToDB(newMessage, connection))
                 {
                     MessageBox.Show("Message sent");
                 }
