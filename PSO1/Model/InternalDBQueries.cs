@@ -659,13 +659,10 @@ namespace PSO1.Model
 
         public static string GetReplyReceiver<T>(string user, int messageIndex, T context) where T:IDbContext
         {
-            psDBContext psContext = new psDBContext();
-
             var queryReplyReceiver = context.Messages.Where(x => x.Receiver == user
                                                               && x.MessageReceiverStatus != "deleted"
                                                               && x.MessageReceiverStatus != "spam")
                                                         .Select(x => x.Sender);
-
             string ReplyReceiver = "";
             if (messageIndex >= 0)
             {
