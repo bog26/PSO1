@@ -400,27 +400,7 @@ namespace PSO1.Model
             return writeToDBSuccessful;
         }
 
-
-        
-        
-        
-        public static string GetReplyTitle(string user, int messageIndex)
-        {
-            psDBContext psContext = new psDBContext();
-            var queryReplyTitle = from message in psContext.Messages
-                                  where message.Receiver == user
-                                      && message.MessageReceiverStatus != "deleted"
-                                      && message.MessageReceiverStatus != "spam"
-                                  select message.MessageTitle;
-            string ReplyReceiver = "";
-            if (messageIndex >= 0)
-            {
-                ReplyReceiver = queryReplyTitle.ToList()[messageIndex];
-            }
-
-            return ReplyReceiver;
-        }
-
+        /*
         public static string GetReplyMessage(string user, int messageIndex)
         {
             psDBContext psContext = new psDBContext();
@@ -436,26 +416,11 @@ namespace PSO1.Model
             }
 
             return ReplyMessage;
-        }
+        }*/
 
 
-        public static bool IsMessageEncrypted(string user, int messageIndex)
-        {
-            bool messageEncryption = false;
-            psDBContext psContext = new psDBContext();
-            var queryReceivedMessages = from message in psContext.Messages
-                                            //where message.Receiver == user
-                                        where message.Receiver == user &&
-                                              //message.MessageStatus != "deleted"
-                                              message.MessageReceiverStatus != "deleted"
-                                              && message.MessageReceiverStatus != "spam"
-                                        select message.IsEncrypted;
-            if (messageIndex >= 0)
-            {
-                messageEncryption = queryReceivedMessages.ToList()[messageIndex];
-            }
-            return messageEncryption;
-        }
+        
+
         public static bool IsSentMessageEncrypted(string user, int messageIndex)
         {
             bool messageEncryption = false;

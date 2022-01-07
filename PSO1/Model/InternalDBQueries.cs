@@ -670,6 +670,58 @@ namespace PSO1.Model
             }
             return ReplyReceiver;
         }
+    
+        public static string GetReplyTitle<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            //psDBContext psContext = new psDBContext();
+
+            var queryReplyTitle = from message in context.Messages
+                                  where message.Receiver == user
+                                      && message.MessageReceiverStatus != "deleted"
+                                      && message.MessageReceiverStatus != "spam"
+                                  select message.MessageTitle;
+            string ReplyReceiver = "";
+            if (messageIndex >= 0)
+            {
+                ReplyReceiver = queryReplyTitle.ToList()[messageIndex];
+            }
+
+            return ReplyReceiver;
+        }
+        /*
+        public static string GetReplyMessage(string user, int messageIndex)
+        {
+            psDBContext psContext = new psDBContext();
+            var queryReplyMessage = from message in psContext.Messages
+                                    where message.Receiver == user
+                                        && message.MessageReceiverStatus != "deleted"
+                                        && message.MessageReceiverStatus != "spam"
+                                    select message.MessageBody;
+            string ReplyMessage = "";
+            if (messageIndex >= 0)
+            {
+                ReplyMessage = queryReplyMessage.ToList()[messageIndex];
+            }
+
+            return ReplyMessage;
+        }*/
+
+        public static bool IsMessageEncrypted<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            bool messageEncryption = false;
+            var queryReceivedMessages = from message in context.Messages
+                                            //where message.Receiver == user
+                                        where message.Receiver == user &&
+                                              //message.MessageStatus != "deleted"
+                                              message.MessageReceiverStatus != "deleted"
+                                              && message.MessageReceiverStatus != "spam"
+                                        select message.IsEncrypted;
+            if (messageIndex >= 0)
+            {
+                messageEncryption = queryReceivedMessages.ToList()[messageIndex];
+            }
+            return messageEncryption;
+        }
 
 
     }

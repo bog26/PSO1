@@ -98,7 +98,7 @@ namespace PSO1
                 else
                 {
                     rawText = GetMessage(crtUser, selection, connection);
-                    if (!DBUpdates.IsMessageEncrypted(crtUser, selection))
+                    if (IsMessageEncrypted(crtUser, selection, connection))
                     {
                         encryption = false;
                     }
@@ -284,7 +284,7 @@ namespace PSO1
             using(connection)
             {
                 string receiverText = GetReplyReceiver(crtUser, selection, connection);
-                string titleText = "re: " + GetReplyTitle(crtUser, selection);
+                string titleText = "re: " + GetReplyTitle(crtUser, selection, connection);
                 string messageText = "\n" + richTextBox1.Text;
                 string[] messageFields = new string[3] { receiverText, titleText, messageText };
                 return messageFields;
@@ -297,7 +297,8 @@ namespace PSO1
             int selection = dataGridView1.CurrentCell.RowIndex;
             StringBuilder title = new StringBuilder();
             title.Append("Fwd: ");
-            title.Append(DBUpdates.GetReplyTitle(crtUser, selection));
+            var connection = new MSSQLConnection<psDBContext>().Context;
+            title.Append(GetReplyTitle(crtUser, selection, connection));
             string titleText = title.ToString();
             string messageText = richTextBox1.Text;
             string[] messageFields = new string[2] { titleText, messageText };
