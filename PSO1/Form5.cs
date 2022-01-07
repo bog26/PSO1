@@ -98,7 +98,7 @@ namespace PSO1
                 else
                 {
                     rawText = GetMessage(crtUser, selection, connection);
-                    if (IsMessageEncrypted(crtUser, selection, connection))
+                    if (IsMessageEncrypted(crtUser, selection))
                     {
                         encryption = false;
                     }
@@ -341,7 +341,7 @@ namespace PSO1
             using(connection)
             {
                 string rawText = GetDeletedMessage(crtUser, selection, connection);
-                DisplayClickedMessage(selection, richTextBox3, panelDeleted1, rawText, DBUpdates.IsDeletedMessageEncrypted, DBUpdates.ReadDeletedMsg, crtUser);
+                DisplayClickedMessage(selection, richTextBox3, panelDeleted1, rawText, IsDeletedMessageEncrypted, DBUpdates.ReadDeletedMsg, crtUser);
             }
             
         }

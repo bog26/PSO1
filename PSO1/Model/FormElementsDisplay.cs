@@ -517,8 +517,13 @@ namespace PSO1.Model
             int length = labelText.Length * 5;
             return length;
         }
+        //public delegate bool EcryptionCheck(string user, int selection);
+        //private static MSSQLConnection<psDBContext> connection = new MSSQLConnection<psDBContext>();
+        //MSSQLConnection<psDBContext> context = connection.Context;
+        //public delegate bool EcryptionCheck<T>(string user, int selection, T context)where T:IDbContext;
         public delegate bool EcryptionCheck(string user, int selection);
         public delegate void DBupdate(string user, int selection);
+        
         public static void DisplayClickedMessage(int selection, RichTextBox MessagePage, Panel panel, string rawMessage, EcryptionCheck encryptionCheck, DBupdate update, string crtUser)
         {
             bool encryption;

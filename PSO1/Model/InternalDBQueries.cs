@@ -705,7 +705,7 @@ namespace PSO1.Model
 
             return ReplyMessage;
         }*/
-
+        /*
         public static bool IsMessageEncrypted<T>(string user, int messageIndex, T context) where T:IDbContext
         {
             bool messageEncryption = false;
@@ -723,6 +723,63 @@ namespace PSO1.Model
             return messageEncryption;
         }
 
+        public static bool IsSentMessageEncrypted<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            bool messageEncryption = false;
+            var queryReceivedMessages = from message in context.Messages
+                                        where message.Sender == user
+                                           && message.MessageSenderStatus != "deleted"
+                                        select message.IsEncrypted;
+            if (messageIndex >= 0)
+            {
+                messageEncryption = queryReceivedMessages.ToList()[messageIndex];
+            }
+            return messageEncryption;
+        }
+        public static bool IsDeletedMessageEncrypted<T>(string user, int messageIndex, T context) where T:IDbContext 
+        {
+            bool messageEncryption = false;
+            var queryReceivedMessages = from message in context.Messages
+                                        where message.Receiver == user
+                                           && message.MessageReceiverStatus == "deleted"
+                                        select message.IsEncrypted;
+            if (messageIndex >= 0)
+            {
+                messageEncryption = queryReceivedMessages.ToList()[messageIndex];
+            }
+            return messageEncryption;
+        }
+        public static bool IsSpamMessageEncrypted<T>(string user, int messageIndex, T context) where T:IDbContext
+        {
+            bool messageEncryption = false;
+            var queryReceivedMessages = from message in context.Messages
+                                        where message.Receiver == user
+                                           && message.MessageReceiverStatus == "spam"
+                                        select message.IsEncrypted;
+            if (messageIndex >= 0)
+            {
+                messageEncryption = queryReceivedMessages.ToList()[messageIndex];
+            }
+            return messageEncryption;
+        }
+        public static bool IsMessageEncrypted<T>(string user, int messageIndex, string searchWord, T context)where T:IDbContext
+        {
+            bool messageEncryption = false;
+            var queryReceivedMessages = from message in context.Messages
+                                            //where message.Receiver == user
+                                        where message.Receiver == user &&
+                                              //message.MessageStatus != "deleted" &&
+                                              message.MessageReceiverStatus != "deleted"
+                                              && message.MessageReceiverStatus != "spam"
+                                              && message.MessageBody.Contains(searchWord)
+                                        select message.IsEncrypted;
+            if (messageIndex >= 0)
+            {
+                messageEncryption = queryReceivedMessages.ToList()[messageIndex];
+            }
+            return messageEncryption;
+        }
 
+        */
     }
 }

@@ -1062,7 +1062,7 @@ namespace PSO1
                 else
                 {
                     rawText = GetMessage(crtUser, selection, connection);
-                    if (!IsMessageEncrypted(crtUser, selection, connection))
+                    if (!DBUpdates.IsMessageEncrypted(crtUser, selection))
                     {
                         encryption = false;
                     }
@@ -1212,7 +1212,7 @@ namespace PSO1
             using(connection)
             {
                 string receiverText = GetReplyReceiver(crtUser, selection, connection);
-                string titleText = "re: " + GetReplyTitle(crtUser, selection, connection);
+                string titleText = "re: " + GetReplyTitle(crtUser, selection,connection);
                 string messageText = "\n" + richTextBox2.Text;
                 string[] messageFields = new string[3] { receiverText, titleText, messageText };
                 return messageFields;
