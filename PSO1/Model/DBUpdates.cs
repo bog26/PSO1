@@ -460,6 +460,7 @@ namespace PSO1.Model
 
             psContext.SaveChanges();
         }
+        /*
         public static void ReadSentMsg(string user, int messageIndex)
         {
             psDBContext psContext = new psDBContext();
@@ -470,8 +471,18 @@ namespace PSO1.Model
                 var messageToRead = messages.ToList()[messageIndex];
                 messageToRead.ReadMessage();
             }
-
-
+            psContext.SaveChanges();
+        }*/
+        public static void ReadSentMsg(string user, int messageIndex)
+        {
+            psDBContext psContext = new psDBContext();
+            var messages = psContext.Messages.Where(x => (x.Sender == user)
+                                                      && x.MessageSenderStatus != "deleted");
+            if (messageIndex >= 0)
+            {
+                var messageToRead = messages.ToList()[messageIndex];
+                messageToRead.ReadMessage();
+            }
             psContext.SaveChanges();
         }
         public static void ReadDeletedMsg(string user, int messageIndex)
